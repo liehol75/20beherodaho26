@@ -10,8 +10,8 @@
 <h1>Thailand 2026</h1>
 
 <div id="translateButtons">
-  <button onclick="switchLang('de')">Deutsch</button>
-  <button onclick="switchLang('th')">ไทย</button>
+  <button class="translateBtn" onclick="window.location.href='index-th.html'">ไทย</button>
+  <button class="translateBtn" onclick="window.location.href='index.html'">Deutsch</button>
 </div>
 
 <table id="calendar">
@@ -28,43 +28,57 @@
 <tbody id="calendarBody"></tbody>
 </table>
 
-<script type="module">
-import {getData} from './kalender.js';
+<script>
+// Personen
+const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
+const start = new Date(2026,1,16); // 16.02.2026 (Monat 1 = Februar)
+const end   = new Date(2026,2,12); // 12.03.2026
 
-const personen=["Rouven","Daniel","Henrik","Benja","Holger"];
-const start=new Date(2026,1,16),end=new Date(2026,2,12);
-let lang='de';
+// Einträge exakt wie Original
+let preset = {
+  "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]},
+  "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"],"Benja":["Familienfest Sa Kaeo"],"Holger":["Familienfest Sa Kaeo"]},
+  "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]},
+  "2026-03-11":{"all":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]},
+  "2026-03-12":{"all":["Osnabrück"]}
+};
 
-function switchLang(l){lang=l;showCalendar();}
+function goPerson(url){ window.location.href=url; }
 
-function formatDate(d){return String(d.getDate()).padStart(2,'0')+"."+String(d.getMonth()+1).padStart(2,'0')+".";}
-function formatKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');}
+function formatDate(d){
+  let dd = String(d.getDate()).padStart(2,'0');
+  let mm = String(d.getMonth()+1).padStart(2,'0');
+  return dd+"."+mm+".";
+}
 
+function formatKey(d){
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');
+}
+
+// Kalender bauen
 function showCalendar(){
-  const data=getData();
-  const preset=data[lang].preset;
-  let body="";
-  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-    const dateKey=formatKey(d);
-    const dateLabel=formatDate(d);
-    const day=d.getDay();
-    const dateClass=(day===0||day===6)?"sticky-col weekendDate":"sticky-col";
-    body+="<tr>";
-    body+=`<td class="${dateClass}">${dateLabel}</td>`;
+  let body = "";
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    let dateKey = formatKey(d);
+    let dateLabel = formatDate(d);
+    let day = d.getDay();
+    let dateClass = (day===0||day===6) ? "sticky-col weekendDate" : "sticky-col";
+    body += "<tr>";
+    body += `<td class="${dateClass}">${dateLabel}</td>`;
     personen.forEach(p=>{
       let base="personCol"+p;
       let weekendClass=(day===0||day===6)?("weekend"+p):base;
-      let entries=[];
+      let entries = [];
       if(preset[dateKey]){
-        if(preset[dateKey]["all"]) entries=entries.concat(preset[dateKey]["all"]);
-        if(preset[dateKey][p]) entries=entries.concat(preset[dateKey][p]);
+        if(preset[dateKey]["all"]) entries = entries.concat(preset[dateKey]["all"]);
+        if(preset[dateKey][p]) entries = entries.concat(preset[dateKey][p]);
       }
-      let combined=entries.map(e=>"<div class='entry'>"+e+"</div>").join("");
-      body+=`<td class="${weekendClass}">${combined}</td>`;
+      let combined = entries.map(e=> "<div class='entry'>"+e+"</div>").join("");
+      body += `<td class="${weekendClass}">${combined}</td>`;
     });
-    body+="</tr>";
+    body += "</tr>";
   }
-  document.getElementById("calendarBody").innerHTML=body;
+  document.getElementById("calendarBody").innerHTML = body;
 }
 
 showCalendar();
