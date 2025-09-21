@@ -1,35 +1,43 @@
-body {font-family:sans-serif;margin:0;background:#f6f6f6;color:#333;}
-h1 {text-align:center;background:#0077b6;color:#fff;padding:10px;margin:0;}
-#translateButtons {text-align:center;margin:10px;}
-button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;font-weight:bold;}
+// kalender.js
+export function getData() {
+  let data=localStorage.getItem('thailand2026');
+  if(!data){
+    data={
+      de:{
+        preset:{
+          "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]},
+          "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"],"Benja":["Familienfest Sa Kaeo"],"Holger":["Familienfest Sa Kaeo"]},
+          "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]},
+          "2026-03-11":{"all":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]},
+          "2026-03-12":{"all":["Osnabrück"]}
+        },
+        todos:{}
+      },
+      th:{
+        preset:{
+          "2026-02-16":{"all":["ถึงสนามบินสุวรรณภูมิ 13.45 น.","ล่องเรือแม่น้ำ"]},
+          "2026-02-19":{"Henrik":["งานเลี้ยงครอบครัวสระแก้ว"],"Benja":["งานเลี้ยงครอบครัวสระแก้ว"],"Holger":["งานเลี้ยงครอบครัวสระแก้ว"]},
+          "2026-02-26":{"all":["งานฉลองบ้านใหม่สระแก้ว"]},
+          "2026-03-11":{"all":["ออกจากสนามบินสุวรรณภูมิ 12.40 น. // ถึงแฟรงก์เฟิร์ต/สนามบินหลัก 19.05 น."]},
+          "2026-03-12":{"all":["ออสนาบรุค"]}
+        },
+        todos:{}
+      }
+    };
+    localStorage.setItem('thailand2026',JSON.stringify(data));
+  }else data=JSON.parse(data);
+  return data;
+}
 
-table {border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:auto;}
-th, td {border:1px solid #ccc;padding:5px;text-align:center;vertical-align:top;word-wrap:break-word;}
-th.sticky-col, td.sticky-col {position:sticky; left:0; z-index:2; background:#f6f6f6;}
-th.nameHeader button {background:#00b4d8;color:#fff;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:16px;}
-thead th {position:sticky;top:0;z-index:3;}
-.entry {background:#fff;margin:2px;padding:3px;border-radius:3px;display:block;}
-.entry:nth-child(even){background:#e0e0e0;}
+export function setData(data){
+  localStorage.setItem('thailand2026',JSON.stringify(data));
+}
 
-/* Farben für Personen */
-.personColRouven{background-color:#ffd9d9;}
-.personColDaniel{background-color:#d9ffd9;}
-.personColHenrik{background-color:#d9d9ff;}
-.personColBenja{background-color:#fff1d9;}
-.personColHolger{background-color:#f0d9ff;}
+export function openModal(content){
+  document.getElementById("modalContent").innerHTML=content;
+  document.getElementById("editModal").style.display="block";
+}
 
-/* Wochenende dunkler für Personen */
-.weekendRouven{background-color:#ffb3b3;}
-.weekendDaniel{background-color:#b3ffb3;}
-.weekendHenrik{background-color:#b3b3ff;}
-.weekendBenja{background-color:#ffe0b3;}
-.weekendHolger{background-color:#dfb3ff;}
-
-/* Wochenende Datum */
-.weekendDate{background-color:#ffd699;font-weight:bold;}
-
-/* Modal */
-.modal{display:none;position:fixed;z-index:100;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);}
-.modal-content{background:#fff;margin:10% auto;padding:20px;border:1px solid #888;width:300px;}
-.close{float:right;font-size:28px;cursor:pointer;}
-input[type=text]{width:90%;}
+export function closeModal(){
+  document.getElementById("editModal").style.display="none";
+}
