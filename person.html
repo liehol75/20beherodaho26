@@ -12,6 +12,7 @@
   <button onclick="switchLang('de')">Deutsch</button>
   <button onclick="switchLang('th')">ไทย</button>
 </div>
+
 <table id="calendar">
 <thead><tr id="headerRow"></tr></thead>
 <tbody id="calendarBody"></tbody>
@@ -52,21 +53,23 @@ function renderCalendar(){
   let b="";
   for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
     let key=formatKey(d),label=formatDate(d);
-    let entries=[];
+    let entries=[],overnight="",booked=false;
     if(dObj[key]){
-      if(dObj[key][person])entries=entries.concat(dObj[key][person]);
+      if(dObj[key][person])entries=dObj[key][person];
+      if(dObj[key].overnight && dObj[key].overnight[person]) overnight=dObj[key].overnight[person];
+      if(dObj[key].booked && dObj[key].booked[person]) booked=dObj[key].booked[person];
     }
     b+=`<tr>
       <td>${label}</td>
-      <td>${entries.map((e,i)=>`<div class='entry'>${e} <button onclick="editEntry('${key}',${i})">✏️</button></div>`).join("")}
-      <button onclick="addEntry('${key}')">+</button></td>
-      <td><input placeholder="Übernachtung"></td>
-      <td><input type="checkbox"></td>
+      <td>${entries.map((e,i)=>`<div class='entry'>${e} <button onclick="editEntry('${key}',${i})">✏️</button></div>`).join("")}<button onclick="addEntry('${key}')">+</button></td>
+      <td><input type="text" value="${overnight}" onchange="saveOvernight('${key}',this.value)"></td>
+      <td><input type="checkbox" ${booked?'checked':''} onchange="saveBooked('${key}',this.checked)"></td>
     </tr>`;
   }
   document.getElementById('calendarBody').innerHTML=b;
 }
 
+// Einträge
 window.addEntry=function(key){
   openModal(`<input id='newEntry' placeholder='Neue Eintragung'>
   <button onclick="saveEntry('${key}')">Speichern</button>`);
@@ -98,6 +101,24 @@ window.deleteEntry=function(key,i){
   setData(d);closeModal();renderCalendar();
 }
 
+// Übernachtung speichern
+window.saveOvernight=function(key,val){
+  let d=getData();
+  d[currentLang].preset[key]=d[currentLang].preset[key]||{};
+  d[currentLang].preset[key].overnight=d[currentLang].preset[key].overnight||{};
+  d[currentLang].preset[key].overnight[person]=val;
+  setData(d);
+}
+
+// Gebucht speichern
+window.saveBooked=function(key,val){
+  let d=getData();
+  d[currentLang].preset[key]=d[currentLang].preset[key]||{};
+  d[currentLang].preset[key].booked=d[currentLang].preset[key].booked||{};
+  d[currentLang].preset[key].booked[person]=val;
+  setData(d);
+}
+
 // To-Do Liste
 function renderTodos(){
   let d=getData();
@@ -107,10 +128,12 @@ function renderTodos(){
 }
 window.addTodo=function(){
   let val=document.getElementById('newTodo').value;
+  if(!val) return;
   let d=getData();
   d[currentLang].todos[person]=d[currentLang].todos[person]||[];
   d[currentLang].todos[person].push(val);
   setData(d);renderTodos();
+  document.getElementById('newTodo').value='';
 }
 window.delTodo=function(i){
   let d=getData();
