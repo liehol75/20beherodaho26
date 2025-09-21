@@ -26,7 +26,7 @@
 </div>
 
 <script type="module">
-import {getData,closeModal} from './kalender.js';
+import {getData, closeModal} from './kalender.js';
 
 const personen=["Rouven","Daniel","Henrik","Benja","Holger"];
 const start=new Date(2026,1,16),end=new Date(2026,2,12);
@@ -64,7 +64,8 @@ function renderCalendar(){
   document.getElementById('calendarBody').innerHTML=b;
 }
 
-renderHeader();renderCalendar();
+renderHeader();
+renderCalendar();
 </script>
 </body>
 </html>
