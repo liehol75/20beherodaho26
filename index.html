@@ -56,16 +56,15 @@ thead th {position:sticky;top:0;z-index:3;}
 </table>
 
 <script>
-// Personen und Kalenderbereich
+// Personen
 const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
-const start = new Date(2026,1,16); // 16.02.2026
+const start = new Date(2026,1,16); // 16.02.2026 (Monat 1 = Februar)
 const end   = new Date(2026,2,12); // 12.03.2026
 
-// Voreinträge
+// Einträge
 let preset = {
-  "2026-02-15":{"all":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"]}, 
-  "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]}, 
-  "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"], "Benja":["Familienfest Sa Kaeo"], "Holger":["Familienfest Sa Kaeo"]}, 
+  "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]},
+  "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"],"Benja":["Familienfest Sa Kaeo"],"Holger":["Familienfest Sa Kaeo"]},
   "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]},
   "2026-03-11":{"all":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]},
   "2026-03-12":{"all":["Osnabrück"]}
@@ -74,39 +73,39 @@ let preset = {
 function goPerson(url){ window.location.href=url; }
 
 function formatDate(d){
- let dd = String(d.getDate()).padStart(2,'0');
- let mm = String(d.getMonth()+1).padStart(2,'0');
- return dd+"."+mm+".";
+  let dd = String(d.getDate()).padStart(2,'0');
+  let mm = String(d.getMonth()+1).padStart(2,'0');
+  return dd+"."+mm+".";
 }
 
 function formatKey(d){
- return d.toISOString().split('T')[0];
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');
 }
 
 // Kalender bauen
 function showCalendar(){
- let body = "";
- for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
-   let dateKey = formatKey(d);
-   let dateLabel = formatDate(d);
-   let day = d.getDay();
-   let dateClass = (day===0||day===6) ? "sticky-col weekendDate" : "sticky-col";
-   body += "<tr>";
-   body += `<td class="${dateClass}">${dateLabel}</td>`;
-   personen.forEach(p=>{
-     let base="personCol"+p;
-     let weekendClass=(day===0||day===6)?("weekend"+p):base;
-     let entries = [];
-     if(preset[dateKey]){
-       if(preset[dateKey]["all"]) entries = entries.concat(preset[dateKey]["all"]);
-       if(preset[dateKey][p]) entries = entries.concat(preset[dateKey][p]);
-     }
-     let combined = entries.map(e=> "<div class='entry'>"+e+"</div>").join("");
-     body += `<td class="${weekendClass}">${combined}</td>`;
-   });
-   body += "</tr>";
- }
- document.getElementById("calendarBody").innerHTML = body;
+  let body = "";
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    let dateKey = formatKey(d);
+    let dateLabel = formatDate(d);
+    let day = d.getDay();
+    let dateClass = (day===0||day===6) ? "sticky-col weekendDate" : "sticky-col";
+    body += "<tr>";
+    body += `<td class="${dateClass}">${dateLabel}</td>`;
+    personen.forEach(p=>{
+      let base="personCol"+p;
+      let weekendClass=(day===0||day===6)?("weekend"+p):base;
+      let entries = [];
+      if(preset[dateKey]){
+        if(preset[dateKey]["all"]) entries = entries.concat(preset[dateKey]["all"]);
+        if(preset[dateKey][p]) entries = entries.concat(preset[dateKey][p]);
+      }
+      let combined = entries.map(e=> "<div class='entry'>"+e+"</div>").join("");
+      body += `<td class="${weekendClass}">${combined}</td>`;
+    });
+    body += "</tr>";
+  }
+  document.getElementById("calendarBody").innerHTML = body;
 }
 
 showCalendar();
