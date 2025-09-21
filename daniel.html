@@ -30,69 +30,55 @@
 <ul id="todoList"></ul>
 <input id="newTodo" placeholder="Neue Aufgabe"><button onclick="addTodo()">+</button>
 
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
 <script type="module">
-import {getData,setData,openModal,closeModal} from './kalender.js';
+import {getData,setData} from './kalender.js';
 
 const person="Daniel";
-let lang='de';
 const start=new Date(2026,1,16),end=new Date(2026,2,12);
+let lang='de';
 
 function switchLang(l){lang=l;showCalendar();showTodos();}
 
-// Hilfsfunktionen
 function formatDate(d){return String(d.getDate()).padStart(2,'0')+"."+String(d.getMonth()+1).padStart(2,'0')+".";}
 function formatKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');}
 
-// Kalender aufbauen
 function showCalendar(){
   const data=getData();
+  const preset=data[lang].preset;
   let body="";
   for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
     const dateKey=formatKey(d),dateLabel=formatDate(d),day=d.getDay();
     const dateClass=(day===0||day===6)?"sticky-col weekendDate":"sticky-col";
     let entries=[];
-    if(data[lang].preset[dateKey]){
-      if(data[lang].preset[dateKey][person]) entries=data[lang].preset[dateKey][person].slice();
-      if(data[lang].preset[dateKey]["all"]) entries=entries.concat(data[lang].preset[dateKey]["all"]);
+    if(preset[dateKey]){
+      if(preset[dateKey]["all"]) entries=entries.concat(preset[dateKey]["all"]);
+      if(preset[dateKey][person]) entries=entries.concat(preset[dateKey][person]);
     }
+    let ue=(preset[dateKey]&&preset[dateKey][person+"_ue"])?preset[dateKey][person+"_ue"]:"";
+    let gb=(preset[dateKey]&&preset[dateKey][person+"_gb"])?preset[dateKey][person+"_gb"]:false;
     body+="<tr>";
     body+=`<td class="${dateClass}">${dateLabel}</td>`;
     body+=`<td>${entries.map(e=>"<div class='entry'>"+e+"</div>").join('')}</td>`;
-    
-    // Übernachtung & Gebucht
-    let uebernachtung=(data[lang].preset[dateKey]&&data[lang].preset[dateKey][person+"_ue"])?data[lang].preset[dateKey][person+"_ue"]:"";
-    let gebucht=(data[lang].preset[dateKey]&&data[lang].preset[dateKey][person+"_gb"])?data[lang].preset[dateKey][person+"_gb"]:false;
-    body+=`<td><input type="text" value="${uebernachtung}" onchange="saveUebernachtung('${dateKey}',this.value)"></td>`;
-    body+=`<td><input type="checkbox" ${gebucht?'checked':''} onchange="saveGebucht('${dateKey}',this.checked)"></td>`;
-    
+    body+=`<td><input type="text" value="${ue}" onchange="saveUe('${dateKey}',this.value)"></td>`;
+    body+=`<td><input type="checkbox" ${gb?'checked':''} onchange="saveGb('${dateKey}',this.checked)"></td>`;
     body+="</tr>";
   }
   document.getElementById("calendarBody").innerHTML=body;
 }
 
-// Speicherfunktionen
-window.saveUebernachtung=(date,val)=>{
+window.saveUe=(date,val)=>{
   const data=getData();
   if(!data[lang].preset[date]) data[lang].preset[date]={};
   data[lang].preset[date][person+"_ue"]=val;
   setData(data);
 }
-
-window.saveGebucht=(date,val)=>{
+window.saveGb=(date,val)=>{
   const data=getData();
   if(!data[lang].preset[date]) data[lang].preset[date]={};
   data[lang].preset[date][person+"_gb"]=val;
   setData(data);
 }
 
-// To-Do-Liste
 function showTodos(){
   const data=getData();
   const list=data[lang].todos[person]||[];
