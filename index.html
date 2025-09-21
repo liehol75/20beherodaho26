@@ -10,8 +10,8 @@
 <h1>Thailand 2026</h1>
 
 <div id="translateButtons">
-  <button class="translateBtn" onclick="window.location.href='index-th.html'">ไทย</button>
-  <button class="translateBtn" onclick="window.location.href='index.html'">Deutsch</button>
+  <button onclick="switchLang('de')">Deutsch</button>
+  <button onclick="switchLang('th')">ไทย</button>
 </div>
 
 <table id="calendar">
@@ -30,17 +30,24 @@
 
 <script type="module">
 import {getData} from './kalender.js';
+
 const personen=["Rouven","Daniel","Henrik","Benja","Holger"];
 const start=new Date(2026,1,16),end=new Date(2026,2,12);
+let lang='de';
+
+function switchLang(l){lang=l;showCalendar();}
 
 function formatDate(d){return String(d.getDate()).padStart(2,'0')+"."+String(d.getMonth()+1).padStart(2,'0')+".";}
 function formatKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');}
 
 function showCalendar(){
   const data=getData();
+  const preset=data[lang].preset;
   let body="";
   for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-    const dateKey=formatKey(d),dateLabel=formatDate(d),day=d.getDay();
+    const dateKey=formatKey(d);
+    const dateLabel=formatDate(d);
+    const day=d.getDay();
     const dateClass=(day===0||day===6)?"sticky-col weekendDate":"sticky-col";
     body+="<tr>";
     body+=`<td class="${dateClass}">${dateLabel}</td>`;
@@ -48,9 +55,9 @@ function showCalendar(){
       let base="personCol"+p;
       let weekendClass=(day===0||day===6)?("weekend"+p):base;
       let entries=[];
-      if(data.de.preset[dateKey]){
-        if(data.de.preset[dateKey]["all"]) entries=entries.concat(data.de.preset[dateKey]["all"]);
-        if(data.de.preset[dateKey][p]) entries=entries.concat(data.de.preset[dateKey][p]);
+      if(preset[dateKey]){
+        if(preset[dateKey]["all"]) entries=entries.concat(preset[dateKey]["all"]);
+        if(preset[dateKey][p]) entries=entries.concat(preset[dateKey][p]);
       }
       let combined=entries.map(e=>"<div class='entry'>"+e+"</div>").join("");
       body+=`<td class="${weekendClass}">${combined}</td>`;
