@@ -16,7 +16,8 @@ th.sticky-col, td.sticky-col {
   background:#f6f6f6;
 }
 th.nameHeader button {
-  background:#00b4d8;color:#fff;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-weight:bold;
+  background:#00b4d8;color:#fff;border:none;padding:5px 10px;border-radius:5px;
+  cursor:pointer;font-weight:bold;font-size:16px;
 }
 thead th {position:sticky;top:0;z-index:3;}
 .entry {background:#fff;margin:2px;padding:3px;border-radius:3px;display:block;}
@@ -33,10 +34,19 @@ thead th {position:sticky;top:0;z-index:3;}
 .weekendHenrik{background-color:#b3b3ff;}
 .weekendBenja{background-color:#ffe0b3;}
 .weekendHolger{background-color:#dfb3ff;}
+.weekendDate{background-color:#ffd;} /* für Datumsspalte Wochenende */
+#translateButtons {text-align:center;margin:10px;}
+button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;}
 </style>
 </head>
 <body>
 <h1>Thailand 2026</h1>
+
+<div id="translateButtons">
+  <button class="translateBtn" onclick="translate('th')">Thailändisch</button>
+  <button class="translateBtn" onclick="translate('de')">Deutsch</button>
+</div>
+
 <table id="calendar">
 <thead>
 <tr>
@@ -54,16 +64,32 @@ thead th {position:sticky;top:0;z-index:3;}
 <script>
 // --- Konfiguration ---
 const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
-const start = new Date(2026,1,16); // 16.02.2026
-const end   = new Date(2026,2,12); // 12.03.2026
+const start = new Date(2026,1,16);
+const end   = new Date(2026,2,12);
 
-// Voreinträge (verschoben wie besprochen)
-const preset = {
-"2026-02-15":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"],          // am 16.02. anzeigen
-"2026-02-16":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"], // am 17.02. angezeigt
-"2026-03-11":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"], // 11.03.
-"2026-03-12":["Osnabrück"] // am 12.03.
+// Voreinträge
+let preset = {
+"2026-02-15":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"],
+"2026-02-16":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"],
+"2026-03-11":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"],
+"2026-03-12":["Osnabrück"]
 };
+
+// Übersetzungen
+const translations = {
+  "Abflug Frankfurt/Main Flughafen 20.55 Uhr":"ออกจากแฟรงก์เฟิร์ต/สนามบินหลัก 20.55 น.",
+  "Ankunft Bangkok-Suvarnabhumi 13.45 Uhr":"ถึงสนามบินสุวรรณภูมิ 13.45 น.",
+  "River Cruise":"ล่องเรือแม่น้ำ",
+  "Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr":"ออกจากสนามบินสุวรรณภูมิ 12.40 น. // ถึงแฟรงก์เฟิร์ต/สนามบินหลัก 19.05 น.",
+  "Osnabrück":"ออสนาเบรุก"
+};
+
+let currentLang = 'de';
+
+function translate(lang){
+  currentLang = lang;
+  showCalendar();
+}
 
 function goPerson(url){ window.location.href=url; }
 
@@ -82,18 +108,22 @@ function showCalendar(){
    let dateKey = formatKey(d);
    let dateLabel = formatDate(d);
    let day = d.getDay(); // 0=Sonntag,6=Samstag
+   let dateClass = (day===0||day===6) ? "sticky-col weekendDate" : "sticky-col";
    body += "<tr>";
-   body += `<td class="sticky-col">${dateLabel}</td>`;
+   body += `<td class="${dateClass}">${dateLabel}</td>`;
    personen.forEach(p=>{
      let base="personCol"+p;
      let weekendClass=(day===0||day===6)?("weekend"+p):base;
-     // preset für alle Personen anzeigen
-     let combined=(preset[dateKey]||[]).map(e=>"<div class='entry'>"+e+"</div>").join("");
+     // preset für alle Personen, Übersetzung falls nötig
+     let combined = (preset[dateKey]||[]).map(e=>{
+       let text = (currentLang==='th' && translations[e]) ? translations[e] : e;
+       return "<div class='entry'>"+text+"</div>";
+     }).join("");
      body += `<td class="${weekendClass}">${combined}</td>`;
    });
    body += "</tr>";
  }
- document.getElementById("calendarBody").innerHTML=body;
+ document.getElementById("calendarBody").innerHTML = body;
 }
 
 showCalendar();
