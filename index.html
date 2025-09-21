@@ -37,8 +37,8 @@ thead th {position:sticky;top:0;z-index:3;}
 <h1>Thailand 2026</h1>
 
 <div id="translateButtons">
-  <button class="translateBtn" onclick="translate('th')">ไทย</button>
-  <button class="translateBtn" onclick="translate('de')">Deutsch</button>
+  <button class="translateBtn" onclick="window.location.href='index-th.html'">ไทย</button>
+  <button class="translateBtn" onclick="window.location.href='index.html'">Deutsch</button>
 </div>
 
 <table id="calendar">
@@ -61,30 +61,15 @@ const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
 const start = new Date(2026,1,16); // 16.02.2026
 const end   = new Date(2026,2,12); // 12.03.2026
 
-// Voreinträge bis 01.03.2026, danach leer
+// Voreinträge
 let preset = {
   "2026-02-15":{"all":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"]}, 
   "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]}, 
   "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"], "Benja":["Familienfest Sa Kaeo"], "Holger":["Familienfest Sa Kaeo"]}, 
-  "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]}
+  "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]},
+  "2026-03-11":{"all":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]},
+  "2026-03-12":{"all":["Osnabrück"]}
 };
-
-// Übersetzungen
-const translations = {
-  "Abflug Frankfurt/Main Flughafen 20.55 Uhr":"ออกจากแฟรงก์เฟิร์ต/สนามบินหลัก 20.55 น.",
-  "Ankunft Bangkok-Suvarnabhumi 13.45 Uhr":"ถึงสนามบินสุวรรณภูมิ 13.45 น.",
-  "River Cruise":"ล่องเรือแม่น้ำ",
-  "Familienfest Sa Kaeo":"งานเลี้ยงครอบครัวสระแก้ว",
-  "Einweihungsfeier Sa Kaeo":"งานฉลองบ้านใหม่สระแก้ว"
-};
-
-let currentLang = 'de';
-
-// Übersetzen
-function translate(lang){
-  currentLang = lang;
-  showCalendar();
-}
 
 function goPerson(url){ window.location.href=url; }
 
@@ -116,10 +101,7 @@ function showCalendar(){
        if(preset[dateKey]["all"]) entries = entries.concat(preset[dateKey]["all"]);
        if(preset[dateKey][p]) entries = entries.concat(preset[dateKey][p]);
      }
-     let combined = entries.map(e=>{
-       let text = (currentLang==='th' && translations[e]) ? translations[e] : e;
-       return "<div class='entry'>"+text+"</div>";
-     }).join("");
+     let combined = entries.map(e=> "<div class='entry'>"+e+"</div>").join("");
      body += `<td class="${weekendClass}">${combined}</td>`;
    });
    body += "</tr>";
