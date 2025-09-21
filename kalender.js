@@ -1,11 +1,14 @@
 // kalender.js – Datenhaltung + Modal
 
-// Erstinitialisierung in localStorage
+// Initialisierung, falls noch nichts im localStorage
 if (!localStorage.getItem('kalenderData')) {
   const initial = {
     de: {
       preset: {
         "2026-02-16": {all:["Ankunft Bangkok 13.45 Uhr","River Cruise"]},
+        "2026-02-19": {"Henrik":["Familienfest Sa Kaeo"],"Benja":["Familienfest Sa Kaeo"],"Holger":["Familienfest Sa Kaeo"]},
+        "2026-02-26": {all:["Einweihungsfeier Sa Kaeo"]},
+        "2026-03-11": {all:["Abflug Bangkok 12.40 Uhr // Ankunft Frankfurt 19.05 Uhr"]},
         "2026-03-12": {all:["Osnabrück"]}
       },
       todos: {}
@@ -13,6 +16,9 @@ if (!localStorage.getItem('kalenderData')) {
     th: {
       preset: {
         "2026-02-16": {all:["ถึงสนามบิน 13.45 น.","ล่องเรือแม่น้ำ"]},
+        "2026-02-19": {"Henrik":["งานเลี้ยงครอบครัวสระแก้ว"],"Benja":["งานเลี้ยงครอบครัวสระแก้ว"],"Holger":["งานเลี้ยงครอบครัวสระแก้ว"]},
+        "2026-02-26": {all:["งานฉลองบ้านใหม่สระแก้ว"]},
+        "2026-03-11": {all:["ออกจากสนามบิน 12.40 น. // ถึงแฟรงก์เฟิร์ต 19.05 น."]},
         "2026-03-12": {all:["ออสนาบรุค"]}
       },
       todos: {}
@@ -29,7 +35,7 @@ export function setData(d) {
   localStorage.setItem('kalenderData', JSON.stringify(d));
 }
 
-// einfache Modalsteuerung (auf beiden Seiten gleich)
+// Modalsteuerung
 export function openModal(content) {
   const m=document.getElementById('editModal');
   document.getElementById('modalContent').innerHTML=content;
