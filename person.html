@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Person</title>
+<link rel="stylesheet" href="kalender.css">
+</head>
+<body>
+<h1 id="personTitle"></h1>
+<div id="translateButtons">
+  <button onclick="switchLang('de')">Deutsch</button>
+  <button onclick="switchLang('th')">ไทย</button>
+</div>
+<table id="calendar">
+<thead><tr id="headerRow"></tr></thead>
+<tbody id="calendarBody"></tbody>
+</table>
+
+<h2>To-Do</h2>
+<ul id="todoList"></ul>
+<input id="newTodo" placeholder="Neue Aufgabe"><button onclick="addTodo()">+</button>
+
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script type="module">
+import {getData,setData,openModal,closeModal} from './kalender.js';
+
+const start=new Date(2026,1,16),end=new Date(2026,2,12);
+let currentLang='de';
+const urlParams=new URLSearchParams(window.location.search);
+const person=urlParams.get('name');
+document.getElementById('personTitle').innerText=person;
+
+window.closeModal=closeModal;
+window.switchLang=switchLang;
+window.addTodo=addTodo;
+
+function switchLang(l){currentLang=l;renderCalendar();renderTodos();}
+function formatDate(d){return d.getDate().toString().padStart(2,'0')+"."+(d.getMonth()+1).toString().padStart(2,'0')+".";}
+function formatKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');}
+
+function renderCalendar(){
+  let dObj=getData()[currentLang].preset;
+  let h=`<th>Datum</th><th>Einträge</th><th>Übernachtung</th><th>Gebucht</th>`;
+  document.getElementById('headerRow').innerHTML=h;
+  let b="";
+  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+    let key=formatKey(d),label=formatDate(d);
+    let entries=[];
+    if(dObj[key]){
+      if(dObj[key][person])entries=entries.concat(dObj[key][person]);
+    }
+    b+=`<tr>
+      <td>${label}</td>
+      <td>${entries.map((e,i)=>`<div class='entry'>${e} <button onclick="editEntry('${key}',${i})">✏️</button></div>`).join("")}
+      <button onclick="addEntry('${key}')">+</button></td>
+      <td><input placeholder="Übernachtung"></td>
+      <td><input type="checkbox"></td>
+    </tr>`;
+  }
+  document.getElementById('calendarBody').innerHTML=b;
+}
+
+window.addEntry=function(key){
+  openModal(`<input id='newEntry' placeholder='Neue Eintragung'>
+  <button onclick="saveEntry('${key}')">Speichern</button>`);
+}
+window.saveEntry=function(key){
+  let val=document.getElementById('newEntry').value;
+  let d=getData();
+  d[currentLang].preset[key]=d[currentLang].preset[key]||{};
+  d[currentLang].preset[key][person]=d[currentLang].preset[key][person]||[];
+  d[currentLang].preset[key][person].push(val);
+  setData(d);closeModal();renderCalendar();
+}
+window.editEntry=function(key,i){
+  let d=getData();
+  let old=d[currentLang].preset[key][person][i];
+  openModal(`<input id='editEntry' value="${old}">
+  <button onclick="updateEntry('${key}',${i})">Update</button>
+  <button onclick="deleteEntry('${key}',${i})">Löschen</button>`);
+}
+window.updateEntry=function(key,i){
+  let val=document.getElementById('editEntry').value;
+  let d=getData();
+  d[currentLang].preset[key][person][i]=val;
+  setData(d);closeModal();renderCalendar();
+}
+window.deleteEntry=function(key,i){
+  let d=getData();
+  d[currentLang].preset[key][person].splice(i,1);
+  setData(d);closeModal();renderCalendar();
+}
+
+// To-Do Liste
+function renderTodos(){
+  let d=getData();
+  let list=d[currentLang].todos[person]||[];
+  let html=list.map((t,i)=>`<li><input type='checkbox'>${t} <button onclick="delTodo(${i})">X</button></li>`).join("");
+  document.getElementById('todoList').innerHTML=html;
+}
+window.addTodo=function(){
+  let val=document.getElementById('newTodo').value;
+  let d=getData();
+  d[currentLang].todos[person]=d[currentLang].todos[person]||[];
+  d[currentLang].todos[person].push(val);
+  setData(d);renderTodos();
+}
+window.delTodo=function(i){
+  let d=getData();
+  d[currentLang].todos[person].splice(i,1);
+  setData(d);renderTodos();
+}
+
+renderCalendar();
+renderTodos();
+</script>
+</body>
+</html>
