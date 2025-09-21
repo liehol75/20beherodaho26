@@ -18,11 +18,11 @@
 <thead>
 <tr>
 <th class="sticky-col">Datum</th>
-<th class="nameHeader"><button onclick="goPerson('rouven.html')">Rouven</button></th>
-<th class="nameHeader"><button onclick="goPerson('daniel.html')">Daniel</button></th>
-<th class="nameHeader"><button onclick="goPerson('henrik.html')">Henrik</button></th>
-<th class="nameHeader"><button onclick="goPerson('benja.html')">Benja</button></th>
-<th class="nameHeader"><button onclick="goPerson('holger.html')">Holger</button></th>
+<th class="nameHeader"><button onclick="window.location.href='rouven.html'">Rouven</button></th>
+<th class="nameHeader"><button onclick="window.location.href='daniel.html'">Daniel</button></th>
+<th class="nameHeader"><button onclick="window.location.href='henrik.html'">Henrik</button></th>
+<th class="nameHeader"><button onclick="window.location.href='benja.html'">Benja</button></th>
+<th class="nameHeader"><button onclick="window.location.href='holger.html'">Holger</button></th>
 </tr>
 </thead>
 <tbody id="calendarBody"></tbody>
@@ -30,22 +30,18 @@
 
 <script type="module">
 import {getData} from './kalender.js';
-
 const personen=["Rouven","Daniel","Henrik","Benja","Holger"];
 const start=new Date(2026,1,16),end=new Date(2026,2,12);
 
-function goPerson(url){ window.location.href=url; }
-
-function formatDate(d){ let dd=String(d.getDate()).padStart(2,'0'); let mm=String(d.getMonth()+1).padStart(2,'0'); return dd+"."+mm+"."; }
-function formatKey(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0'); }
+function formatDate(d){return String(d.getDate()).padStart(2,'0')+"."+String(d.getMonth()+1).padStart(2,'0')+".";}
+function formatKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');}
 
 function showCalendar(){
-  let data=getData();
+  const data=getData();
   let body="";
-  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
-    let dateKey=formatKey(d),dateLabel=formatDate(d);
-    let day=d.getDay();
-    let dateClass=(day===0||day===6)?"sticky-col weekendDate":"sticky-col";
+  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+    const dateKey=formatKey(d),dateLabel=formatDate(d),day=d.getDay();
+    const dateClass=(day===0||day===6)?"sticky-col weekendDate":"sticky-col";
     body+="<tr>";
     body+=`<td class="${dateClass}">${dateLabel}</td>`;
     personen.forEach(p=>{
