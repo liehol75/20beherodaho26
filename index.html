@@ -4,7 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thailand 2026 – Startseite</title>
-<link rel="stylesheet" href="kalender.css">
+<style>
+body {font-family:sans-serif;margin:0;background:#f6f6f6;color:#333;}
+h1 {text-align:center;background:#0077b6;color:#fff;padding:10px;margin:0;}
+#translateButtons {text-align:center;margin:10px;}
+button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;font-weight:bold;}
+
+table {border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:auto;}
+th, td {border:1px solid #ccc;padding:5px;text-align:center;vertical-align:top;word-wrap:break-word;}
+th.sticky-col, td.sticky-col {position:sticky; left:0; z-index:2; background:#f6f6f6;}
+th.nameHeader button {background:#00b4d8;color:#fff;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:16px;}
+thead th {position:sticky;top:0;z-index:3;}
+.entry {background:#fff;margin:2px;padding:3px;border-radius:3px;display:block;}
+.entry:nth-child(even){background:#e0e0e0;}
+/* Farben für Personen */
+.personColRouven{background-color:#ffd9d9;}
+.personColDaniel{background-color:#d9ffd9;}
+.personColHenrik{background-color:#d9d9ff;}
+.personColBenja{background-color:#fff1d9;}
+.personColHolger{background-color:#f0d9ff;}
+/* Wochenende dunkler für Personen */
+.weekendRouven{background-color:#ffb3b3;}
+.weekendDaniel{background-color:#b3ffb3;}
+.weekendHenrik{background-color:#b3b3ff;}
+.weekendBenja{background-color:#ffe0b3;}
+.weekendHolger{background-color:#dfb3ff;}
+/* Wochenende Datum */
+.weekendDate{background-color:#ffd699;font-weight:bold;}
+</style>
 </head>
 <body>
 <h1>Thailand 2026</h1>
@@ -18,11 +45,11 @@
 <thead>
 <tr>
 <th class="sticky-col">Datum</th>
-<th class="nameHeader"><button onclick="window.location.href='rouven.html'">Rouven</button></th>
-<th class="nameHeader"><button onclick="window.location.href='daniel.html'">Daniel</button></th>
-<th class="nameHeader"><button onclick="window.location.href='henrik.html'">Henrik</button></th>
-<th class="nameHeader"><button onclick="window.location.href='benja.html'">Benja</button></th>
-<th class="nameHeader"><button onclick="window.location.href='holger.html'">Holger</button></th>
+<th class="nameHeader"><button onclick="goPerson('rouven.html')">Rouven</button></th>
+<th class="nameHeader"><button onclick="goPerson('daniel.html')">Daniel</button></th>
+<th class="nameHeader"><button onclick="goPerson('henrik.html')">Henrik</button></th>
+<th class="nameHeader"><button onclick="goPerson('benja.html')">Benja</button></th>
+<th class="nameHeader"><button onclick="goPerson('holger.html')">Holger</button></th>
 </tr>
 </thead>
 <tbody id="calendarBody"></tbody>
@@ -31,10 +58,10 @@
 <script>
 // Personen
 const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
-const start = new Date(2026,1,16); // 16.02.2026 (Monat 1 = Februar)
+const start = new Date(2026,1,16); // 16.02.2026
 const end   = new Date(2026,2,12); // 12.03.2026
 
-// Einträge exakt wie Original
+// Einträge
 let preset = {
   "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]},
   "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"],"Benja":["Familienfest Sa Kaeo"],"Holger":["Familienfest Sa Kaeo"]},
