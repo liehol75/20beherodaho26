@@ -8,7 +8,7 @@
 body {font-family:sans-serif;margin:0;background:#f6f6f6;color:#333;}
 h1 {text-align:center;background:#0077b6;color:#fff;padding:10px;margin:0;}
 #translateButtons {text-align:center;margin:10px;}
-button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;}
+button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;font-weight:bold;}
 
 table {border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:auto;}
 th, td {border:1px solid #ccc;padding:5px;text-align:center;vertical-align:top;word-wrap:break-word;}
@@ -29,14 +29,14 @@ thead th {position:sticky;top:0;z-index:3;}
 .weekendHenrik{background-color:#b3b3ff;}
 .weekendBenja{background-color:#ffe0b3;}
 .weekendHolger{background-color:#dfb3ff;}
-.weekendDate{background-color:#ffd;}
+.weekendDate{background-color:#ffd;font-weight:bold;}
 </style>
 </head>
 <body>
 <h1>Thailand 2026</h1>
 
 <div id="translateButtons">
-  <button class="translateBtn" onclick="translate('th')">Thailändisch</button>
+  <button class="translateBtn" onclick="translate('th')">ไทย</button>
   <button class="translateBtn" onclick="translate('de')">Deutsch</button>
 </div>
 
@@ -57,17 +57,15 @@ thead th {position:sticky;top:0;z-index:3;}
 <script>
 // Personen und Kalenderbereich
 const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
-const start = new Date(2026,1,16);
-const end   = new Date(2026,2,12);
+const start = new Date(2026,1,16); // 16.02.2026
+const end   = new Date(2026,2,1);  // 01.03.2026
 
-// Voreinträge: Datum -> Person -> Einträge
+// Voreinträge bis 01.03.2026
 let preset = {
-  "2026-02-15":{"all":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"]}, // 16.02.
-  "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]}, // 17.02.
+  "2026-02-15":{"all":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"]}, 
+  "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]}, 
   "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"], "Benja":["Familienfest Sa Kaeo"], "Holger":["Familienfest Sa Kaeo"]}, 
-  "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]},
-  "2026-03-11":{"all":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]}
-  // 12.03. gelöscht
+  "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]}
 };
 
 // Übersetzungen
@@ -75,7 +73,6 @@ const translations = {
   "Abflug Frankfurt/Main Flughafen 20.55 Uhr":"ออกจากแฟรงก์เฟิร์ต/สนามบินหลัก 20.55 น.",
   "Ankunft Bangkok-Suvarnabhumi 13.45 Uhr":"ถึงสนามบินสุวรรณภูมิ 13.45 น.",
   "River Cruise":"ล่องเรือแม่น้ำ",
-  "Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr":"ออกจากสนามบินสุวรรณภูมิ 12.40 น. // ถึงแฟรงก์เฟิร์ต/สนามบินหลัก 19.05 น.",
   "Familienfest Sa Kaeo":"งานเลี้ยงครอบครัวสระแก้ว",
   "Einweihungsfeier Sa Kaeo":"งานฉลองบ้านใหม่สระแก้ว"
 };
@@ -100,7 +97,7 @@ function formatKey(d){
  return d.toISOString().split('T')[0];
 }
 
-// Hauptfunktion: Kalender bauen
+// Kalender bauen
 function showCalendar(){
  let body = "";
  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
