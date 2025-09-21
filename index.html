@@ -15,7 +15,9 @@ th.sticky-col, td.sticky-col {
   z-index:2;
   background:#f6f6f6;
 }
-th.nameHeader {background:#00b4d8;color:#fff;cursor:pointer;text-align:center;position:sticky;top:0;z-index:3;}
+th.nameHeader button {
+  background:#00b4d8;color:#fff;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-weight:bold;
+}
 thead th {position:sticky;top:0;z-index:3;}
 .entry {background:#fff;margin:2px;padding:3px;border-radius:3px;display:block;}
 .entry:nth-child(even){background:#e0e0e0;}
@@ -39,11 +41,11 @@ thead th {position:sticky;top:0;z-index:3;}
 <thead>
 <tr>
 <th class="sticky-col">Datum</th>
-<th class="nameHeader" onclick="goPerson('rouven.html')">Rouven</th>
-<th class="nameHeader" onclick="goPerson('daniel.html')">Daniel</th>
-<th class="nameHeader" onclick="goPerson('henrik.html')">Henrik</th>
-<th class="nameHeader" onclick="goPerson('benja.html')">Benja</th>
-<th class="nameHeader" onclick="goPerson('holger.html')">Holger</th>
+<th class="nameHeader"><button onclick="goPerson('rouven.html')">Rouven</button></th>
+<th class="nameHeader"><button onclick="goPerson('daniel.html')">Daniel</button></th>
+<th class="nameHeader"><button onclick="goPerson('henrik.html')">Henrik</button></th>
+<th class="nameHeader"><button onclick="goPerson('benja.html')">Benja</button></th>
+<th class="nameHeader"><button onclick="goPerson('holger.html')">Holger</button></th>
 </tr>
 </thead>
 <tbody id="calendarBody"></tbody>
@@ -55,11 +57,12 @@ const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
 const start = new Date(2026,1,16); // 16.02.2026
 const end   = new Date(2026,2,12); // 12.03.2026
 
-// Vorgabedaten für alle
+// Voreinträge (verschoben wie besprochen)
 const preset = {
-"2026-02-16":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"],
-"2026-02-17":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"],
-"2026-03-11":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]
+"2026-02-15":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"],          // am 16.02. anzeigen
+"2026-02-16":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"], // am 17.02. angezeigt
+"2026-03-11":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"], // 11.03.
+"2026-03-12":["Osnabrück"] // am 12.03.
 };
 
 function goPerson(url){ window.location.href=url; }
