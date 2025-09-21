@@ -7,20 +7,34 @@
 <style>
 body{font-family:sans-serif;margin:0;background:#f6f6f6;color:#333;}
 h1{text-align:center;background:#0077b6;color:#fff;padding:10px;margin:0;}
-table{border-collapse:collapse;width:100%;margin-bottom:20px;}
+table{border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:fixed;}
 th,td{border:1px solid #ccc;padding:5px;text-align:left;vertical-align:top;}
-th.nameHeader{background:#00b4d8;color:#fff;cursor:pointer;text-align:center;}
-tr:nth-child(even){background:#f9f9f9;}
-tr:nth-child(odd){background:#efefef;}
+th.sticky-col, td.sticky-col {
+  position:sticky;
+  left:0;
+  z-index:2;
+  background:#f6f6f6;
+}
+th.nameHeader{background:#00b4d8;color:#fff;cursor:pointer;text-align:center;position:sticky;top:0;z-index:3;}
+thead th{position:sticky;top:0;z-index:3;}
 .entry{background:#fff;margin:2px;padding:3px;border-radius:3px;}
 .entry:nth-child(even){background:#e0e0e0;}
-.addBtn{background:#0077b6;color:#fff;border:none;border-radius:3px;padding:2px 5px;cursor:pointer;}
+.addBtn{background:#0077b6;color:#fff;border:none;border-radius:3px;padding:2px 5px;cursor:pointer;font-size:12px;}
 .delBtn{background:#dc3545;color:#fff;border:none;border-radius:3px;padding:1px 4px;cursor:pointer;font-size:10px;}
-.personColRouven{background-color:#fddede;}
-.personColDaniel{background-color:#defde0;}
-.personColHenrik{background-color:#dde0fd;}
-.personColBenja{background-color:#fdf3de;}
-.personColHolger{background-color:#e4defd;}
+/* Farben für Personen */
+.personColRouven{background-color:#ffd9d9;}
+.personColDaniel{background-color:#d9ffd9;}
+.personColHenrik{background-color:#d9d9ff;}
+.personColBenja{background-color:#fff1d9;}
+.personColHolger{background-color:#f0d9ff;}
+/* Wochenende dunkler */
+.weekendRouven{background-color:#ffb3b3;}
+.weekendDaniel{background-color:#b3ffb3;}
+.weekendHenrik{background-color:#b3b3ff;}
+.weekendBenja{background-color:#ffe0b3;}
+.weekendHolger{background-color:#dfb3ff;}
+/* Sticky first column */
+td.sticky-col {background:#fff;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -28,7 +42,7 @@ tr:nth-child(odd){background:#efefef;}
 <table id="calendar">
 <thead>
 <tr>
-<th>Datum</th>
+<th class="sticky-col">Datum</th>
 <th class="nameHeader" onclick="goPerson('rouven.html')">Rouven</th>
 <th class="nameHeader" onclick="goPerson('daniel.html')">Daniel</th>
 <th class="nameHeader" onclick="goPerson('henrik.html')">Henrik</th>
@@ -42,7 +56,7 @@ tr:nth-child(odd){background:#efefef;}
 <script>
 // --- Konfiguration ---
 const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
-const start = new Date(2026,1,16); // 16.02.2026 (Monate 0-indexiert)
+const start = new Date(2026,1,16); // 16.02.2026
 const end   = new Date(2026,2,12); // 12.03.2026
 
 // Vorgabedaten für alle
@@ -62,31 +76,37 @@ function saveEntries(){
 function goPerson(url){ window.location.href=url; }
 
 function formatDate(d){
+ // TT.MM.
+ let dd=String(d.getDate()).padStart(2,'0');
+ let mm=String(d.getMonth()+1).padStart(2,'0');
+ return dd+"."+mm;
+}
+function formatKey(d){
  return d.toISOString().split('T')[0];
 }
 
-function addEntry(date,person){
-  const text = prompt("Neuer Eintrag für "+person+" am "+date+":","");
+function addEntry(dateKey,dateLabel,person){
+  const text = prompt("Neuer Eintrag für "+person+" am "+dateLabel+":","");
   if(!text) return;
-  entries[date] = entries[date] || {};
-  entries[date][person] = entries[date][person] || [];
-  entries[date][person].push(text);
+  entries[dateKey] = entries[dateKey] || {};
+  entries[dateKey][person] = entries[dateKey][person] || [];
+  entries[dateKey][person].push(text);
   saveEntries();
   showCalendar();
 }
 
-function editEntry(date,person,index){
-  const oldText=entries[date][person][index];
+function editEntry(dateKey,person,index){
+  const oldText=entries[dateKey][person][index];
   const text = prompt("Eintrag bearbeiten:",oldText);
   if(text===null) return;
-  entries[date][person][index]=text;
+  entries[dateKey][person][index]=text;
   saveEntries();
   showCalendar();
 }
 
-function deleteEntry(date,person,index){
+function deleteEntry(dateKey,person,index){
   if(!confirm("Eintrag löschen?")) return;
-  entries[date][person].splice(index,1);
+  entries[dateKey][person].splice(index,1);
   saveEntries();
   showCalendar();
 }
@@ -94,24 +114,29 @@ function deleteEntry(date,person,index){
 function showCalendar(){
   let body="";
   for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-    let dateStr=formatDate(d);
-    body+="<tr><td>"+dateStr+"</td>";
+    let dateKey=formatKey(d);
+    let dateLabel=formatDate(d);
+    let day=d.getDay(); // 0=Sonntag,6=Samstag
+    body+="<tr>";
+    body+=`<td class="sticky-col">${dateLabel}</td>`;
     personen.forEach(p=>{
-      let colClass="personCol"+p;
+      // Spaltenfarbe je nach Wochenende
+      let base="personCol"+p;
+      let weekendClass=(day===0||day===6)?("weekend"+p):base;
       // preset für alle Personen anzeigen
-      let combined=(preset[dateStr]||[]).map(e=>"<div class='entry'>"+e+"</div>").join("");
+      let combined=(preset[dateKey]||[]).map(e=>"<div class='entry'>"+e+"</div>").join("");
       // individuelle Einträge
-      let userEntries=(entries[dateStr] && entries[dateStr][p]) ? entries[dateStr][p] : [];
+      let userEntries=(entries[dateKey] && entries[dateKey][p]) ? entries[dateKey][p] : [];
       let indiv=userEntries.map((e,i)=>
         `<div class='entry'>
            ${e}
-           <button class='delBtn' onclick="deleteEntry('${dateStr}','${p}',${i})">x</button>
-           <button class='addBtn' onclick="editEntry('${dateStr}','${p}',${i})">✎</button>
+           <button class='delBtn' onclick="deleteEntry('${dateKey}','${p}',${i})">x</button>
+           <button class='addBtn' onclick="editEntry('${dateKey}','${p}',${i})">✎</button>
          </div>`
       ).join("");
-      body+=`<td class='${colClass}'>
+      body+=`<td class='${weekendClass}'>
               ${combined}${indiv}
-              <button class='addBtn' onclick="addEntry('${dateStr}','${p}')">+</button>
+              <button class='addBtn' onclick="addEntry('${dateKey}','${dateLabel}','${p}')">+</button>
              </td>`;
     });
     body+="</tr>";
