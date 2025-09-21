@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Henrik</title>
+<link rel="stylesheet" href="kalender.css">
+</head>
+<body>
+<h1>Henrik</h1>
+
+<div id="translateButtons">
+  <button onclick="switchLang('de')">Deutsch</button>
+  <button onclick="switchLang('th')">ไทย</button>
+</div>
+
+<table id="calendar">
+<thead>
+<tr>
+<th class="sticky-col">Datum</th>
+<th>Einträge</th>
+<th>Übernachtung</th>
+<th>Gebucht</th>
+</tr>
+</thead>
+<tbody id="calendarBody"></tbody>
+</table>
+
+<h2>To-Do</h2>
+<ul id="todoList"></ul>
+<input id="newTodo" placeholder="Neue Aufgabe"><button onclick="addTodo()">+</button>
+
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script type="module">
+import {getData,setData,openModal,closeModal} from './kalender.js';
+
+const person="Henrik";
+let lang='de';
+const start=new Date(2026,1,16),end=new Date(2026,2,12);
+
+function switchLang(l){lang=l;showCalendar();showTodos();}
+function formatDate(d){return String(d.getDate()).padStart(2,'0')+"."+String(d.getMonth()+1).padStart(2,'0')+".";}
+function formatKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');}
+
+function showCalendar(){
+  const data=getData();
+  let body="";
+  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+    const dateKey=formatKey(d),dateLabel=formatDate(d),day=d.getDay();
+    const dateClass=(day===0||day===6)?"sticky-col weekendDate":"sticky-col";
+    let entries=[];
+    if(data[lang].preset[dateKey]){
+      if(data[lang].preset[dateKey][person]) entries=data[lang].preset[dateKey][person].slice();
+      if(data[lang].preset[dateKey]["all"]) entries=entries.concat(data[lang].preset[dateKey]["all"]);
+    }
+    body+="<tr>";
+    body+=`<td class="${dateClass}">${dateLabel}</td>`;
+    body+=`<td>${entries.map(e=>"<div class='entry'>"+e+"</div>").join('')}</td>`;
+    
+    let uebernachtung=(data[lang].preset[dateKey]&&data[lang].preset[dateKey][person+"_ue"])?data[lang].preset[dateKey][person+"_ue"]:"";
+    let gebucht=(data[lang].preset[dateKey]&&data[lang].preset[dateKey][person+"_gb"])?data[lang].preset[dateKey][person+"_gb"]:false;
+    body+=`<td><input type="text" value="${uebernachtung}" onchange="saveUebernachtung('${dateKey}',this.value)"></td>`;
+    body+=`<td><input type="checkbox" ${gebucht?'checked':''} onchange="saveGebucht('${dateKey}',this.checked)"></td>`;
+    
+    body+="</tr>";
+  }
+  document.getElementById("calendarBody").innerHTML=body;
+}
+
+window.saveUebernachtung=(date,val)=>{const data=getData();if(!data[lang].preset[date]) data[lang].preset[date]={}; data[lang].preset[date][person+"_ue"]=val; setData(data);}
+window.saveGebucht=(date,val)=>{const data=getData();if(!data[lang].preset[date]) data[lang].preset[date]={}; data[lang].preset[date][person+"_gb"]=val; setData(data);}
+
+function showTodos(){
+  const data=getData();
+  const list=data[lang].todos[person]||[];
+  const ul=document.getElementById("todoList");
+  ul.innerHTML="";
+  list.forEach((item,i)=>{
+    const li=document.createElement("li");
+    const chk=document.createElement("input");
+    chk.type="checkbox";
+    chk.checked=item.done;
+    chk.onchange=()=>{list[i].done=chk.checked;saveTodos();}
+    li.appendChild(chk);
+    li.appendChild(document.createTextNode(" "+item.text));
+    const del=document.createElement("button");
+    del.textContent="×";
+    del.onclick=()=>{list.splice(i,1);saveTodos();}
+    li.appendChild(del);
+    ul.appendChild(li);
+  });
+}
+
+function addTodo(){const val=document.getElementById("newTodo").value.trim(); if(!val) return; const data=getData(); if(!data[lang].todos[person]) data[lang].todos[person]=[]; data[lang].todos[person].push({text:val,done:false}); setData(data); document.getElementById("newTodo").value=""; showTodos();}
+function saveTodos(){setData(getData());showTodos();}
+
+showCalendar();
+showTodos();
+</script>
+</body>
+</html>
