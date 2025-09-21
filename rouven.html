@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rouven</title>
+<link rel="stylesheet" href="kalender.css">
+</head>
+<body>
+<h1>Rouven</h1>
+
+<div id="translateButtons">
+  <button onclick="switchLang('de')">Deutsch</button>
+  <button onclick="switchLang('th')">ไทย</button>
+</div>
+
+<table id="calendar">
+<thead>
+<tr>
+<th class="sticky-col">Datum</th>
+<th>Einträge</th>
+<th>Übernachtung</th>
+<th>Gebucht</th>
+</tr>
+</thead>
+<tbody id="calendarBody"></tbody>
+</table>
+
+<h2>To-Do</h2>
+<ul id="todoList"></ul>
+<input id="newTodo" placeholder="Neue Aufgabe"><button onclick="addTodo()">+</button>
+
+<div id="editModal" class="modal">
+<div
