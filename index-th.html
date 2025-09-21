@@ -56,18 +56,16 @@ thead th {position:sticky;top:0;z-index:3;}
 </table>
 
 <script>
-// Personen
 const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
 const start = new Date(2026,1,16); // 16.02.2026
 const end   = new Date(2026,2,12); // 12.03.2026
 
-// Einträge (Thailändisch)
 let preset = {
   "2026-02-16":{"all":["ถึงสนามบินสุวรรณภูมิ 13.45 น.","ล่องเรือแม่น้ำ"]},
   "2026-02-19":{"Henrik":["งานเลี้ยงครอบครัวสระแก้ว"],"Benja":["งานเลี้ยงครอบครัวสระแก้ว"],"Holger":["งานเลี้ยงครอบครัวสระแก้ว"]},
   "2026-02-26":{"all":["งานฉลองบ้านใหม่สระแก้ว"]},
   "2026-03-11":{"all":["ออกจากสนามบินสุวรรณภูมิ 12.40 น. // ถึงแฟรงก์เฟิร์ต/สนามบินหลัก 19.05 น."]},
-  "2026-03-12":{"all":["Osnabrück"]}
+  "2026-03-12":{"all":["ออสนาบรุค"]}
 };
 
 function goPerson(url){ window.location.href=url; }
@@ -82,7 +80,6 @@ function formatKey(d){
   return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');
 }
 
-// Kalender bauen
 function showCalendar(){
   let body = "";
   for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
