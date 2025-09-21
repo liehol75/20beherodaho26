@@ -23,13 +23,14 @@ thead th {position:sticky;top:0;z-index:3;}
 .personColHenrik{background-color:#d9d9ff;}
 .personColBenja{background-color:#fff1d9;}
 .personColHolger{background-color:#f0d9ff;}
-/* Wochenende dunkler */
+/* Wochenende dunkler für Personen */
 .weekendRouven{background-color:#ffb3b3;}
 .weekendDaniel{background-color:#b3ffb3;}
 .weekendHenrik{background-color:#b3b3ff;}
 .weekendBenja{background-color:#ffe0b3;}
 .weekendHolger{background-color:#dfb3ff;}
-.weekendDate{background-color:#ffd;font-weight:bold;}
+/* Wochenende Datum */
+.weekendDate{background-color:#ffd699;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -58,9 +59,9 @@ thead th {position:sticky;top:0;z-index:3;}
 // Personen und Kalenderbereich
 const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
 const start = new Date(2026,1,16); // 16.02.2026
-const end   = new Date(2026,2,1);  // 01.03.2026
+const end   = new Date(2026,2,12); // 12.03.2026
 
-// Voreinträge bis 01.03.2026
+// Voreinträge bis 01.03.2026, danach leer
 let preset = {
   "2026-02-15":{"all":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"]}, 
   "2026-02-16":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]}, 
