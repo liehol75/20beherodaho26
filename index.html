@@ -7,6 +7,9 @@
 <style>
 body {font-family:sans-serif;margin:0;background:#f6f6f6;color:#333;}
 h1 {text-align:center;background:#0077b6;color:#fff;padding:10px;margin:0;}
+#translateButtons {text-align:center;margin:10px;}
+button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;}
+
 table {border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:auto;}
 th, td {border:1px solid #ccc;padding:5px;text-align:center;vertical-align:top;word-wrap:break-word;}
 th.sticky-col, td.sticky-col {position:sticky; left:0; z-index:2; background:#f6f6f6;}
@@ -14,19 +17,19 @@ th.nameHeader button {background:#00b4d8;color:#fff;border:none;padding:5px 10px
 thead th {position:sticky;top:0;z-index:3;}
 .entry {background:#fff;margin:2px;padding:3px;border-radius:3px;display:block;}
 .entry:nth-child(even){background:#e0e0e0;}
+/* Farben für Personen */
 .personColRouven{background-color:#ffd9d9;}
 .personColDaniel{background-color:#d9ffd9;}
 .personColHenrik{background-color:#d9d9ff;}
 .personColBenja{background-color:#fff1d9;}
 .personColHolger{background-color:#f0d9ff;}
+/* Wochenende dunkler */
 .weekendRouven{background-color:#ffb3b3;}
 .weekendDaniel{background-color:#b3ffb3;}
 .weekendHenrik{background-color:#b3b3ff;}
 .weekendBenja{background-color:#ffe0b3;}
 .weekendHolger{background-color:#dfb3ff;}
 .weekendDate{background-color:#ffd;}
-#translateButtons {text-align:center;margin:10px;}
-button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;}
 </style>
 </head>
 <body>
@@ -52,17 +55,20 @@ button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:
 </table>
 
 <script>
+// Personen
 const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
-const start = new Date(2026,1,16);
-const end   = new Date(2026,2,12);
+const start = new Date(2026,1,16); // 16.02.2026
+const end   = new Date(2026,2,12); // 12.03.2026
 
+// Voreinträge
 let preset = {
-  "2026-02-15":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"],
-  "2026-02-16":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"],
-  "2026-03-11":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"],
-  "2026-03-12":["Osnabrück"]
+  "2026-02-15":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"],         // am 16.02.
+  "2026-02-16":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"], // am 17.02.
+  "2026-03-11":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"], // 11.03.
+  "2026-03-12":["Osnabrück"] // 12.03.
 };
 
+// Übersetzungen
 const translations = {
   "Abflug Frankfurt/Main Flughafen 20.55 Uhr":"ออกจากแฟรงก์เฟิร์ต/สนามบินหลัก 20.55 น.",
   "Ankunft Bangkok-Suvarnabhumi 13.45 Uhr":"ถึงสนามบินสุวรรณภูมิ 13.45 น.",
@@ -95,7 +101,7 @@ function showCalendar(){
  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
    let dateKey = formatKey(d);
    let dateLabel = formatDate(d);
-   let day = d.getDay();
+   let day = d.getDay(); // 0=So,6=Sa
    let dateClass = (day===0||day===6) ? "sticky-col weekendDate" : "sticky-col";
    body += "<tr>";
    body += `<td class="${dateClass}">${dateLabel}</td>`;
