@@ -3,69 +3,68 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Thailand 2026</title>
+<title>Thailand 2026 – Startseite</title>
 <link rel="stylesheet" href="kalender.css">
 </head>
 <body>
 <h1>Thailand 2026</h1>
+
 <div id="translateButtons">
-  <button onclick="switchLang('de')">Deutsch</button>
-  <button onclick="switchLang('th')">ไทย</button>
+  <button class="translateBtn" onclick="window.location.href='index-th.html'">ไทย</button>
+  <button class="translateBtn" onclick="window.location.href='index.html'">Deutsch</button>
 </div>
 
 <table id="calendar">
-<thead><tr id="headerRow"></tr></thead>
+<thead>
+<tr>
+<th class="sticky-col">Datum</th>
+<th class="nameHeader"><button onclick="goPerson('rouven.html')">Rouven</button></th>
+<th class="nameHeader"><button onclick="goPerson('daniel.html')">Daniel</button></th>
+<th class="nameHeader"><button onclick="goPerson('henrik.html')">Henrik</button></th>
+<th class="nameHeader"><button onclick="goPerson('benja.html')">Benja</button></th>
+<th class="nameHeader"><button onclick="goPerson('holger.html')">Holger</button></th>
+</tr>
+</thead>
 <tbody id="calendarBody"></tbody>
 </table>
 
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
 <script type="module">
-import {getData, closeModal} from './kalender.js';
+import {getData} from './kalender.js';
 
 const personen=["Rouven","Daniel","Henrik","Benja","Holger"];
 const start=new Date(2026,1,16),end=new Date(2026,2,12);
-let currentLang='de';
 
-window.closeModal=closeModal;
-window.switchLang=switchLang;
+function goPerson(url){ window.location.href=url; }
 
-function switchLang(l){currentLang=l;renderHeader();renderCalendar();}
-function formatDate(d){return d.getDate().toString().padStart(2,'0')+"."+(d.getMonth()+1).toString().padStart(2,'0')+".";}
-function formatKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');}
+function formatDate(d){ let dd=String(d.getDate()).padStart(2,'0'); let mm=String(d.getMonth()+1).padStart(2,'0'); return dd+"."+mm+"."; }
+function formatKey(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0'); }
 
-function renderHeader(){
-  let h=`<th>Datum</th>`;
-  personen.forEach(p=>h+=`<th><a href="person.html?name=${p}">${p}</a></th>`);
-  document.getElementById('headerRow').innerHTML=h;
-}
-
-function renderCalendar(){
-  let dObj=getData()[currentLang].preset;
-  let b="";
-  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-    let key=formatKey(d),label=formatDate(d);
-    b+=`<tr><td>${label}</td>`;
+function showCalendar(){
+  let data=getData();
+  let body="";
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    let dateKey=formatKey(d),dateLabel=formatDate(d);
+    let day=d.getDay();
+    let dateClass=(day===0||day===6)?"sticky-col weekendDate":"sticky-col";
+    body+="<tr>";
+    body+=`<td class="${dateClass}">${dateLabel}</td>`;
     personen.forEach(p=>{
+      let base="personCol"+p;
+      let weekendClass=(day===0||day===6)?("weekend"+p):base;
       let entries=[];
-      if(dObj[key]){
-        if(dObj[key]["all"])entries=entries.concat(dObj[key]["all"]);
-        if(dObj[key][p])entries=entries.concat(dObj[key][p]);
+      if(data.de.preset[dateKey]){
+        if(data.de.preset[dateKey]["all"]) entries=entries.concat(data.de.preset[dateKey]["all"]);
+        if(data.de.preset[dateKey][p]) entries=entries.concat(data.de.preset[dateKey][p]);
       }
-      b+=`<td>${entries.map(e=>`<div class='entry'>${e}</div>`).join("")}</td>`;
+      let combined=entries.map(e=>"<div class='entry'>"+e+"</div>").join("");
+      body+=`<td class="${weekendClass}">${combined}</td>`;
     });
-    b+=`</tr>`;
+    body+="</tr>";
   }
-  document.getElementById('calendarBody').innerHTML=b;
+  document.getElementById("calendarBody").innerHTML=body;
 }
 
-renderHeader();
-renderCalendar();
+showCalendar();
 </script>
 </body>
 </html>
