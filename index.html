@@ -5,22 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thailand 2026 – Startseite</title>
 <style>
-body{font-family:sans-serif;margin:0;background:#f6f6f6;color:#333;}
-h1{text-align:center;background:#0077b6;color:#fff;padding:10px;margin:0;}
-table{border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:fixed;}
-th,td{border:1px solid #ccc;padding:5px;text-align:left;vertical-align:top;}
+body {font-family:sans-serif;margin:0;background:#f6f6f6;color:#333;}
+h1 {text-align:center;background:#0077b6;color:#fff;padding:10px;margin:0;}
+table {border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:auto;}
+th, td {border:1px solid #ccc;padding:5px;text-align:center;vertical-align:top;word-wrap:break-word;}
 th.sticky-col, td.sticky-col {
   position:sticky;
   left:0;
   z-index:2;
   background:#f6f6f6;
 }
-th.nameHeader{background:#00b4d8;color:#fff;cursor:pointer;text-align:center;position:sticky;top:0;z-index:3;}
-thead th{position:sticky;top:0;z-index:3;}
-.entry{background:#fff;margin:2px;padding:3px;border-radius:3px;}
+th.nameHeader {background:#00b4d8;color:#fff;cursor:pointer;text-align:center;position:sticky;top:0;z-index:3;}
+thead th {position:sticky;top:0;z-index:3;}
+.entry {background:#fff;margin:2px;padding:3px;border-radius:3px;display:block;}
 .entry:nth-child(even){background:#e0e0e0;}
-.addBtn{background:#0077b6;color:#fff;border:none;border-radius:3px;padding:2px 5px;cursor:pointer;font-size:12px;}
-.delBtn{background:#dc3545;color:#fff;border:none;border-radius:3px;padding:1px 4px;cursor:pointer;font-size:10px;}
 /* Farben für Personen */
 .personColRouven{background-color:#ffd9d9;}
 .personColDaniel{background-color:#d9ffd9;}
@@ -33,8 +31,6 @@ thead th{position:sticky;top:0;z-index:3;}
 .weekendHenrik{background-color:#b3b3ff;}
 .weekendBenja{background-color:#ffe0b3;}
 .weekendHolger{background-color:#dfb3ff;}
-/* Sticky first column */
-td.sticky-col {background:#fff;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -66,82 +62,35 @@ const preset = {
 "2026-03-11":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]
 };
 
-// Einträge aus localStorage laden
-let entries = JSON.parse(localStorage.getItem('entries')||'{}');
-
-function saveEntries(){
- localStorage.setItem('entries',JSON.stringify(entries));
-}
-
 function goPerson(url){ window.location.href=url; }
 
 function formatDate(d){
- // TT.MM.
- let dd=String(d.getDate()).padStart(2,'0');
- let mm=String(d.getMonth()+1).padStart(2,'0');
- return dd+"."+mm;
+ let dd = String(d.getDate()).padStart(2,'0');
+ let mm = String(d.getMonth()+1).padStart(2,'0');
+ return dd+"."+mm+".";
 }
 function formatKey(d){
  return d.toISOString().split('T')[0];
 }
 
-function addEntry(dateKey,dateLabel,person){
-  const text = prompt("Neuer Eintrag für "+person+" am "+dateLabel+":","");
-  if(!text) return;
-  entries[dateKey] = entries[dateKey] || {};
-  entries[dateKey][person] = entries[dateKey][person] || [];
-  entries[dateKey][person].push(text);
-  saveEntries();
-  showCalendar();
-}
-
-function editEntry(dateKey,person,index){
-  const oldText=entries[dateKey][person][index];
-  const text = prompt("Eintrag bearbeiten:",oldText);
-  if(text===null) return;
-  entries[dateKey][person][index]=text;
-  saveEntries();
-  showCalendar();
-}
-
-function deleteEntry(dateKey,person,index){
-  if(!confirm("Eintrag löschen?")) return;
-  entries[dateKey][person].splice(index,1);
-  saveEntries();
-  showCalendar();
-}
-
 function showCalendar(){
-  let body="";
-  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-    let dateKey=formatKey(d);
-    let dateLabel=formatDate(d);
-    let day=d.getDay(); // 0=Sonntag,6=Samstag
-    body+="<tr>";
-    body+=`<td class="sticky-col">${dateLabel}</td>`;
-    personen.forEach(p=>{
-      // Spaltenfarbe je nach Wochenende
-      let base="personCol"+p;
-      let weekendClass=(day===0||day===6)?("weekend"+p):base;
-      // preset für alle Personen anzeigen
-      let combined=(preset[dateKey]||[]).map(e=>"<div class='entry'>"+e+"</div>").join("");
-      // individuelle Einträge
-      let userEntries=(entries[dateKey] && entries[dateKey][p]) ? entries[dateKey][p] : [];
-      let indiv=userEntries.map((e,i)=>
-        `<div class='entry'>
-           ${e}
-           <button class='delBtn' onclick="deleteEntry('${dateKey}','${p}',${i})">x</button>
-           <button class='addBtn' onclick="editEntry('${dateKey}','${p}',${i})">✎</button>
-         </div>`
-      ).join("");
-      body+=`<td class='${weekendClass}'>
-              ${combined}${indiv}
-              <button class='addBtn' onclick="addEntry('${dateKey}','${dateLabel}','${p}')">+</button>
-             </td>`;
-    });
-    body+="</tr>";
-  }
-  document.getElementById("calendarBody").innerHTML=body;
+ let body = "";
+ for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+   let dateKey = formatKey(d);
+   let dateLabel = formatDate(d);
+   let day = d.getDay(); // 0=Sonntag,6=Samstag
+   body += "<tr>";
+   body += `<td class="sticky-col">${dateLabel}</td>`;
+   personen.forEach(p=>{
+     let base="personCol"+p;
+     let weekendClass=(day===0||day===6)?("weekend"+p):base;
+     // preset für alle Personen anzeigen
+     let combined=(preset[dateKey]||[]).map(e=>"<div class='entry'>"+e+"</div>").join("");
+     body += `<td class="${weekendClass}">${combined}</td>`;
+   });
+   body += "</tr>";
+ }
+ document.getElementById("calendarBody").innerHTML=body;
 }
 
 showCalendar();
