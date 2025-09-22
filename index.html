@@ -8,6 +8,8 @@
 :root{
   --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff;
   --txt:#222;
+  --gray1:#f3f3f3;
+  --gray2:#e9e9e9;
 }
 *{box-sizing:border-box}
 body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
@@ -38,6 +40,15 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
 .entry .meta{font-size:12px;color:#666;margin-bottom:4px}
 .entry .text{font-size:14px}
 
+/* alternate gray tones for entries inside calendar cells (overview) */
+td .entry:nth-of-type(odd){ background: var(--gray1); }
+td .entry:nth-of-type(even){ background: var(--gray2); }
+
+/* alternate gray tones for entry rows inside person editor */
+.entryBox .entryRow:nth-of-type(odd){ background: var(--gray1); border-radius:6px; padding:6px; margin-top:6px; display:flex; gap:8px; align-items:center; }
+.entryBox .entryRow:nth-of-type(even){ background: var(--gray2); border-radius:6px; padding:6px; margin-top:6px; display:flex; gap:8px; align-items:center; }
+.entryBox .entryRow input[type="text"]{ border:0; background:transparent; padding:6px; width:100%; }
+
 /* person base colors */
 .personColRouven{background: linear-gradient(180deg,#fff0f0,#ffd9d9);}
 .personColDaniel{background: linear-gradient(180deg,#f0fff0,#d9ffd9);}
@@ -64,12 +75,13 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
 
 /* left column: calendar */
 .entryBox{background:#fff;padding:10px;border-radius:8px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
+.entryBox strong{display:inline-block;width:100px}
 .entryRow{display:flex;gap:8px;align-items:center;margin-top:8px}
 .entryRow input[type="text"]{padding:6px;border-radius:6px;border:1px solid #ddd;width:100%}
 .entryRow .btn{padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:#fafafa;cursor:pointer}
 .smallBtn{padding:6px 8px;border-radius:6px;border:0;background:var(--accent2);color:#fff;cursor:pointer}
 
-/* right column: overnight + todos */
+/* right column: (we keep todo card) */
 .sideCard{background:#fff;padding:10px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
 .sideCard h4{margin:0 0 8px 0}
 .ov-row{display:flex;gap:6px;margin-bottom:8px}
@@ -137,15 +149,8 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
           <div id="personCalendarList"></div>
         </div>
 
-        <!-- right: overnight + todos -->
+        <!-- right: todos (Übernachtung wurde in die Tagesboxen integriert) -->
         <div>
-          <div class="sideCard">
-            <h4 id="overnightTitle">Übernachtung</h4>
-            <div id="overnightList"></div>
-          </div>
-
-          <div style="height:12px"></div>
-
           <div class="sideCard">
             <h4 id="todoTitle">To-Do</h4>
             <div id="todoList"></div>
@@ -198,6 +203,7 @@ const start = new Date(2026,1,16); // 16.02.2026
 const end   = new Date(2026,2,12);  // 12.03.2026
 
 // Preset entries (DE + TH)
+// IMPORTANT: 2026-03-11 split into two entries (Abflug + Ankunft) — no '//' left.
 const preset = {
   "2026-02-16":{ all:[
     {de:"Abflug Frankfurt/Main Flughafen 20.55 Uhr", th:"ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น."}
@@ -216,7 +222,10 @@ const preset = {
                  Benja:[  {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ],
                  Holger:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ] },
   "2026-02-26":{ all:[ {de:"Einweihungsfeier Sa Kaeo", th:"พิธีเปิดบ้าน จังหวัดสระแก้ว"} ] },
-  "2026-03-11":{ all:[ {de:"Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th:"ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น. // ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น."} ] },
+  "2026-03-11":{ all:[
+    {de:"Abflug Bangkok-Suvarnabhumi 12.40 Uhr", th:"ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น."},
+    {de:"Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th:"ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น."}
+  ] },
   "2026-03-12":{ all:[ {de:"Osnabrück", th:"ออสนาบรู้ค"} ] }
 };
 
@@ -258,6 +267,17 @@ function createEmptyData(){
   return d;
 }
 
+/* Helper to check whether an entry (de+th) already exists in a list */
+function sameEntry(a,b){
+  if(!a || !b) return false;
+  const da = (a.de||"").trim();
+  const ta = (a.th||"").trim();
+  const db = (b.de||"").trim();
+  const tb = (b.th||"").trim();
+  return (da !== "" && da === db) || (ta !== "" && ta === tb);
+}
+
+/* Merge preset but avoid duplicates — only add if not already present for that person/date */
 function mergePresetInto(d){
   for(const dateKey in preset){
     // ensure date exists (only if in range)
@@ -266,13 +286,24 @@ function mergePresetInto(d){
     // all
     if(obj.all){
       obj.all.forEach(item=>{
-        persons.forEach(p => d.entries[dateKey][p].push({de:item.de, th:item.th}) );
+        persons.forEach(p => {
+          const list = d.entries[dateKey][p] || [];
+          // add only if not present
+          const exists = list.some(e => sameEntry(e,item));
+          if(!exists) list.push({de:item.de, th:item.th});
+          d.entries[dateKey][p] = list;
+        });
       });
     }
     // per person
     persons.forEach(p=>{
       if(obj[p]){
-        obj[p].forEach(item => d.entries[dateKey][p].push({de:item.de, th:item.th}) );
+        obj[p].forEach(item => {
+          const list = d.entries[dateKey][p] || [];
+          const exists = list.some(e => sameEntry(e,item));
+          if(!exists) list.push({de:item.de, th:item.th});
+          d.entries[dateKey][p] = list;
+        });
       }
     });
   }
@@ -362,7 +393,7 @@ function renderOverview(){
         const text = (lang==='de')? e.de : e.th;
         return `<div class="entry"><div class="text">${escAttr(text)}</div></div>`;
       }).join('');
-      // overnight (show small)
+      // overnight (show small) — stays as a small entry in overview but in the person editor it's now an editable last entry
       let ovText = "";
       if(data.overnight[p] && data.overnight[p][key] && (data.overnight[p][key].de || data.overnight[p][key].th)){
         ovText = `<div class="entry"><div class="meta">${(lang==='de'?'Übernachtung':'ที่พัก')}</div><div class="text">${escAttr(lang==='de'?data.overnight[p][key].de:data.overnight[p][key].th)}${data.overnight[p][key].booked? ' • ' + LANG[lang].bookedLabel : ''}</div></div>`;
@@ -389,7 +420,6 @@ function openEditor(person){
   // set name + badge color
   document.getElementById('editorName').textContent = LANG[lang].persons[person] || person;
   document.getElementById('closeLabel').textContent = LANG[lang].closeLabel;
-  document.getElementById('overnightTitle').textContent = LANG[lang].overnightTitle;
   document.getElementById('todoTitle').textContent = LANG[lang].todoTitle;
 
   // badge color class
@@ -429,7 +459,10 @@ function renderPersonEditor(){
     if(!data.entries[key]) data.entries[key] = {};
     if(!data.entries[key][currentPerson]) data.entries[key][currentPerson] = [];
     const entries = data.entries[key][currentPerson];
+
     leftHtml += `<div class="entryBox"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${label}</strong><button class="btn" onclick="addEntry('${key}')">${LANG[lang].addEntryLabel}</button></div>`;
+
+    // existing entries (editable)
     entries.forEach((e,i)=>{
       leftHtml += `<div class="entryRow" id="entry-${key}-${i}">
         <input type="text" placeholder="DE" value="${escAttr(e.de)}" oninput="updateEntry('${key}',${i},'de',this.value)">
@@ -437,24 +470,20 @@ function renderPersonEditor(){
         <button class="btn" onclick="deleteEntry('${key}',${i})">${LANG[lang].btnDelete}</button>
       </div>`;
     });
+
+    // --- Overnight as last editable entry for this date (per requirement) ---
+    const ov = (data.overnight[currentPerson] && data.overnight[currentPerson][key]) ? data.overnight[currentPerson][key] : {de:'', th:'', booked:false};
+    // we present overnight as a special last "row" with label and inputs
+    leftHtml += `<div class="entryRow">
+      <div style="min-width:120px;font-size:13px;font-weight:700">${LANG[lang].overnightTitle}</div>
+      <input type="text" placeholder="DE Übernachtung" value="${escAttr(ov.de)}" oninput="updateOvernight('${key}','de',this.value)">
+      <input type="text" placeholder="TH ที่พัก" value="${escAttr(ov.th)}" oninput="updateOvernight('${key}','th',this.value)">
+      <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${ov.booked ? 'checked' : ''} onchange="updateOvernight('${key}','booked',this.checked)"> ${LANG[lang].bookedLabel}</label>
+    </div>`;
+
     leftHtml += `</div>`;
   }
   document.getElementById('personCalendarList').innerHTML = leftHtml;
-
-  // right: overnight list
-  let ovHtml = "";
-  for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
-    const key = formatKey(dt);
-    const label = formatLabel(dt);
-    const ov = (data.overnight[currentPerson] && data.overnight[currentPerson][key]) ? data.overnight[currentPerson][key] : {de:'', th:'', booked:false};
-    ovHtml += `<div class="ov-row" style="align-items:center;margin-bottom:8px">
-      <div style="width:72px">${label}</div>
-      <input type="text" placeholder="DE" value="${escAttr(ov.de)}" onchange="updateOvernight('${key}','de',this.value)">
-      <input type="text" placeholder="TH" value="${escAttr(ov.th)}" onchange="updateOvernight('${key}','th',this.value)">
-      <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${ov.booked ? 'checked' : ''} onchange="updateOvernight('${key}','booked',this.checked)"> ${LANG[lang].bookedLabel}</label>
-    </div>`;
-  }
-  document.getElementById('overnightList').innerHTML = ovHtml;
 
   // right: todos
   renderTodos();
@@ -464,6 +493,8 @@ function renderPersonEditor(){
 function addEntry(dateKey){
   if(!data.entries[dateKey]) data.entries[dateKey] = {};
   if(!data.entries[dateKey][currentPerson]) data.entries[dateKey][currentPerson] = [];
+  // only add blank entry; duplicates only matter for preset merges. If user pastes text that already exists, they asked to avoid duplicates —
+  // we'll guard when adding via a helper that checks if identical text already exists (if user filled both fields equal to an existing one).
   data.entries[dateKey][currentPerson].push({de:'', th:''});
   saveData();
   renderPersonEditor();
@@ -477,6 +508,8 @@ function addEntry(dateKey){
 function updateEntry(dateKey, idx, field, value){
   if(!data.entries[dateKey] || !data.entries[dateKey][currentPerson] || !data.entries[dateKey][currentPerson][idx]) return;
   data.entries[dateKey][currentPerson][idx][field] = value;
+  // if the user has created an entry that exactly equals an existing different entry, avoid duplicates by checking and removing duplicates:
+  dedupeEntriesForDatePerson(dateKey, currentPerson);
   saveData();
 }
 function deleteEntry(dateKey, idx){
@@ -487,12 +520,35 @@ function deleteEntry(dateKey, idx){
   renderPersonEditor();
 }
 
+/* Remove exact duplicate entries for a given date/person (keeps first occurrence) */
+function dedupeEntriesForDatePerson(dateKey, person){
+  if(!data.entries[dateKey] || !data.entries[dateKey][person]) return;
+  const seen = [];
+  const result = [];
+  data.entries[dateKey][person].forEach(e=>{
+    const key = ((e.de||"").trim() + "||" + (e.th||"").trim());
+    if(key.trim() === "||") { // both empty, keep one only
+      if(!seen.includes(key)){
+        seen.push(key);
+        result.push(e);
+      }
+    } else {
+      if(!seen.includes(key)){
+        seen.push(key);
+        result.push(e);
+      }
+    }
+  });
+  data.entries[dateKey][person] = result;
+}
+
 /* Overnight handlers */
 function updateOvernight(dateKey, field, value){
   if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
   if(!data.overnight[currentPerson][dateKey]) data.overnight[currentPerson][dateKey] = {de:'',th:'',booked:false};
   if(field==='booked') data.overnight[currentPerson][dateKey].booked = !!value;
   else data.overnight[currentPerson][dateKey][field] = value;
+  // If overnight fields are empty, we keep the object empty (but it's fine to keep structure)
   saveData();
 }
 
@@ -545,7 +601,6 @@ function setLang(l){
   renderOverview();
   if(editorOpen && currentPerson){
     document.getElementById('editorName').textContent = LANG[lang].persons[currentPerson];
-    document.getElementById('overnightTitle').textContent = LANG[lang].overnightTitle;
     document.getElementById('todoTitle').textContent = LANG[lang].todoTitle;
     renderPersonEditor();
   }
