@@ -5,18 +5,81 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thailand 2026 – Startseite</title>
 <style>
-body {font-family:sans-serif;margin:0;background:#f6f6f6;color:#333;}
-h1 {text-align:center;background:#0077b6;color:#fff;padding:10px;margin:0;}
-#translateButtons {text-align:center;margin:10px;}
-button.translateBtn {padding:5px 10px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;font-weight:bold;}
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin:0;
+  background:#f6f6f6;
+  color:#333;
+}
+h1 {
+  text-align:center;
+  background:#0077b6;
+  color:#fff;
+  padding:15px;
+  margin:0;
+  box-shadow:0 2px 4px rgba(0,0,0,0.2);
+}
+#translateButtons {
+  text-align:center;
+  margin:15px;
+}
+button.translateBtn {
+  padding:6px 12px;
+  margin:0 5px;
+  cursor:pointer;
+  border-radius:5px;
+  border:none;
+  background:#0077b6;
+  color:#fff;
+  font-weight:bold;
+  transition:background 0.3s;
+}
+button.translateBtn:hover{background:#0096c7;}
 
-table {border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:auto;}
-th, td {border:1px solid #ccc;padding:5px;text-align:center;vertical-align:top;word-wrap:break-word;}
-th.sticky-col, td.sticky-col {position:sticky; left:0; z-index:2; background:#f6f6f6;}
-th.nameHeader button {background:#00b4d8;color:#fff;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:16px;}
-thead th {position:sticky;top:0;z-index:3;}
-.entry {background:#fff;margin:2px;padding:3px;border-radius:3px;display:block;}
-.entry:nth-child(even){background:#e0e0e0;}
+table {
+  border-collapse:collapse;
+  width:100%;
+  margin-bottom:20px;
+  table-layout:auto;
+  font-size:14px;
+}
+th, td {
+  border:1px solid #ccc;
+  padding:5px;
+  text-align:center;
+  vertical-align:top;
+  word-wrap:break-word;
+}
+th.sticky-col, td.sticky-col {
+  position:sticky;
+  left:0;
+  z-index:2;
+  background:#f6f6f6;
+}
+th.nameHeader button {
+  background:#00b4d8;
+  color:#fff;
+  border:none;
+  padding:5px 10px;
+  border-radius:5px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:16px;
+}
+thead th {
+  position:sticky;
+  top:0;
+  z-index:3;
+}
+.entry {
+  background:#fff;
+  margin:2px;
+  padding:3px;
+  border-radius:3px;
+  display:block;
+  box-shadow:0 1px 2px rgba(0,0,0,0.1);
+}
+.entry:nth-child(even){background:#e9e9e9;}
 /* Farben für Personen */
 .personColRouven{background-color:#ffd9d9;}
 .personColDaniel{background-color:#d9ffd9;}
@@ -61,11 +124,13 @@ const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
 const start = new Date(2026,1,16); // 16.02.2026
 const end   = new Date(2026,2,12); // 12.03.2026
 
-// Einträge (verschoben wie gewünscht)
+// Einträge inkl. neuer Vorgaben
 let preset = {
-  "2026-02-16":{"all":["Abflug Frankfurt/Main Flughafen"]},
+  "2026-02-16":{"all":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"]},
   "2026-02-17":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]},
   "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"],"Benja":["Familienfest Sa Kaeo"],"Holger":["Familienfest Sa Kaeo"]},
+  "2026-02-24":{"Henrik":["Upasampada-Feier Sa Kaeo"],"Benja":["Upasampada-Feier Sa Kaeo"],"Holger":["Upasampada-Feier Sa Kaeo"]},
+  "2026-02-25":{"Henrik":["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"],"Benja":["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"],"Holger":["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"]},
   "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]},
   "2026-03-11":{"all":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]},
   "2026-03-12":{"all":["Osnabrück"]}
