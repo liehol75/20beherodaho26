@@ -3,194 +3,577 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Thailand 2026</title>
+<title>Thailand 2026 — Übersicht</title>
 <style>
-body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:#f6f6f6;color:#333;}
-h1{text-align:center;background:#0077b6;color:#fff;padding:15px;margin:0;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
-#translateButtons{text-align:center;margin:15px;}
-button.translateBtn{padding:6px 12px;margin:0 5px;cursor:pointer;border-radius:5px;border:none;background:#0077b6;color:#fff;font-weight:bold;transition:background .3s;}
-button.translateBtn:hover{background:#0096c7;}
-table{border-collapse:collapse;width:100%;margin-bottom:20px;table-layout:auto;font-size:14px;}
-th,td{border:1px solid #ccc;padding:5px;text-align:center;vertical-align:top;word-wrap:break-word;}
-th.sticky-col,td.sticky-col{position:sticky;left:0;z-index:2;background:#f6f6f6;}
-th.nameHeader button{background:#00b4d8;color:#fff;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:16px;}
-thead th{position:sticky;top:0;z-index:3;}
-.entry{background:#fff;margin:2px;padding:3px;border-radius:3px;display:block;box-shadow:0 1px 2px rgba(0,0,0,.1);}
-.entry:nth-child(even){background:#e9e9e9;}
-/* Personenfarben */
-.personColRouven{background:#ffd9d9;}
-.personColDaniel{background:#d9ffd9;}
-.personColHenrik{background:linear-gradient(#b3b3ff,#9999ff);}
-.personColBenja{background:linear-gradient(#ffe0b3,#ffc266);}
-.personColHolger{background:linear-gradient(#dfb3ff,#c299ff);}
-.weekendDate{background-color:#ffd699;font-weight:bold;}
-/* Bearbeitungsmodus */
-#editor{padding:20px;}
-.entryBox{border:1px solid #ccc;padding:5px;margin:5px 0;background:#fff;border-radius:5px;}
-.entryBox input[type=text]{width:45%;margin-right:5px;}
-.todo-item{display:flex;align-items:center;margin:5px 0;}
-.todo-item input[type=checkbox]{margin-right:8px;}
-button.small{padding:2px 5px;margin-left:5px;}
+:root{
+  --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff;
+  --txt:#222;
+}
+*{box-sizing:border-box}
+body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
+.header{
+  background:linear-gradient(90deg,var(--accent),#00629a);
+  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+}
+.header h1{margin:0;font-size:18px;font-weight:600}
+.langBtns{display:flex;gap:8px}
+button.langBtn{
+  border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;
+}
+.container{max-width:1200px;margin:18px auto;padding:12px}
+.card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.small{font-size:13px;color:#444}
+
+/* Table */
+.table-wrap{overflow:auto;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border:1px solid #e2e2e2;padding:8px;text-align:center;vertical-align:top}
+thead th{position:sticky;top:0;background:#fafafa;z-index:5}
+.sticky-date{position:sticky;left:0;background:#fff;z-index:6;font-weight:700;width:72px;min-width:64px}
+
+/* entries */
+.entry{display:block;background:#fff;padding:6px;margin:6px 0;border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,0.05);text-align:left}
+.entry .meta{font-size:12px;color:#666;margin-bottom:4px}
+.entry .text{font-size:14px}
+
+/* person base colors */
+.personColRouven{background: linear-gradient(180deg,#fff0f0,#ffd9d9);}
+.personColDaniel{background: linear-gradient(180deg,#f0fff0,#d9ffd9);}
+.personColHenrik{background: linear-gradient(180deg,#eef4ff,#d9e7ff);}
+.personColBenja{background: linear-gradient(180deg,#fffaf0,#fff1d9);}
+.personColHolger{background: linear-gradient(180deg,#f7efff,#f0d9ff);}
+
+/* weekend darker variants */
+.weekendRouven{background: linear-gradient(180deg,#ffd0d0,#ffb3b3);}
+.weekendDaniel{background: linear-gradient(180deg,#d0ffd0,#b3ffb3);}
+.weekendHenrik{background: linear-gradient(180deg,#c6d9ff,#9fbfff);}
+.weekendBenja{background: linear-gradient(180deg,#ffe8c2,#ffd18a);}
+.weekendHolger{background: linear-gradient(180deg,#ebd2ff,#d8b3ff);}
+
+.weekendDate{background:#ffd699;font-weight:700;color:#222}
+
+/* editor styles */
+.editorHeader{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.personBadge{display:inline-flex;align-items:center;gap:10px}
+.badgeCircle{width:36px;height:36px;border-radius:50%;display:inline-block}
+.personName{font-weight:700;font-size:16px}
+.editorGrid{display:grid;grid-template-columns:1fr 360px;gap:12px}
+@media(max-width:980px){ .editorGrid{grid-template-columns:1fr} }
+
+/* left column: calendar */
+.entryBox{background:#fff;padding:10px;border-radius:8px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
+.entryRow{display:flex;gap:8px;align-items:center;margin-top:8px}
+.entryRow input[type="text"]{padding:6px;border-radius:6px;border:1px solid #ddd;width:100%}
+.entryRow .btn{padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:#fafafa;cursor:pointer}
+.smallBtn{padding:6px 8px;border-radius:6px;border:0;background:var(--accent2);color:#fff;cursor:pointer}
+
+/* right column: overnight + todos */
+.sideCard{background:#fff;padding:10px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
+.sideCard h4{margin:0 0 8px 0}
+.ov-row{display:flex;gap:6px;margin-bottom:8px}
+.ov-row input[type="text"]{flex:1;padding:6px;border-radius:6px;border:1px solid #ddd}
+.ov-row label{display:flex;gap:6px;align-items:center}
+
+/* todos */
+.todo-item{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.todo-item input[type="text"]{flex:1;padding:6px;border-radius:6px;border:1px solid #ddd}
+.todo-actions button{padding:6px;border-radius:6px;border:0;background:#f0f0f0;cursor:pointer}
+
+/* misc */
+.kv{font-size:13px;color:#666}
+.note{font-size:13px;color:#555;margin-top:8px}
 </style>
 </head>
 <body>
-<h1 id="title">Thailand 2026</h1>
-<div id="translateButtons">
-  <button class="translateBtn" onclick="setLang('de')">Deutsch</button>
-  <button class="translateBtn" onclick="setLang('th')">ไทย</button>
+
+<div class="header">
+  <h1 id="pageTitle">Thailand 2026</h1>
+  <div class="langBtns">
+    <button class="langBtn" onclick="setLang('de')">Deutsch</button>
+    <button class="langBtn" onclick="setLang('th')">ไทย</button>
+  </div>
 </div>
 
-<div id="mainView">
-<table id="calendar">
-<thead>
-<tr>
-<th class="sticky-col" id="dateHeader">Datum</th>
-<th class="nameHeader"><button onclick="openEditor('Rouven')">Rouven</button></th>
-<th class="nameHeader"><button onclick="openEditor('Daniel')">Daniel</button></th>
-<th class="nameHeader"><button onclick="openEditor('Henrik')">Henrik</button></th>
-<th class="nameHeader"><button onclick="openEditor('Benja')">Benja</button></th>
-<th class="nameHeader"><button onclick="openEditor('Holger')">Holger</button></th>
-</tr>
-</thead>
-<tbody id="calendarBody"></tbody>
-</table>
-</div>
+<div class="container">
+  <div class="card">
+    <div class="controls">
+      <div class="small kv" id="rangeInfo"></div>
+      <div style="flex:1"></div>
+      <div class="small kv">Sprache: <strong id="langLabel">Deutsch</strong></div>
+    </div>
 
-<div id="editor" style="display:none;">
-  <h2 id="editorTitle"></h2>
-  <button onclick="backToMain()">&larr; <span id="backText">Zurück</span></button>
-  <div id="personCalendar"></div>
-  <h3 id="todoTitle">To-Do-Liste</h3>
-  <div id="todoList"></div>
-  <button onclick="addTodo()">+ <span id="addTodoText">Eintrag</span></button>
+    <!-- Übersicht -->
+    <div id="overview">
+      <div class="table-wrap">
+        <table id="calendarTable" aria-label="Reiseübersicht">
+          <thead id="calendarHead"></thead>
+          <tbody id="calendarBody"></tbody>
+        </table>
+      </div>
+      <p class="note">Klicke auf einen Namen, um die persönliche Seite (inline Editor) zu öffnen.</p>
+    </div>
+
+    <!-- Editor -->
+    <div id="editor" style="display:none;margin-top:14px;">
+      <div class="editorHeader">
+        <div class="personBadge">
+          <div class="badgeCircle" id="badgeColor"></div>
+          <div>
+            <div class="personName" id="editorName">Person</div>
+            <div class="kv" id="editorSub">Bearbeiten — Einträge / Übernachtung / To-Dos</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="smallBtn" onclick="closeEditor()">← <span id="closeLabel">Zurück</span></button>
+          <div class="kv">Änderungen werden sofort gespeichert (localStorage)</div>
+        </div>
+      </div>
+
+      <div class="editorGrid">
+        <!-- left: calendar entries -->
+        <div>
+          <div id="personCalendarList"></div>
+        </div>
+
+        <!-- right: overnight + todos -->
+        <div>
+          <div class="sideCard">
+            <h4 id="overnightTitle">Übernachtung</h4>
+            <div id="overnightList"></div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="sideCard">
+            <h4 id="todoTitle">To-Do</h4>
+            <div id="todoList"></div>
+            <div style="margin-top:8px">
+              <button class="smallBtn" onclick="addTodoItem()">+ Neue Aufgabe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
 <script>
-// Sprachdaten
-const translations={
-  de:{title:"Thailand 2026",dateHeader:"Datum",back:"Zurück",todoTitle:"To-Do-Liste",addTodo:"Eintrag",
-      persons:{Rouven:"Rouven",Daniel:"Daniel",Henrik:"Henrik",Benja:"Benja",Holger:"Holger"},
-      defaultTodo:"Gültiger Reisepass (mind. bis 09/2016)"},
-  th:{title:"ประเทศไทย 2026",dateHeader:"วันที่",back:"กลับ",todoTitle:"รายการสิ่งที่ต้องทำ",addTodo:"เพิ่ม",
-      persons:{Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"},
-      defaultTodo:"หนังสือเดินทางที่ถูกต้อง (อย่างน้อยถึง 09/2016)"}
-};
-let lang="de";
-
-// Zeitspanne
-const start=new Date(2026,1,16);
-const end=new Date(2026,2,12);
-const personen=["Rouven","Daniel","Henrik","Benja","Holger"];
-
-// Daten laden/speichern
-let data=JSON.parse(localStorage.getItem("calendarData")||"{}");
-let todos=JSON.parse(localStorage.getItem("todos")||"{}");
-
-// Hilfsfunktionen
-function formatDate(d){return String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+".";}
-function formatKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
-
-// Übersicht rendern
-function showCalendar(){
-  document.getElementById("title").textContent=translations[lang].title;
-  document.getElementById("dateHeader").textContent=translations[lang].dateHeader;
-  let body="";
-  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-    let dateKey=formatKey(d);
-    let dateLabel=formatDate(d);
-    let day=d.getDay();
-    let dateClass=(day===0||day===6)?"sticky-col weekendDate":"sticky-col";
-    body+="<tr><td class='"+dateClass+"'>"+dateLabel+"</td>";
-    personen.forEach(p=>{
-      let base="personCol"+p;
-      let entries=(data[dateKey]&&data[dateKey][p])?data[dateKey][p]:[];
-      let combined=entries.map(e=>"<div class='entry'>"+(lang==="de"?e.de:e.th)+"</div>").join("");
-      body+=`<td class="${base}">${combined}</td>`;
-    });
-    body+="</tr>";
+/* ===========================
+   Konfiguration & Übersetzungen
+   =========================== */
+const LANG = {
+  de: {
+    pageTitle: "Thailand 2026",
+    closeLabel: "Zurück",
+    overnightTitle: "Übernachtung",
+    todoTitle: "To-Do",
+    addEntryLabel: "+ Eintrag",
+    btnDelete: "Löschen",
+    btnAddEntry: "+Eintrag",
+    defaultTodo: "Gültiger Reisepass (mind. bis 09/2016)",
+    persons: {Rouven:"Rouven",Daniel:"Daniel",Henrik:"Henrik",Benja:"Benja",Holger:"Holger"},
+    bookedLabel: "Gebucht"
+  },
+  th: {
+    pageTitle: "ประเทศไทย 2026",
+    closeLabel: "กลับ",
+    overnightTitle: "ที่พัก",
+    todoTitle: "รายการที่ต้องทำ",
+    addEntryLabel: "+ รายการ",
+    btnDelete: "ลบ",
+    btnAddEntry: "+รายการ",
+    defaultTodo: "หนังสือเดินทางที่ถูกต้อง (อย่างน้อยถึง 09/2016)",
+    persons: {Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"},
+    bookedLabel: "จองแล้ว"
   }
-  document.getElementById("calendarBody").innerHTML=body;
-}
-showCalendar();
+};
 
-// Editor
-let currentPerson=null;
+let lang = 'de'; // default
+const persons = ["Rouven","Daniel","Henrik","Benja","Holger"];
+const start = new Date(2026,1,16); // 16.02.2026
+const end   = new Date(2026,2,12);  // 12.03.2026
+
+// Preset entries (DE + TH)
+const preset = {
+  "2026-02-16":{ all:[
+    {de:"Abflug Frankfurt/Main Flughafen 20.55 Uhr", th:"ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น."}
+  ]},
+  "2026-02-17":{ all:[
+    {de:"Ankunft Bangkok-Suvarnabhumi 13.45 Uhr", th:"ถึงกรุงเทพฯ สนามบินสุวรรณภูมิ 13:45 น."},
+    {de:"River Cruise", th:"ล่องเรือ"}
+  ]},
+  "2026-02-19":{ Henrik:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ],
+                 Benja:[  {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ],
+                 Holger:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแกัว"} ] },
+  "2026-02-24":{ Henrik:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ],
+                 Benja:[  {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ],
+                 Holger:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ] },
+  "2026-02-25":{ Henrik:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ],
+                 Benja:[  {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ],
+                 Holger:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ] },
+  "2026-02-26":{ all:[ {de:"Einweihungsfeier Sa Kaeo", th:"พิธีเปิดบ้าน จังหวัดสระแก้ว"} ] },
+  "2026-03-11":{ all:[ {de:"Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th:"ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น. // ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น."} ] },
+  "2026-03-12":{ all:[ {de:"Osnabrück", th:"ออสนาบรู้ค"} ] }
+};
+
+/* ===========================
+   Datenstruktur
+   - data.entries[dateKey][person] = [ {de,th}, ... ]
+   - data.overnight[person][dateKey] = {de,th,booked}
+   - data.todos[person] = [ {id,de,th,done}, ... ]
+   =========================== */
+
+const STORAGE_KEY = "trip2026_v3";
+
+let data = null;
+
+// Helpers
+function pad(n){ return String(n).padStart(2,'0'); }
+function formatLabel(d){ return pad(d.getDate()) + "." + pad(d.getMonth()+1) + "."; }
+function formatKey(d){ return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
+function dateRangeText(){ return formatLabel(start) + " — " + formatLabel(end); }
+function makeId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function escAttr(s){ return String(s||"").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ===========================
+   Init / Load
+   =========================== */
+function createEmptyData(){
+  const d = { entries:{}, overnight:{}, todos:{} };
+  // dates
+  for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+    const key = formatKey(dt);
+    d.entries[key] = {};
+    persons.forEach(p => d.entries[key][p] = []);
+  }
+  // overnight & todos
+  persons.forEach(p=>{
+    d.overnight[p] = {}; // dateKey -> {de,th,booked}
+    d.todos[p] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
+  });
+  return d;
+}
+
+function mergePresetInto(d){
+  for(const dateKey in preset){
+    // ensure date exists (only if in range)
+    if(!d.entries[dateKey]) continue;
+    const obj = preset[dateKey];
+    // all
+    if(obj.all){
+      obj.all.forEach(item=>{
+        persons.forEach(p => d.entries[dateKey][p].push({de:item.de, th:item.th}) );
+      });
+    }
+    // per person
+    persons.forEach(p=>{
+      if(obj[p]){
+        obj[p].forEach(item => d.entries[dateKey][p].push({de:item.de, th:item.th}) );
+      }
+    });
+  }
+}
+
+function loadData(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw){
+    const d = createEmptyData();
+    mergePresetInto(d);
+    data = d;
+    saveData();
+    return;
+  }
+  try{
+    data = JSON.parse(raw);
+    // back-compat / ensure structure
+    if(!data.entries || !data.overnight || !data.todos){
+      data = createEmptyData();
+      mergePresetInto(data);
+      saveData();
+    } else {
+      // ensure all date/person keys exist (in case someone cleared only parts)
+      for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+        const k=formatKey(dt);
+        if(!data.entries[k]) data.entries[k] = {};
+        persons.forEach(p=> { if(!data.entries[k][p]) data.entries[k][p]=[]; });
+      }
+      persons.forEach(p=>{
+        if(!data.overnight[p]) data.overnight[p] = {};
+        if(!data.todos[p]) data.todos[p] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
+      });
+      // merge preset if missing (only add presets that aren't already present)
+      mergePresetInto(data);
+    }
+  }catch(e){
+    console.error("load error, resetting data", e);
+    data = createEmptyData();
+    mergePresetInto(data);
+    saveData();
+  }
+}
+
+function saveData(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  // update overview as well
+  if(!editorOpen) renderOverview();
+}
+
+/* ===========================
+   Render — Übersicht
+   =========================== */
+
+const calendarHead = document.getElementById('calendarHead');
+const calendarBody = document.getElementById('calendarBody');
+const pageTitle = document.getElementById('pageTitle');
+const rangeInfo = document.getElementById('rangeInfo');
+
+function renderOverview(){
+  pageTitle.textContent = LANG[lang].pageTitle;
+  rangeInfo.textContent = dateRangeText();
+  document.getElementById('langLabel').textContent = (lang==='de'?'Deutsch':'ไทย');
+
+  // header row
+  let headHtml = "<tr><th class='sticky-date'>" + (lang==='de' ? "Datum" : "วันที่") + "</th>";
+  persons.forEach(p=>{
+    const name = LANG[lang].persons[p] || p;
+    headHtml += `<th><button class="langBtn" style="padding:8px 12px;border-radius:8px" onclick="openEditor('${p}')">${escAttr(name)}</button></th>`;
+  });
+  headHtml += "</tr>";
+  calendarHead.innerHTML = headHtml;
+
+  // body
+  let bodyHtml = "";
+  for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+    const key = formatKey(dt);
+    const label = formatLabel(dt);
+    const isWeekend = (dt.getDay()===0 || dt.getDay()===6);
+    const dateClass = isWeekend ? "sticky-date weekendDate":"sticky-date";
+    bodyHtml += `<tr><td class="${dateClass}">${label}</td>`;
+    persons.forEach(p=>{
+      const baseClass = "personCol" + p;
+      const weekendClass = isWeekend ? (" weekend" + p) : "";
+      const classes = baseClass + weekendClass;
+      const entries = (data.entries[key] && data.entries[key][p]) ? data.entries[key][p] : [];
+      const htmlEntries = entries.map(e=>{
+        const text = (lang==='de')? e.de : e.th;
+        return `<div class="entry"><div class="text">${escAttr(text)}</div></div>`;
+      }).join('');
+      // overnight (show small)
+      let ovText = "";
+      if(data.overnight[p] && data.overnight[p][key] && (data.overnight[p][key].de || data.overnight[p][key].th)){
+        ovText = `<div class="entry"><div class="meta">${(lang==='de'?'Übernachtung':'ที่พัก')}</div><div class="text">${escAttr(lang==='de'?data.overnight[p][key].de:data.overnight[p][key].th)}${data.overnight[p][key].booked? ' • ' + LANG[lang].bookedLabel : ''}</div></div>`;
+      }
+      bodyHtml += `<td class="${classes}">${htmlEntries}${ovText}</td>`;
+    });
+    bodyHtml += "</tr>";
+  }
+  calendarBody.innerHTML = bodyHtml;
+}
+
+/* ===========================
+   Editor (Person) 
+   =========================== */
+
+let editorOpen = false;
+let currentPerson = null;
+
 function openEditor(person){
-  currentPerson=person;
-  document.getElementById("mainView").style.display="none";
-  document.getElementById("editor").style.display="block";
-  document.getElementById("editorTitle").textContent=translations[lang].persons[person];
-  document.getElementById("backText").textContent=translations[lang].back;
-  document.getElementById("todoTitle").textContent=translations[lang].todoTitle;
-  document.getElementById("addTodoText").textContent=translations[lang].addTodo;
-  renderPersonCalendar();
+  currentPerson = person;
+  editorOpen = true;
+  document.getElementById('overview').style.display = 'none';
+  document.getElementById('editor').style.display = 'block';
+  // set name + badge color
+  document.getElementById('editorName').textContent = LANG[lang].persons[person] || person;
+  document.getElementById('closeLabel').textContent = LANG[lang].closeLabel;
+  document.getElementById('overnightTitle').textContent = LANG[lang].overnightTitle;
+  document.getElementById('todoTitle').textContent = LANG[lang].todoTitle;
+
+  // badge color class
+  const badge = document.getElementById('badgeColor');
+  badge.style.background = getPersonColor(person);
+  renderPersonEditor();
+}
+
+function closeEditor(){
+  saveData();
+  editorOpen = false;
+  currentPerson = null;
+  document.getElementById('editor').style.display = 'none';
+  document.getElementById('overview').style.display = 'block';
+  renderOverview();
+}
+
+function getPersonColor(p){
+  const map = {
+    Rouven: 'linear-gradient(180deg,#fff0f0,#ffd9d9)',
+    Daniel: 'linear-gradient(180deg,#f0fff0,#d9ffd9)',
+    Henrik: 'linear-gradient(180deg,#eef4ff,#d9e7ff)',
+    Benja: 'linear-gradient(180deg,#fffaf0,#fff1d9)',
+    Holger: 'linear-gradient(180deg,#f7efff,#f0d9ff)'
+  };
+  return map[p] || '#ddd';
+}
+
+function renderPersonEditor(){
+  if(!currentPerson) return;
+  // left: calendar entries by date
+  let leftHtml = "";
+  for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+    const key = formatKey(dt);
+    const label = formatLabel(dt);
+    // ensure structures exist
+    if(!data.entries[key]) data.entries[key] = {};
+    if(!data.entries[key][currentPerson]) data.entries[key][currentPerson] = [];
+    const entries = data.entries[key][currentPerson];
+    leftHtml += `<div class="entryBox"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${label}</strong><button class="btn" onclick="addEntry('${key}')">${LANG[lang].addEntryLabel}</button></div>`;
+    entries.forEach((e,i)=>{
+      leftHtml += `<div class="entryRow" id="entry-${key}-${i}">
+        <input type="text" placeholder="DE" value="${escAttr(e.de)}" oninput="updateEntry('${key}',${i},'de',this.value)">
+        <input type="text" placeholder="TH" value="${escAttr(e.th)}" oninput="updateEntry('${key}',${i},'th',this.value)">
+        <button class="btn" onclick="deleteEntry('${key}',${i})">${LANG[lang].btnDelete}</button>
+      </div>`;
+    });
+    leftHtml += `</div>`;
+  }
+  document.getElementById('personCalendarList').innerHTML = leftHtml;
+
+  // right: overnight list
+  let ovHtml = "";
+  for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+    const key = formatKey(dt);
+    const label = formatLabel(dt);
+    const ov = (data.overnight[currentPerson] && data.overnight[currentPerson][key]) ? data.overnight[currentPerson][key] : {de:'', th:'', booked:false};
+    ovHtml += `<div class="ov-row" style="align-items:center;margin-bottom:8px">
+      <div style="width:72px">${label}</div>
+      <input type="text" placeholder="DE" value="${escAttr(ov.de)}" onchange="updateOvernight('${key}','de',this.value)">
+      <input type="text" placeholder="TH" value="${escAttr(ov.th)}" onchange="updateOvernight('${key}','th',this.value)">
+      <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${ov.booked ? 'checked' : ''} onchange="updateOvernight('${key}','booked',this.checked)"> ${LANG[lang].bookedLabel}</label>
+    </div>`;
+  }
+  document.getElementById('overnightList').innerHTML = ovHtml;
+
+  // right: todos
   renderTodos();
 }
 
-function backToMain(){
-  localStorage.setItem("calendarData",JSON.stringify(data));
-  localStorage.setItem("todos",JSON.stringify(todos));
-  document.getElementById("editor").style.display="none";
-  document.getElementById("mainView").style.display="block";
-  showCalendar();
-}
-
-// Personenkalender rendern
-function renderPersonCalendar(){
-  let html="";
-  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-    let dateKey=formatKey(d);
-    let dateLabel=formatDate(d);
-    if(!data[dateKey])data[dateKey]={};
-    if(!data[dateKey][currentPerson])data[dateKey][currentPerson]=[];
-    let entries=data[dateKey][currentPerson];
-    html+=`<div class="entryBox"><strong>${dateLabel}</strong> <button class="small" onclick="addEntry('${dateKey}')">+Eintrag</button>`;
-    entries.forEach((e,i)=>{
-      html+=`<div><input type="text" placeholder="DE" value="${e.de}" onchange="editEntry('${dateKey}',${i},'de',this.value)">
-             <input type="text" placeholder="TH" value="${e.th}" onchange="editEntry('${dateKey}',${i},'th',this.value)">
-             <button class="small" onclick="deleteEntry('${dateKey}',${i})">x</button></div>`;
-    });
-    html+="</div>";
-  }
-  document.getElementById("personCalendar").innerHTML=html;
-}
-
+/* Entry handlers */
 function addEntry(dateKey){
-  data[dateKey][currentPerson].push({de:"",th:""});
-  renderPersonCalendar();
+  if(!data.entries[dateKey]) data.entries[dateKey] = {};
+  if(!data.entries[dateKey][currentPerson]) data.entries[dateKey][currentPerson] = [];
+  data.entries[dateKey][currentPerson].push({de:'', th:''});
+  saveData();
+  renderPersonEditor();
+  // autofocus last DE input (wait a tick)
+  setTimeout(()=> {
+    const idx = data.entries[dateKey][currentPerson].length - 1;
+    const el = document.querySelector(`#entry-${dateKey}-${idx} input[placeholder="DE"]`);
+    if(el) el.focus();
+  },50);
 }
-function editEntry(dateKey,i,field,val){
-  data[dateKey][currentPerson][i][field]=val;
+function updateEntry(dateKey, idx, field, value){
+  if(!data.entries[dateKey] || !data.entries[dateKey][currentPerson] || !data.entries[dateKey][currentPerson][idx]) return;
+  data.entries[dateKey][currentPerson][idx][field] = value;
+  saveData();
 }
-function deleteEntry(dateKey,i){
-  data[dateKey][currentPerson].splice(i,1);
-  renderPersonCalendar();
+function deleteEntry(dateKey, idx){
+  if(!confirm(lang==='de' ? 'Eintrag löschen?' : 'ต้องการลบรายการ?')) return;
+  if(!data.entries[dateKey] || !data.entries[dateKey][currentPerson]) return;
+  data.entries[dateKey][currentPerson].splice(idx,1);
+  saveData();
+  renderPersonEditor();
 }
 
-// To-Do-Liste
+/* Overnight handlers */
+function updateOvernight(dateKey, field, value){
+  if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
+  if(!data.overnight[currentPerson][dateKey]) data.overnight[currentPerson][dateKey] = {de:'',th:'',booked:false};
+  if(field==='booked') data.overnight[currentPerson][dateKey].booked = !!value;
+  else data.overnight[currentPerson][dateKey][field] = value;
+  saveData();
+}
+
+/* Todos (DE+TH) */
 function renderTodos(){
-  if(!todos[currentPerson])todos[currentPerson]=[{text:translations[lang].defaultTodo,done:false}];
-  let html="";
-  todos[currentPerson].forEach((item,i)=>{
-    html+=`<div class="todo-item">
-             <input type="checkbox" ${item.done?"checked":""} onchange="toggleTodo(${i},this.checked)">
-             <input type="text" value="${item.text}" onchange="editTodo(${i},this.value)">
-             <button class="small" onclick="deleteTodo(${i})">x</button>
-           </div>`;
+  if(!data.todos[currentPerson]) data.todos[currentPerson] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
+  const list = data.todos[currentPerson];
+  let html = "";
+  list.forEach((t,i)=>{
+    html += `<div class="todo-item">
+      <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodo(${i},this.checked)">
+      <input type="text" placeholder="DE" value="${escAttr(t.de)}" oninput="updateTodo(${i},'de',this.value)">
+      <input type="text" placeholder="TH" value="${escAttr(t.th)}" oninput="updateTodo(${i},'th',this.value)">
+      <div class="todo-actions"><button onclick="deleteTodo(${i})">${LANG[lang].btnDelete}</button></div>
+    </div>`;
   });
-  document.getElementById("todoList").innerHTML=html;
+  document.getElementById('todoList').innerHTML = html;
 }
-function addTodo(){todos[currentPerson].push({text:"",done:false});renderTodos();}
-function editTodo(i,val){todos[currentPerson][i].text=val;}
-function deleteTodo(i){todos[currentPerson].splice(i,1);renderTodos();}
-function toggleTodo(i,checked){todos[currentPerson][i].done=checked;}
+function addTodoItem(){
+  if(!data.todos[currentPerson]) data.todos[currentPerson] = [];
+  data.todos[currentPerson].push({ id: makeId(), de:'', th:'', done:false });
+  saveData();
+  renderTodos();
+}
+function updateTodo(i, field, v){
+  if(!data.todos[currentPerson] || !data.todos[currentPerson][i]) return;
+  data.todos[currentPerson][i][field] = v;
+  saveData();
+}
+function toggleTodo(i, checked){
+  if(!data.todos[currentPerson] || !data.todos[currentPerson][i]) return;
+  data.todos[currentPerson][i].done = !!checked;
+  saveData();
+}
+function deleteTodo(i){
+  if(!confirm(lang==='de' ? 'Aufgabe löschen?' : 'ต้องการลบงานนี้?')) return;
+  data.todos[currentPerson].splice(i,1);
+  saveData();
+  renderTodos();
+}
 
-// Sprache wechseln
+/* ===========================
+   Language switching
+   =========================== */
 function setLang(l){
-  lang=l;
-  showCalendar();
-  if(currentPerson)openEditor(currentPerson);
+  lang = l;
+  // change labels immediately
+  document.getElementById('pageTitle').textContent = LANG[lang].pageTitle;
+  document.getElementById('closeLabel').textContent = LANG[lang].closeLabel;
+  renderOverview();
+  if(editorOpen && currentPerson){
+    document.getElementById('editorName').textContent = LANG[lang].persons[currentPerson];
+    document.getElementById('overnightTitle').textContent = LANG[lang].overnightTitle;
+    document.getElementById('todoTitle').textContent = LANG[lang].todoTitle;
+    renderPersonEditor();
+  }
 }
+
+/* ===========================
+   Start
+   =========================== */
+
+loadData();
+renderOverview();
+
+/* Make important functions accessible from inline handlers */
+window.openEditor = openEditor;
+window.closeEditor = closeEditor;
+window.addEntry = addEntry;
+window.updateEntry = updateEntry;
+window.deleteEntry = deleteEntry;
+window.updateOvernight = updateOvernight;
+window.addTodoItem = addTodoItem;
+window.updateTodo = updateTodo;
+window.toggleTodo = toggleTodo;
+window.deleteTodo = deleteTodo;
+window.setLang = setLang;
+
+/* Show initial language */
+setLang('de');
+
 </script>
 </body>
 </html>
