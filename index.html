@@ -3,178 +3,224 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Thailand 2026 – Startseite</title>
+<title>Thailand 2026 – Übersicht</title>
 <style>
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  margin:0;
-  background:#f6f6f6;
-  color:#333;
+:root{--accent:#0077b6;--accent2:#00b4d8;--bg:#f6f6f6;--card:#fff}
+body{font-family: "Segoe UI", Arial, sans-serif;margin:0;background:var(--bg);color:#222}
+.header{background:var(--accent);color:#fff;padding:14px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.header h1{margin:0;font-size:18px}
+.langBtns{display:flex;gap:8px}
+button.langBtn{background:var(--accent2);color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600}
+.container{padding:14px;max-width:1100px;margin:0 auto}
+table{width:100%;border-collapse:collapse;background:transparent}
+th,td{border:1px solid #d6d6d6;padding:6px;text-align:center;vertical-align:top;font-size:14px}
+thead th{position:sticky;top:0;background:#fff;z-index:4}
+.sticky-col{position:sticky;left:0;background:#fafafa;z-index:5;font-weight:700}
+.personBtn{background:var(--accent2);color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer}
+.entry{display:block;padding:4px;margin:3px;border-radius:4px;background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,0.06)}
+.entry.small{font-size:13px;padding:3px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.card{background:var(--card);padding:10px;border-radius:8px;box-shadow:0 3px 10px rgba(0,0,0,0.05)}
+.dateCol{width:80px;min-width:72px}
+.personColRouven{background:#ffd9d9}
+.personColDaniel{background:#d9ffd9}
+.personColHenrik{background:#d9d9ff}
+.personColBenja{background:#fff1d9}
+.personColHolger{background:#f0d9ff}
+.weekendDate{background:#ffd699;font-weight:700}
+.smallNote{font-size:13px;color:#333}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+a.linkBtn{background:#333;color:#fff;padding:6px 8px;border-radius:6px;text-decoration:none;font-size:13px}
+@media(max-width:900px){
+  .dateCol{width:64px}
+  th,td{font-size:12px;padding:4px}
 }
-h1 {
-  text-align:center;
-  background:#0077b6;
-  color:#fff;
-  padding:15px;
-  margin:0;
-  box-shadow:0 2px 4px rgba(0,0,0,0.2);
-}
-#translateButtons {
-  text-align:center;
-  margin:15px;
-}
-button.translateBtn {
-  padding:6px 12px;
-  margin:0 5px;
-  cursor:pointer;
-  border-radius:5px;
-  border:none;
-  background:#0077b6;
-  color:#fff;
-  font-weight:bold;
-  transition:background 0.3s;
-}
-button.translateBtn:hover{background:#0096c7;}
-
-table {
-  border-collapse:collapse;
-  width:100%;
-  margin-bottom:20px;
-  table-layout:auto;
-  font-size:14px;
-}
-th, td {
-  border:1px solid #ccc;
-  padding:5px;
-  text-align:center;
-  vertical-align:top;
-  word-wrap:break-word;
-}
-th.sticky-col, td.sticky-col {
-  position:sticky;
-  left:0;
-  z-index:2;
-  background:#f6f6f6;
-}
-th.nameHeader button {
-  background:#00b4d8;
-  color:#fff;
-  border:none;
-  padding:5px 10px;
-  border-radius:5px;
-  cursor:pointer;
-  font-weight:bold;
-  font-size:16px;
-}
-thead th {
-  position:sticky;
-  top:0;
-  z-index:3;
-}
-.entry {
-  background:#fff;
-  margin:2px;
-  padding:3px;
-  border-radius:3px;
-  display:block;
-  box-shadow:0 1px 2px rgba(0,0,0,0.1);
-}
-.entry:nth-child(even){background:#e9e9e9;}
-/* Farben für Personen */
-.personColRouven{background-color:#ffd9d9;}
-.personColDaniel{background-color:#d9ffd9;}
-.personColHenrik{background-color:#d9d9ff;}
-.personColBenja{background-color:#fff1d9;}
-.personColHolger{background-color:#f0d9ff;}
-/* Wochenende dunkler für Personen */
-.weekendRouven{background-color:#ffb3b3;}
-.weekendDaniel{background-color:#b3ffb3;}
-.weekendHenrik{background-color:#b3b3ff;}
-.weekendBenja{background-color:#ffe0b3;}
-.weekendHolger{background-color:#dfb3ff;}
-/* Wochenende Datum */
-.weekendDate{background-color:#ffd699;font-weight:bold;}
 </style>
 </head>
 <body>
-<h1>Thailand 2026</h1>
-
-<div id="translateButtons">
-  <button class="translateBtn" onclick="window.location.href='index-th.html'">ไทย</button>
-  <button class="translateBtn" onclick="window.location.href='index.html'">Deutsch</button>
+<div class="header">
+  <h1 id="title">Thailand 2026 – Übersicht</h1>
+  <div class="actions">
+    <div class="langBtns">
+      <button class="langBtn" onclick="setLang('de')">Deutsch</button>
+      <button class="langBtn" onclick="setLang('th')">ไทย</button>
+    </div>
+    <a id="open-first-person" class="linkBtn" href="#">Personenseite öffnen</a>
+  </div>
 </div>
 
-<table id="calendar">
-<thead>
-<tr>
-<th class="sticky-col">Datum</th>
-<th class="nameHeader"><button onclick="goPerson('rouven.html')">Rouven</button></th>
-<th class="nameHeader"><button onclick="goPerson('daniel.html')">Daniel</button></th>
-<th class="nameHeader"><button onclick="goPerson('henrik.html')">Henrik</button></th>
-<th class="nameHeader"><button onclick="goPerson('benja.html')">Benja</button></th>
-<th class="nameHeader"><button onclick="goPerson('holger.html')">Holger</button></th>
-</tr>
-</thead>
-<tbody id="calendarBody"></tbody>
-</table>
+<div class="container card">
+  <div class="legend" id="legend"></div>
+
+  <div style="overflow:auto">
+    <table id="calendar">
+      <thead>
+        <tr>
+          <th class="sticky-col dateCol" id="thDate">Datum</th>
+          <th><button class="personBtn" onclick="openPerson('Rouven')">Rouven</button></th>
+          <th><button class="personBtn" onclick="openPerson('Daniel')">Daniel</button></th>
+          <th><button class="personBtn" onclick="openPerson('Henrik')">Henrik</button></th>
+          <th><button class="personBtn" onclick="openPerson('Benja')">Benja</button></th>
+          <th><button class="personBtn" onclick="openPerson('Holger')">Holger</button></th>
+        </tr>
+      </thead>
+      <tbody id="calendarBody"></tbody>
+    </table>
+  </div>
+  <p class="smallNote" id="note"></p>
+</div>
 
 <script>
-// Personen
-const personen = ["Rouven","Daniel","Henrik","Benja","Holger"];
+/* -----------------------
+   Konfiguration / Presets
+   ----------------------- */
+const persons = ["Rouven","Daniel","Henrik","Benja","Holger"];
 const start = new Date(2026,1,16); // 16.02.2026
-const end   = new Date(2026,2,12); // 12.03.2026
+const end = new Date(2026,2,12);   // 12.03.2026
 
-// Einträge inkl. neuer Vorgaben
-let preset = {
-  "2026-02-16":{"all":["Abflug Frankfurt/Main Flughafen 20.55 Uhr"]},
-  "2026-02-17":{"all":["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"]},
-  "2026-02-19":{"Henrik":["Familienfest Sa Kaeo"],"Benja":["Familienfest Sa Kaeo"],"Holger":["Familienfest Sa Kaeo"]},
-  "2026-02-24":{"Henrik":["Upasampada-Feier Sa Kaeo"],"Benja":["Upasampada-Feier Sa Kaeo"],"Holger":["Upasampada-Feier Sa Kaeo"]},
-  "2026-02-25":{"Henrik":["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"],"Benja":["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"],"Holger":["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"]},
-  "2026-02-26":{"all":["Einweihungsfeier Sa Kaeo"]},
-  "2026-03-11":{"all":["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"]},
-  "2026-03-12":{"all":["Osnabrück"]}
+// initial Presets (fest eingegeben)
+const initialData = {
+  "2026-02-16":{ all:["Abflug Frankfurt/Main Flughafen 20.55 Uhr"] },
+  "2026-02-17":{ all:["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"] },
+  "2026-02-19":{ Henrik:["Familienfest Sa Kaeo"], Benja:["Familienfest Sa Kaeo"], Holger:["Familienfest Sa Kaeo"] },
+  "2026-02-24":{ Henrik:["Upasampada-Feier Sa Kaeo"], Benja:["Upasampada-Feier Sa Kaeo"], Holger:["Upasampada-Feier Sa Kaeo"] },
+  "2026-02-25":{ Henrik:["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"], Benja:["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"], Holger:["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"] },
+  "2026-02-26":{ all:["Einweihungsfeier Sa Kaeo"] },
+  "2026-03-11":{ all:["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"] },
+  "2026-03-12":{ all:["Osnabrück"] }
 };
 
-function goPerson(url){ window.location.href=url; }
+// lokal gespeicherte Struktur:
+// localStorage key: "trip2026_data"
+// structure: {
+//   entries: { "YYYY-MM-DD": { all:[..], Rouven:[..], ... }, ... },
+//   overnight: { "Rouven": { "YYYY-MM-DD": { place: "...", booked: true } }, ... },
+//   todos: { "Rouven": [{text:"...",done:false,id:123}, ...], ... }
+// }
 
-function formatDate(d){
-  let dd = String(d.getDate()).padStart(2,'0');
-  let mm = String(d.getMonth()+1).padStart(2,'0');
-  return dd+"."+mm+".";
+// Sprachstrings
+const L = {
+  de: {
+    title: "Thailand 2026 – Übersicht",
+    date: "Datum",
+    booked: "Gebucht",
+    openPerson: "Personenseite öffnen",
+    note: "Klicke auf einen Namen, um die persönliche Seite zu öffnen und Einträge/Übernachtung/To-Do zu bearbeiten."
+  },
+  th: {
+    title: "ประเทศไทย 2026 – ภาพรวม",
+    date: "วันที่",
+    booked: "จองแล้ว",
+    openPerson: "เปิดหน้าบุคคล",
+    note: "คลิกที่ชื่อเพื่อเปิดหน้าบุคคลและแก้ไขรายการ, ที่พัก, งานที่ต้องทำ"
+  }
+};
+
+let lang = (new URLSearchParams(location.search)).get('lang') || 'de';
+
+/* -----------------------
+   Storage Helpers
+   ----------------------- */
+function loadData(){
+  const raw = localStorage.getItem("trip2026_data");
+  if(!raw){
+    // create with initialData + default overnight/todo + passport todo
+    const base = { entries:{}, overnight:{}, todos:{} };
+    // copy initialData into base.entries
+    for(const k in initialData) base.entries[k]=JSON.parse(JSON.stringify(initialData[k]));
+    // populate empty structures for persons
+    persons.forEach(p=>{
+      base.overnight[p] = {};
+      // initial todo with passport if not present
+      base.todos[p] = [
+        { id: Date.now() + Math.floor(Math.random()*1000), text: (lang==='th' ? "หนังสือเดินทางที่ยังใช้ได้ (อย่างน้อยถึง 09/2016)" : "Gültiger Reisepass (mind. bis 09/2016)"), done:false }
+      ];
+    });
+    localStorage.setItem("trip2026_data", JSON.stringify(base));
+    return base;
+  }
+  try{
+    return JSON.parse(raw);
+  }catch(e){
+    console.error("LocalStorage corrupt, resetting",e);
+    localStorage.removeItem("trip2026_data");
+    return loadData();
+  }
 }
 
+function saveData(data){ localStorage.setItem("trip2026_data", JSON.stringify(data)); }
+
+/* -----------------------
+   Rendering Übersicht
+   ----------------------- */
+function formatDateLabel(d){
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  return dd+"."+mm+".";
+}
 function formatKey(d){
   return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');
 }
 
-// Kalender bauen
-function showCalendar(){
+function renderOverview(){
+  const data = loadData();
+  // header / lang
+  document.getElementById('title').textContent = L[lang].title;
+  document.getElementById('thDate').textContent = L[lang].date;
+  document.getElementById('open-first-person').textContent = L[lang].openPerson;
+  document.getElementById('note').textContent = L[lang].note;
+
+  // legend (colors)
+  const legend = document.getElementById('legend');
+  legend.innerHTML = persons.map(p=> `<div class="entry small" style="background:transparent;padding:6px;border:1px solid #ddd"><strong>${p}</strong></div>`).join('');
+
   let body = "";
   for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
-    let dateKey = formatKey(d);
-    let dateLabel = formatDate(d);
-    let day = d.getDay();
-    let dateClass = (day===0||day===6) ? "sticky-col weekendDate" : "sticky-col";
+    const key = formatKey(d);
+    const day = d.getDay();
+    const dateClass = (day===0||day===6) ? "sticky-col weekendDate" : "sticky-col";
     body += "<tr>";
-    body += `<td class="${dateClass}">${dateLabel}</td>`;
-    personen.forEach(p=>{
-      let base="personCol"+p;
-      let weekendClass=(day===0||day===6)?("weekend"+p):base;
-      let entries = [];
-      if(preset[dateKey]){
-        if(preset[dateKey]["all"]) entries = entries.concat(preset[dateKey]["all"]);
-        if(preset[dateKey][p]) entries = entries.concat(preset[dateKey][p]);
+    body += `<td class="${dateClass}">${formatDateLabel(d)}</td>`;
+    persons.forEach(p=>{
+      const colorClass = "personCol"+p;
+      let entriesArr = [];
+      if(data.entries[key]){
+        if(data.entries[key].all) entriesArr = entriesArr.concat(data.entries[key].all);
+        if(data.entries[key][p]) entriesArr = entriesArr.concat(data.entries[key][p]);
       }
-      let combined = entries.map(e=> "<div class='entry'>"+e+"</div>").join("");
-      body += `<td class="${weekendClass}">${combined}</td>`;
+      const entriesHtml = entriesArr.map(e=>`<div class="entry small">${escapeHtml(e)}</div>`).join("");
+      // overnight overview (if exists) show small note
+      let overnightHtml = "";
+      if(data.overnight[p] && data.overnight[p][key]){
+        const ov = data.overnight[p][key];
+        overnightHtml = `<div class="entry small">🏨 ${escapeHtml(ov.place || "")} ${ov.booked ? "• " + L[lang].booked : ""}</div>`;
+      }
+      body += `<td class="${colorClass}">${entriesHtml}${overnightHtml}</td>`;
     });
     body += "</tr>";
   }
-  document.getElementById("calendarBody").innerHTML = body;
+  document.getElementById('calendarBody').innerHTML = body;
 }
 
-showCalendar();
+function openPerson(name){
+  location.href = `person.html?person=${encodeURIComponent(name)}&lang=${lang}`;
+}
+
+function setLang(l){
+  const params = new URLSearchParams(location.search);
+  params.set('lang', l);
+  location.search = params.toString();
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+/* initial render */
+renderOverview();
+
+/* set open-person button to first person */
+document.getElementById('open-first-person').href = `person.html?person=${encodeURIComponent(persons[0])}&lang=${lang}`;
 </script>
 </body>
 </html>
