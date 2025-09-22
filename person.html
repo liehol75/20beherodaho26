@@ -3,18 +3,362 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Person</title>
-<link rel="stylesheet" href="kalender.css">
+<title>Personenseite – Thailand 2026</title>
+<style>
+:root{--accent:#0077b6;--accent2:#00b4d8;--bg:#f6f6f6;--card:#fff}
+body{font-family: "Segoe UI", Arial, sans-serif;margin:0;background:var(--bg);color:#222}
+.header{background:var(--accent);color:#fff;padding:12px;display:flex;align-items:center;justify-content:space-between}
+.header h1{margin:0;font-size:18px}
+.header .controls{display:flex;gap:8px;align-items:center}
+button.small{padding:6px 10px;border-radius:6px;border:none;cursor:pointer;background:var(--accent2);color:#fff}
+.container{max-width:1100px;margin:14px auto;padding:12px}
+.grid{display:grid;grid-template-columns:1fr 320px;gap:12px}
+.card{background:var(--card);padding:10px;border-radius:8px;box-shadow:0 3px 10px rgba(0,0,0,0.05)}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:6px;text-align:left;vertical-align:top;font-size:14px}
+.dateCol{width:78px}
+.entry{background:#fff;padding:6px;border-radius:6px;margin-bottom:6px;border:1px solid #eee}
+.inputRow{display:flex;gap:8px;margin-bottom:8px}
+input[type="text"], select{padding:6px;border-radius:6px;border:1px solid #ccc;width:100%}
+.todoItem{display:flex;align-items:center;gap:8px;padding:6px;border-radius:6px;border:1px solid #eee;margin-bottom:6px}
+.todoItem input[type="checkbox"]{transform:scale(1.2)}
+.editBtn, .delBtn{background:#eee;border:none;padding:6px 8px;border-radius:6px;cursor:pointer}
+.small{font-size:13px;color:#333}
+.personColorRouven{background:#ffd9d9}
+.personColorDaniel{background:#d9ffd9}
+.personColorHenrik{background:#d9d9ff}
+.personColorBenja{background:#fff1d9}
+.personColorHolger{background:#f0d9ff}
+@media(max-width:980px){
+  .grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
-<h1 id="personTitle"></h1>
-
-<div id="translateButtons">
-  <button onclick="switchLang('de')">Deutsch</button>
-  <button onclick="switchLang('th')">ไทย</button>
+<div class="header">
+  <h1 id="pageTitle">Person</h1>
+  <div class="controls">
+    <button class="small" id="backBtn">Zur Übersicht</button>
+    <div style="width:8px"></div>
+    <button class="small" id="langToggle">ภาษาไทย</button>
+  </div>
 </div>
 
-<table id="calendar">
-<thead><tr id="headerRow"></tr></thead>
-<tbody id="calendarBody"></tbody>
-</table
+<div class="container">
+  <div class="grid">
+    <div class="card" id="mainCard">
+      <h3 id="calendarTitle">Kalender</h3>
+
+      <!-- Add entry -->
+      <div class="inputRow">
+        <select id="dateSelect"></select>
+        <input id="newEntryText" type="text" placeholder="Neuen Eintrag hinzufügen">
+        <button id="addEntryBtn" class="small">Hinzufügen</button>
+      </div>
+
+      <!-- Table -->
+      <div style="overflow:auto">
+        <table id="personCalendar">
+          <thead>
+            <tr><th class="dateCol" id="thDate">Datum</th><th>Einträge</th><th style="width:160px">Übernachtung<br><small class="small">({{booked_label}})</small></th></tr>
+          </thead>
+          <tbody id="personCalBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 id="todoTitle">To-Do</h3>
+      <div id="todoList"></div>
+      <div style="margin-top:8px" class="inputRow">
+        <input id="newTodoText" type="text" placeholder="Neues To-Do">
+        <button id="addTodoBtn" class="small">Hinzufügen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Reuse same date range as overview */
+const start = new Date(2026,1,16);
+const end = new Date(2026,2,12);
+const persons = ["Rouven","Daniel","Henrik","Benja","Holger"];
+
+// language strings
+const L = {
+  de:{
+    titlePerson: "Personenseite",
+    calendar: "Kalender",
+    todo: "To-Do",
+    addEntry: "Hinzufügen",
+    addTodo: "Hinzufügen",
+    booked: "Gebucht",
+    back: "Zur Übersicht",
+    placeholderEntry: "Neuen Eintrag hinzufügen",
+    placeholderTodo: "Neues To-Do",
+    overnight: "Übernachtung",
+    edit: "Bearbeiten",
+    delete: "Löschen"
+  },
+  th:{
+    titlePerson: "หน้าบุคคล",
+    calendar: "ปฏิทิน",
+    todo: "รายการที่ต้องทำ",
+    addEntry: "เพิ่ม",
+    addTodo: "เพิ่ม",
+    booked: "จองแล้ว",
+    back: "กลับไปหน้าภาพรวม",
+    placeholderEntry: "เพิ่มรายการใหม่",
+    placeholderTodo: "รายการที่ต้องทำใหม่",
+    overnight: "ที่พัก",
+    edit: "แก้ไข",
+    delete: "ลบ"
+  }
+};
+
+const urlParams = new URLSearchParams(location.search);
+let person = urlParams.get('person') || 'Rouven';
+let lang = urlParams.get('lang') || 'de';
+
+// helper storage same format as index.html
+function loadData(){
+  const raw = localStorage.getItem("trip2026_data");
+  if(!raw){
+    // create baseline similar to index; ensure passport todo present
+    const base = { entries:{}, overnight:{}, todos:{} };
+    // initial entries similar to index (to keep sync)
+    base.entries = JSON.parse(JSON.stringify({
+      "2026-02-16":{ all:["Abflug Frankfurt/Main Flughafen 20.55 Uhr"] },
+      "2026-02-17":{ all:["Ankunft Bangkok-Suvarnabhumi 13.45 Uhr","River Cruise"] },
+      "2026-02-19":{ Henrik:["Familienfest Sa Kaeo"], Benja:["Familienfest Sa Kaeo"], Holger:["Familienfest Sa Kaeo"] },
+      "2026-02-24":{ Henrik:["Upasampada-Feier Sa Kaeo"], Benja:["Upasampada-Feier Sa Kaeo"], Holger:["Upasampada-Feier Sa Kaeo"] },
+      "2026-02-25":{ Henrik:["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"], Benja:["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"], Holger:["Upasampada-Zeremonie Sa Kaeo 08.00 Uhr"] },
+      "2026-02-26":{ all:["Einweihungsfeier Sa Kaeo"] },
+      "2026-03-11":{ all:["Abflug Bangkok-Suvarnabhumi 12.40 Uhr // Ankunft Frankfurt/Main Flughafen 19.05 Uhr"] },
+      "2026-03-12":{ all:["Osnabrück"] }
+    }));
+    persons.forEach(p=>{
+      base.overnight[p] = {};
+      base.todos[p] = [
+        { id: Date.now() + Math.floor(Math.random()*1000), text: (lang==='th' ? "หนังสือเดินทางที่ยังใช้ได้ (อย่างน้อยถึง 09/2016)" : "Gültiger Reisepass (mind. bis 09/2016)"), done:false }
+      ];
+    });
+    localStorage.setItem("trip2026_data", JSON.stringify(base));
+    return base;
+  }
+  try{ return JSON.parse(raw); } catch(e){ localStorage.removeItem("trip2026_data"); return loadData(); }
+}
+function saveData(data){ localStorage.setItem("trip2026_data", JSON.stringify(data)); }
+
+function formatDateLabel(d){
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  return dd+"."+mm+".";
+}
+function formatKey(d){
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');
+}
+
+/* UI elements */
+document.getElementById('backBtn').addEventListener('click', ()=> location.href = `index.html?lang=${lang}`);
+document.getElementById('langToggle').addEventListener('click', ()=>{
+  lang = (lang==='de' ? 'th' : 'de');
+  const params = new URLSearchParams(location.search);
+  params.set('lang', lang);
+  location.search = params.toString();
+});
+
+function init(){
+  document.title = `${person} — ${L[lang].titlePerson}`;
+  document.getElementById('pageTitle').textContent = `${person} — ${L[lang].titlePerson}`;
+  document.getElementById('calendarTitle').textContent = L[lang].calendar;
+  document.getElementById('todoTitle').textContent = L[lang].todo;
+  document.getElementById('addEntryBtn').textContent = L[lang].addEntry;
+  document.getElementById('addTodoBtn').textContent = L[lang].addTodo;
+  document.getElementById('newEntryText').placeholder = L[lang].placeholderEntry;
+  document.getElementById('newTodoText').placeholder = L[lang].placeholderTodo;
+  document.getElementById('thDate').textContent = (lang==='th' ? 'วันที่' : 'Datum');
+  document.getElementById('addEntryBtn').addEventListener('click', addEntryFromInput);
+  document.getElementById('addTodoBtn').addEventListener('click', addTodoFromInput);
+
+  populateDateSelect();
+  renderCalendar();
+  renderTodos();
+}
+
+function populateDateSelect(){
+  const sel = document.getElementById('dateSelect');
+  sel.innerHTML = "";
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    const key = formatKey(d);
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.text = formatDateLabel(d);
+    sel.appendChild(opt);
+  }
+}
+
+// Add entry
+function addEntryFromInput(){
+  const txt = document.getElementById('newEntryText').value.trim();
+  const dateKey = document.getElementById('dateSelect').value;
+  if(!txt) return alert((lang==='th')? 'กรุณากรอกข้อความ' : 'Bitte Text eingeben');
+  const data = loadData();
+  if(!data.entries[dateKey]) data.entries[dateKey] = {};
+  if(!data.entries[dateKey][person]) data.entries[dateKey][person] = [];
+  data.entries[dateKey][person].push(txt);
+  saveData(data);
+  document.getElementById('newEntryText').value="";
+  renderCalendar();
+}
+
+// render per-person calendar with edit/delete and overnight controls
+function renderCalendar(){
+  const data = loadData();
+  const tbody = document.getElementById('personCalBody');
+  let html = "";
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    const key = formatKey(d);
+    const entries = (data.entries[key] && data.entries[key][person]) ? data.entries[key][person] : [];
+    html += `<tr><td class="small">${formatDateLabel(d)}</td><td>`;
+    // entries list
+    entries.forEach((e,i)=>{
+      html += `<div class="entry"><span class="small">${escapeHtml(e)}</span> 
+        <div style="float:right">
+          <button class="editBtn" onclick="editEntry('${key}',${i})">${L[lang].edit}</button>
+          <button class="delBtn" onclick="deleteEntry('${key}',${i})">${L[lang].delete}</button>
+        </div>
+      </div>`;
+    });
+    html += `</td><td>`;
+    // overnight controls
+    const ov = (data.overnight[person] && data.overnight[person][key]) ? data.overnight[person][key] : {place:"",booked:false};
+    html += `<div style="display:flex;gap:6px;flex-direction:column">
+      <input type="text" id="ov_place_${key}" placeholder="${L[lang].overnight}" value="${escapeAttr(ov.place||'')}">
+      <label style="font-size:13px"><input type="checkbox" id="ov_booked_${key}" ${ov.booked ? 'checked' : ''}> ${L[lang].booked}</label>
+      <div style="display:flex;gap:6px;margin-top:4px">
+        <button class="small" onclick="saveOvernight('${key}')">${(lang==='th')?'บันทึก':'Speichern'}</button>
+        <button class="small" onclick="clearOvernight('${key}')">${(lang==='th')?'ลบ':'Löschen'}</button>
+      </div>
+    </div>`;
+    html += `</td></tr>`;
+  }
+  tbody.innerHTML = html;
+}
+
+// entry edit/delete
+function editEntry(dateKey,index){
+  const data = loadData();
+  const arr = data.entries[dateKey] && data.entries[dateKey][person];
+  if(!arr || !arr[index]) return;
+  const val = prompt((lang==='th')? 'แก้ไขรายการ' : 'Eintrag bearbeiten', arr[index]);
+  if(val===null) return;
+  arr[index] = val.trim();
+  saveData(data);
+  renderCalendar();
+}
+function deleteEntry(dateKey,index){
+  if(!confirm((lang==='th')? 'ลบรายการ?' : 'Eintrag löschen?')) return;
+  const data = loadData();
+  const arr = data.entries[dateKey] && data.entries[dateKey][person];
+  if(!arr) return;
+  arr.splice(index,1);
+  saveData(data);
+  renderCalendar();
+}
+
+// overnight save/clear
+function saveOvernight(dateKey){
+  const place = document.getElementById(`ov_place_${dateKey}`).value.trim();
+  const booked = document.getElementById(`ov_booked_${dateKey}`).checked;
+  const data = loadData();
+  if(!data.overnight[person]) data.overnight[person]={};
+  data.overnight[person][dateKey] = { place, booked };
+  saveData(data);
+  renderCalendar();
+}
+function clearOvernight(dateKey){
+  if(!confirm((lang==='th')? 'ลบที่พัก?' : 'Übernachtung löschen?')) return;
+  const data = loadData();
+  if(data.overnight[person]) delete data.overnight[person][dateKey];
+  saveData(data);
+  renderCalendar();
+}
+
+/* To-Do list functions */
+function renderTodos(){
+  const data = loadData();
+  const list = data.todos[person] || [];
+  const container = document.getElementById('todoList');
+  container.innerHTML = "";
+  list.forEach(item=>{
+    const div = document.createElement('div');
+    div.className = 'todoItem';
+    div.innerHTML = `<input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTodo(${item.id})">
+      <div style="flex:1"><span style="${item.done? 'text-decoration:line-through;color:#666' : ''}">${escapeHtml(item.text)}</span></div>
+      <div style="display:flex;gap:6px">
+        <button class="editBtn" onclick="editTodo(${item.id})">${L[lang].edit}</button>
+        <button class="delBtn" onclick="deleteTodo(${item.id})">${L[lang].delete}</button>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function addTodoFromInput(){
+  const txt = document.getElementById('newTodoText').value.trim();
+  if(!txt) return alert((lang==='th')?'กรุณากรอกข้อความ':'Bitte Text eingeben');
+  const data = loadData();
+  const entry = { id: Date.now()+Math.floor(Math.random()*1000), text:txt, done:false };
+  if(!data.todos[person]) data.todos[person]=[];
+  data.todos[person].push(entry);
+  saveData(data);
+  document.getElementById('newTodoText').value="";
+  renderTodos();
+}
+
+function toggleTodo(id){
+  const data = loadData();
+  const list = data.todos[person] || [];
+  const it = list.find(x=>x.id===id);
+  if(!it) return;
+  it.done = !it.done;
+  saveData(data);
+  renderTodos();
+}
+
+function editTodo(id){
+  const data = loadData();
+  const list = data.todos[person] || [];
+  const it = list.find(x=>x.id===id);
+  if(!it) return;
+  const val = prompt((lang==='th')?'แก้ไขรายการ':'Eintrag bearbeiten', it.text);
+  if(val===null) return;
+  it.text = val.trim();
+  saveData(data);
+  renderTodos();
+}
+function deleteTodo(id){
+  if(!confirm((lang==='th')?'ลบรายการ?':'Eintrag löschen?')) return;
+  const data = loadData();
+  data.todos[person] = (data.todos[person]||[]).filter(x=>x.id!==id);
+  saveData(data);
+  renderTodos();
+}
+
+/* small helpers */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
+function escapeAttr(s){ return (String(s||'').replace(/"/g,'&quot;')); }
+
+/* Expose some functions globally because used in inline handlers */
+window.editEntry = editEntry;
+window.deleteEntry = deleteEntry;
+window.saveOvernight = saveOvernight;
+window.clearOvernight = clearOvernight;
+window.toggleTodo = toggleTodo;
+window.editTodo = editTodo;
+window.deleteTodo = deleteTodo;
+
+init();
+</script>
+</body>
+</html>
