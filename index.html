@@ -7,8 +7,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
-  --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff;
-  --txt:#222;
+  --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff; --txt:#222;
+  --overnight-bg:#e8f5ff; --overnight-accent:#2b95ff;
 }
 *{box-sizing:border-box}
 body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
@@ -32,10 +32,14 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
 .entry{display:block;padding:6px;margin:4px auto;border-radius:6px;text-align:center;border:1px solid rgba(0,0,0,0.03)}
 .entry .meta{font-size:12px;color:#666;margin-top:4px}
 .entry .text{font-size:14px}
-/* overnight distinct */
-.entry.overnight{ background:#e8f5ff; border-left:4px solid #2b95ff; }
-.entry.overnight .meta{ font-weight:700; color:#2b95ff; }
+.entry.overnight{background:var(--overnight-bg);border-left:4px solid var(--overnight-accent);}
+.entry.overnight .meta{font-weight:700;color:var(--overnight-accent);}
 .personLink{display:block;font-weight:700;color:#0077b6;text-decoration:none}
+th.personRouven{background:linear-gradient(180deg,#fff0f0,#ffd9d9);}
+th.personDaniel{background:linear-gradient(180deg,#f0fff0,#d9ffd9);}
+th.personHenrik{background:linear-gradient(180deg,#eef4ff,#d9e7ff);}
+th.personBenja{background:linear-gradient(180deg,#fffaf0,#fff1d9);}
+th.personHolger{background:linear-gradient(180deg,#f7efff,#f0d9ff);}
 </style>
 </head>
 <body>
@@ -66,36 +70,29 @@ const LANG = {
   th:{pageTitle:"ประเทศไทย 2026",persons:{Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"},overnightTitle:"ที่พัก"}
 };
 let lang='de';
-
-/* Personen */
 const persons=["Rouven","Daniel","Henrik","Benja","Holger"];
 const start=new Date(2026,1,16);
 const end=new Date(2026,2,12);
 
-/* Daten initialisieren */
+/* Daten laden */
 function initData(){
   let d=localStorage.getItem("tripData");
   if(d) return JSON.parse(d);
   return {
     entries:{},
-    overnightTypes:[{id:1,label:"Flugzeug"}], // zentrale Übernachtungen
+    overnightTypes:[{id:1,label:"Flugzeug"}],
     todos:{}
   };
 }
 let data=initData();
 
-/* Helper zum Speichern */
-function saveData(){
-  localStorage.setItem("tripData",JSON.stringify(data));
-}
+/* Speichern */
+function saveData(){localStorage.setItem("tripData",JSON.stringify(data));}
 
-/* Helper: generiere Datumsarray */
+/* Datumsarray */
 function getDateList(){
   let arr=[];let days=Math.round((end-start)/86400000)+1;
-  for(let i=0;i<days;i++){
-    let dt=new Date(start.getTime()+i*86400000);
-    arr.push(dt);
-  }
+  for(let i=0;i<days;i++){arr.push(new Date(start.getTime()+i*86400000));}
   return arr;
 }
 
@@ -104,19 +101,17 @@ function getEntries(person,dateKey){
   if(!data.entries[person]) return [];
   return data.entries[person][dateKey]||[];
 }
-
-/* Overnight-Label */
 function overnightLabel(id){
   let t=data.overnightTypes.find(o=>o.id===id);
   return t?t.label:"";
 }
 
-/* Render Übersicht */
+/* Render Tabelle */
 function renderTable(){
   document.getElementById("pageTitle").textContent=LANG[lang].pageTitle;
   let head="<tr><th class='sticky-date'>Datum</th>";
   for(let p of persons){
-    head+=`<th><a class="personLink" href="person.html?person=${encodeURIComponent(p)}">${LANG[lang].persons[p]}</a></th>`;
+    head+=`<th class="person${p}"><a class="personLink" href="person.html?person=${encodeURIComponent(p)}">${LANG[lang].persons[p]}</a></th>`;
   }
   head+="</tr>";
   document.getElementById("calendarHead").innerHTML=head;
@@ -146,13 +141,10 @@ function renderTable(){
   document.getElementById("calendarBody").innerHTML=body;
 }
 
-/* Sprache umschalten */
-function setLang(l){
-  lang=l;
-  renderTable();
-}
+/* Sprache */
+function setLang(l){lang=l;renderTable();}
 
-/* Demo-Eintrag: Holger 16.02 Übernachtung Flugzeug */
+/* Demo Holger 16.02 */
 const demoDate="2026-02-16";
 if(!data.entries["Holger"]) data.entries["Holger"]={};
 if(!data.entries["Holger"][demoDate]) data.entries["Holger"][demoDate]=[];
