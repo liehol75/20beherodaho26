@@ -3,43 +3,67 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Thailand 2026 – Übersicht</title>
+<title>Thailand 2026 — Übersicht</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
-  --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff; --txt:#222;
+  --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff;
+  --txt:#222;
+  --gray1:#fbfbfb; --gray2:#f0f0f0;
   --overnight-bg:#e8f5ff; --overnight-accent:#2b95ff;
 }
 *{box-sizing:border-box}
 body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
 .header{
   background:linear-gradient(90deg,var(--accent),#00629a);
-  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
-  gap:12px;
+  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
 }
 .header h1{margin:0;font-size:18px;font-weight:600}
 .langBtns{display:flex;gap:8px}
-button.langBtn{
-  border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;
-}
+button.langBtn{border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;}
 .container{max-width:1200px;margin:18px auto;padding:12px}
 .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.small{font-size:13px;color:#444}
+/* Table */
 .table-wrap{overflow:auto;border-radius:8px}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{border:1px solid #e2e2e2;padding:8px;text-align:center;vertical-align:top}
 thead th{position:sticky;top:0;background:#fafafa;z-index:5}
-.sticky-date{position:sticky;left:0;background:#fff;z-index:6;font-weight:700;width:72px;min-width:64px}
-.entry{display:block;padding:6px;margin:4px auto;border-radius:6px;text-align:center;border:1px solid rgba(0,0,0,0.03)}
+.sticky-date{position:sticky;left:0;background:#fff;z-index:6;font-weight:700;width:88px;min-width:72px}
+/* entries */
+.entry{display:block;padding:8px;margin:6px auto;border-radius:6px;text-align:center;border:1px solid rgba(0,0,0,0.03);max-width:260px;word-wrap:break-word}
 .entry .meta{font-size:12px;color:#666;margin-top:4px}
-.entry .text{font-size:14px}
-.entry.overnight{background:var(--overnight-bg);border-left:4px solid var(--overnight-accent);}
-.entry.overnight .meta{font-weight:700;color:var(--overnight-accent);}
-.personLink{display:block;font-weight:700;color:#0077b6;text-decoration:none}
-th.personRouven{background:linear-gradient(180deg,#fff0f0,#ffd9d9);}
-th.personDaniel{background:linear-gradient(180deg,#f0fff0,#d9ffd9);}
-th.personHenrik{background:linear-gradient(180deg,#eef4ff,#d9e7ff);}
-th.personBenja{background:linear-gradient(180deg,#fffaf0,#fff1d9);}
-th.personHolger{background:linear-gradient(180deg,#f7efff,#f0d9ff);}
+.entry .text{font-size:14px;white-space:normal;}
+td .entry.odd { background: var(--gray1); }
+td .entry.even{ background: var(--gray2); }
+/* overnight distinct */
+.entry.overnight{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent); }
+.entry.overnight .meta{ font-weight:700; color:var(--overnight-accent); }
+/* person base colors (header) */
+.personColRouven{background: linear-gradient(180deg,#fff0f0,#ffd9d9);}
+.personColDaniel{background: linear-gradient(180deg,#f0fff0,#d9ffd9);}
+.personColHenrik{background: linear-gradient(180deg,#eef4ff,#d9e7ff);}
+.personColBenja{background: linear-gradient(180deg,#fffaf0,#fff1d9);}
+.personColHolger{background: linear-gradient(180deg,#f7efff,#f0d9ff);}
+/* weekend darker variants */
+.weekendRouven{background: linear-gradient(180deg,#ffd0d0,#ffb3b3);}
+.weekendDaniel{background: linear-gradient(180deg,#d0ffd0,#b3ffb3);}
+.weekendHenrik{background: linear-gradient(180deg,#c6d9ff,#9fbfff);}
+.weekendBenja{background: linear-gradient(180deg,#ffe8c2,#ffd18a);}
+.weekendHolger{background: linear-gradient(180deg,#ebd2ff,#d8b3ff);}
+.weekendDate{background:#ffd699;font-weight:700;color:#222}
+/* editor hints */
+.note{font-size:13px;color:#555;margin-top:8px}
+.personLink{display:inline-block;padding:6px 10px;border-radius:8px;text-decoration:none;font-weight:700;color:#fff;background:rgba(0,0,0,0.06)}
+/* responsive */
+@media(max-width:900px){
+  .sticky-date{display:none}
+  table, thead, tbody, th, td, tr{display:block}
+  thead tr{position:relative}
+  tr{margin-bottom:8px;border:1px solid #eee;border-radius:8px}
+  td{border:0;padding:8px}
+}
 </style>
 </head>
 <body>
@@ -54,106 +78,309 @@ th.personHolger{background:linear-gradient(180deg,#f7efff,#f0d9ff);}
 
 <div class="container">
   <div class="card">
-    <div class="table-wrap">
-      <table id="calendarTable" aria-label="Reiseübersicht">
-        <thead id="calendarHead"></thead>
-        <tbody id="calendarBody"></tbody>
-      </table>
+    <div class="controls">
+      <div class="small" id="rangeInfo"></div>
+      <div style="flex:1"></div>
+      <div class="small" id="langLabel"></div>
+    </div>
+
+    <div id="overview">
+      <div class="table-wrap">
+        <table id="calendarTable" aria-label="Reiseübersicht">
+          <thead id="calendarHead"></thead>
+          <tbody id="calendarBody"></tbody>
+        </table>
+      </div>
+      <p class="note">Klicke auf einen Namen, um die persönliche Seite zu öffnen. Hover zeigt Buchungsstatus.</p>
     </div>
   </div>
 </div>
 
 <script>
-/* Sprachpaket */
+/* ---------------------------
+   Übersetzungen (DE / TH)
+   --------------------------- */
 const LANG = {
-  de:{pageTitle:"Thailand 2026",persons:{Rouven:"Rouven",Daniel:"Daniel",Henrik:"Henrik",Benja:"Benja",Holger:"Holger"},overnightTitle:"Übernachtung"},
-  th:{pageTitle:"ประเทศไทย 2026",persons:{Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"},overnightTitle:"ที่พัก"}
+  de: {
+    pageTitle: "Thailand 2026",
+    closeLabel: "Zurück",
+    overnightTitle: "Übernachtung",
+    todoTitle: "To-Do",
+    bookedLabel: "Gebucht",
+    adoptLabel: "Eintrag übernehmen",
+    persons: {Rouven:"Rouven",Daniel:"Daniel",Henrik:"Henrik",Benja:"Benja",Holger:"Holger"}
+  },
+  th: {
+    pageTitle: "ประเทศไทย 2026",
+    closeLabel: "กลับ",
+    overnightTitle: "ที่พัก",
+    todoTitle: "รายการที่ต้องทำ",
+    bookedLabel: "จองแล้ว",
+    adoptLabel: "นำรายการมาใช้",
+    persons: {Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"}
+  }
 };
-let lang='de';
-const persons=["Rouven","Daniel","Henrik","Benja","Holger"];
-const start=new Date(2026,1,16);
-const end=new Date(2026,2,12);
 
-/* Daten laden */
-function initData(){
-  let d=localStorage.getItem("tripData");
-  if(d) return JSON.parse(d);
-  return {
-    entries:{},
-    overnightTypes:[{id:1,label:"Flugzeug"}],
-    todos:{}
-  };
-}
-let data=initData();
+let lang = 'de';
 
-/* Speichern */
-function saveData(){localStorage.setItem("tripData",JSON.stringify(data));}
+/* persons & date range (safe) */
+const persons = ["Rouven","Daniel","Henrik","Benja","Holger"];
+const start = new Date(2026,1,16); // 16 Feb 2026
+const end   = new Date(2026,2,12); // 12 Mar 2026
 
-/* Datumsarray */
-function getDateList(){
-  let arr=[];let days=Math.round((end-start)/86400000)+1;
-  for(let i=0;i<days;i++){arr.push(new Date(start.getTime()+i*86400000));}
-  return arr;
-}
+/* helper date functions (DST-safe) */
+function pad(n){return String(n).padStart(2,'0');}
+function formatLabel(d){ return pad(d.getDate()) + "." + pad(d.getMonth()+1) + "."; }
+function formatKey(d){ return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
+function daysInRange(s,e){ const s0=new Date(s.getFullYear(),s.getMonth(),s.getDate()); const e0=new Date(e.getFullYear(),e.getMonth(),e.getDate()); return Math.round((e0-s0)/86400000)+1; }
+function dateByOffset(s,offset){ return new Date(s.getFullYear(), s.getMonth(), s.getDate()+offset); }
 
-/* Einträge holen */
-function getEntries(person,dateKey){
-  if(!data.entries[person]) return [];
-  return data.entries[person][dateKey]||[];
-}
-function overnightLabel(id){
-  let t=data.overnightTypes.find(o=>o.id===id);
-  return t?t.label:"";
-}
+/* storage key */
+const STORAGE_KEY = "tripData_v2";
 
-/* Render Tabelle */
-function renderTable(){
-  document.getElementById("pageTitle").textContent=LANG[lang].pageTitle;
-  let head="<tr><th class='sticky-date'>Datum</th>";
-  for(let p of persons){
-    head+=`<th class="person${p}"><a class="personLink" href="person.html?person=${encodeURIComponent(p)}">${LANG[lang].persons[p]}</a></th>`;
+/* default preset (from original) with corrected Thai translations */
+const PRESET = {
+  "2026-02-16":{ all:[
+    {de:"Abflug Frankfurt/Main Flughafen 20.55 Uhr", th:"ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น."}
+  ]},
+  "2026-02-17":{ all:[
+    {de:"Ankunft Bangkok-Suvarnabhumi 13.45 Uhr", th:"ถึงกรุงเทพฯ สนามบินสุวรรณภูมิ 13:45 น."},
+    {de:"River Cruise", th:"ล่องเรือ"}
+  ]},
+  "2026-02-19":{ Henrik:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ],
+                 Benja:[  {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ],
+                 Holger:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ] },
+  "2026-02-24":{ Henrik:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ],
+                 Benja:[  {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ],
+                 Holger:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ] },
+  "2026-02-25":{ Henrik:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ],
+                 Benja:[  {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ],
+                 Holger:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ] },
+  "2026-02-26":{ all:[ {de:"Einweihungsfeier Sa Kaeo", th:"พิธีเปิดบ้าน จังหวัดสระแก้ว"} ] },
+  "2026-03-11":{ all:[
+    {de:"Abflug Bangkok-Suvarnabhumi 12.40 Uhr", th:"ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น."},
+    {de:"Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th:"ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น."}
+  ] },
+  "2026-03-12":{ all:[ {de:"Osnabrück", th:"ออสนาบรู้ค"} ] }
+};
+
+/* default overnight types (centralized), with DE/TH labels */
+const DEFAULT_OVERNIGHT_TYPES = [
+  { id: 1, label_de: "Flugzeug", label_th: "เครื่องบิน" },
+  { id: 2, label_de: "Hotel",    label_th: "โรงแรม" }
+];
+
+/* data structure:
+  data = {
+    entries: { "YYYY-MM-DD": { person: [ {de,th}, ... ] } },
+    overnight: { person: { "YYYY-MM-DD": {overnightId, de, th, booked } } },
+    overnightTypes: [ {id,label_de,label_th} ],
+    todos: { person: [ {id,de,th,done}, ... ] }
   }
-  head+="</tr>";
-  document.getElementById("calendarHead").innerHTML=head;
+*/
+let data = null;
 
-  let body="";
-  for(let dt of getDateList()){
-    let key=dt.toISOString().slice(0,10);
-    body+=`<tr><td class='sticky-date'>${key}</td>`;
-    for(let p of persons){
-      let entries=getEntries(p,key);
-      if(entries.length===0){
-        body+="<td></td>";
-      }else{
-        let html="";
-        entries.forEach(e=>{
-          let cls=e.overnightId?"entry overnight":"entry";
-          html+=`<div class="${cls}">
-                   <div class="text">${e.text||""}</div>
-                   ${e.overnightId?`<div class="meta">${LANG[lang].overnightTitle}: ${overnightLabel(e.overnightId)}</div>`:""}
-                 </div>`;
-        });
-        body+=`<td>${html}</td>`;
+function createEmptyData(){
+  const d = { entries:{}, overnight:{}, overnightTypes:[], todos:{} };
+  const days = daysInRange(start,end);
+  for(let i=0;i<days;i++){
+    const dt = dateByOffset(start,i);
+    const key = formatKey(dt);
+    d.entries[key] = {};
+    persons.forEach(p=> d.entries[key][p] = []);
+  }
+  persons.forEach(p=>{
+    d.overnight[p] = {};
+    d.todos[p] = [ { id: makeId(), de: "Gültiger Reisepass (mind. bis 09/2016)", th: "หนังสือเดินทางที่ถูกต้อง (อย่างน้อยถึง 09/2016)", done: false } ];
+  });
+  d.overnightTypes = DEFAULT_OVERNIGHT_TYPES.slice();
+  return d;
+}
+
+function makeId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+
+function loadData(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw){
+    data = createEmptyData();
+    mergePresetInto(data);
+    // ensure Holger overnight 2026-02-16 = Flugzeug (id 1)
+    if(!data.overnight["Holger"]) data.overnight["Holger"] = {};
+    data.overnight["Holger"]["2026-02-16"] = {overnightId:1, de:"Flugzeug", th:"เครื่องบิน", booked:false};
+    saveData();
+    return;
+  }
+  try{
+    data = JSON.parse(raw);
+    // back-compat & ensure structure
+    if(!data.entries || !data.overnight || !data.overnightTypes || !data.todos){
+      data = createEmptyData();
+      mergePresetInto(data);
+    } else {
+      // ensure dates and persons exist
+      const days = daysInRange(start,end);
+      for(let i=0;i<days;i++){
+        const dt = dateByOffset(start,i);
+        const k = formatKey(dt);
+        if(!data.entries[k]) data.entries[k] = {};
+        persons.forEach(p=> { if(!data.entries[k][p]) data.entries[k][p] = []; });
       }
+      persons.forEach(p=>{
+        if(!data.overnight[p]) data.overnight[p] = {};
+        if(!data.todos[p] || !Array.isArray(data.todos[p])) data.todos[p] = [];
+      });
+      // ensure there is at least the default overnight types
+      if(!Array.isArray(data.overnightTypes) || data.overnightTypes.length===0) data.overnightTypes = DEFAULT_OVERNIGHT_TYPES.slice();
     }
-    body+="</tr>";
+    // ensure Holger overnight default exists
+    if(!data.overnight["Holger"]) data.overnight["Holger"] = {};
+    if(!data.overnight["Holger"]["2026-02-16"]) data.overnight["Holger"]["2026-02-16"] = {overnightId:1, de:"Flugzeug", th:"เครื่องบิน", booked:false};
+    mergePresetInto(data);
+  } catch(e){
+    console.error("load error", e);
+    data = createEmptyData();
+    mergePresetInto(data);
   }
-  document.getElementById("calendarBody").innerHTML=body;
-}
-
-/* Sprache */
-function setLang(l){lang=l;renderTable();}
-
-/* Demo Holger 16.02 */
-const demoDate="2026-02-16";
-if(!data.entries["Holger"]) data.entries["Holger"]={};
-if(!data.entries["Holger"][demoDate]) data.entries["Holger"][demoDate]=[];
-if(data.entries["Holger"][demoDate].length===0){
-  data.entries["Holger"][demoDate].push({time:"",text:"Anreise",overnightId:1});
   saveData();
 }
 
-renderTable();
+function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+/* sameEntry logic from original */
+function sameEntry(a,b){
+  if(!a||!b) return false;
+  const da=(a.de||"").trim(), ta=(a.th||"").trim(), db=(b.de||"").trim(), tb=(b.th||"").trim();
+  return (da!=="" && da===db) || (ta!=="" && ta===tb);
+}
+
+/* merge preset */
+function mergePresetInto(d){
+  for(const dateKey in PRESET){
+    if(!d.entries[dateKey]) continue;
+    const obj = PRESET[dateKey];
+    if(obj.all){
+      obj.all.forEach(item=>{
+        persons.forEach(p => {
+          const list = d.entries[dateKey][p] || [];
+          const exists = list.some(e => sameEntry(e,item));
+          if(!exists) list.push({de:item.de, th:item.th});
+          d.entries[dateKey][p] = list;
+        });
+      });
+    }
+    persons.forEach(p=>{
+      if(obj[p]){
+        obj[p].forEach(item => {
+          const list = d.entries[dateKey][p] || [];
+          const exists = list.some(e => sameEntry(e,item));
+          if(!exists) list.push({de:item.de, th:item.th});
+          d.entries[dateKey][p] = list;
+        });
+      }
+    });
+  }
+}
+
+/* time parsing + sort */
+function parseFirstTime(text){
+  if(!text) return null;
+  const m = String(text).match(/(\b\d{1,2})[.:](\d{2})\b/);
+  if(!m) return null;
+  const h = parseInt(m[1],10), min = parseInt(m[2],10);
+  if(isNaN(h)||isNaN(min)) return null;
+  return h*60+min;
+}
+function sortItemsByTime(list){
+  return list.slice().sort((a,b)=>{
+    const ta = parseFirstTime(a.de) ?? parseFirstTime(a.th) ?? Infinity;
+    const tb = parseFirstTime(b.de) ?? parseFirstTime(b.th) ?? Infinity;
+    return ta - tb;
+  });
+}
+
+/* render overview */
+const calendarHead = () => document.getElementById('calendarHead');
+const calendarBody = () => document.getElementById('calendarBody');
+const pageTitle = () => document.getElementById('pageTitle');
+const rangeInfo = () => document.getElementById('rangeInfo');
+
+function overnightLabel(id){
+  const t = data.overnightTypes.find(x=>x.id===id);
+  if(!t) return '';
+  return lang === 'de' ? (t.label_de || '') : (t.label_th || '');
+}
+
+function renderOverview(){
+  pageTitle().textContent = LANG[lang].pageTitle;
+  rangeInfo().textContent = formatLabel(start) + " — " + formatLabel(end);
+  document.getElementById('langLabel').textContent = (lang==='de' ? 'Deutsch' : 'ไทย');
+
+  // header
+  let headHtml = "<tr><th class='sticky-date'>" + (lang==='de' ? "Datum" : "วันที่") + "</th>";
+  persons.forEach(p=>{
+    const name = LANG[lang].persons[p] || p;
+    headHtml += `<th class="personCol${p}"><button class="personLink" onclick="openPerson('${p}')">${escAttr(name)}</button></th>`;
+  });
+  headHtml += "</tr>";
+  calendarHead().innerHTML = headHtml;
+
+  // body
+  let bodyHtml = "";
+  const days = daysInRange(start,end);
+  for(let i=0;i<days;i++){
+    const dt = dateByOffset(start,i);
+    const key = formatKey(dt);
+    const label = formatLabel(dt);
+    const isWeekend = (dt.getDay()===0 || dt.getDay()===6);
+    const dateClass = isWeekend ? "sticky-date weekendDate" : "sticky-date";
+    bodyHtml += `<tr><td class="${dateClass}">${label}</td>`;
+    persons.forEach(p=>{
+      const entries = (data.entries[key] && data.entries[key][p]) ? data.entries[key][p] : [];
+      const ov = (data.overnight[p] && data.overnight[p][key]) ? data.overnight[p][key] : null;
+
+      // combine entries + overnight (overnight as item if present and non-empty)
+      const combined = entries.map(e=> ({...e, _type:'entry'}));
+      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.overnightId)){
+        combined.push({...ov, _type:'overnight'});
+      }
+      const sorted = sortItemsByTime(combined);
+
+      const htmlEntries = sorted.map((e,idx)=>{
+        const text = (lang==='de') ? (e.de || e.th || '') : (e.th || e.de || '');
+        const baseCls = e._type === 'overnight' ? 'entry overnight' : 'entry';
+        const parity = (idx % 2 === 0) ? 'odd' : 'even';
+        const meta = e._type === 'overnight' ? (e.overnightId ? `<div class="meta"><i class="fa-solid fa-hotel"></i> ${overnightLabel(e.overnightId)}</div>` : `<div class="meta">${e.de||e.th||''}</div>`) : '';
+        const booked = e._type==='overnight' && e.booked ? `<span title="${LANG[lang].bookedLabel}"> <i class="fa-solid fa-check" style="color:var(--overnight-accent)"></i></span>` : '';
+        return `<div class="${baseCls} ${parity}"><div class="text">${escAttr(text)}</div>${meta}${booked}</div>`;
+      }).join('');
+
+      bodyHtml += `<td class="${isWeekend ? 'weekend' + p : ''}">${htmlEntries}</td>`;
+    });
+    bodyHtml += "</tr>";
+  }
+  calendarBody().innerHTML = bodyHtml;
+}
+
+/* open person page */
+function openPerson(person){
+  window.location.href = `person.html?person=${encodeURIComponent(person)}`;
+}
+
+/* utility */
+function escAttr(s){ return String(s||"").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function setLang(l){
+  lang = l;
+  renderOverview();
+}
+
+/* initial load */
+loadData();
+renderOverview();
+
+/* expose for console if needed */
+window.setLang = setLang;
+window.openPerson = openPerson;
 </script>
 </body>
 </html>
