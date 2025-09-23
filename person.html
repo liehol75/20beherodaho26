@@ -3,196 +3,647 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Thailand 2026 – Person</title>
+<title>Thailand 2026 — Person</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
-  --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff;
-  --txt:#222;
+  --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff; --txt:#222;
+  --gray1:#fbfbfb; --gray2:#f0f0f0;
+  --overnight-bg:#e8f5ff; --overnight-accent:#2b95ff;
 }
 *{box-sizing:border-box}
 body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
 .header{
-  position:sticky;top:0;z-index:20;
+  position:sticky; top:0; z-index:30;
   background:linear-gradient(90deg,var(--accent),#00629a);
-  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
-  gap:12px;
+  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.12);
 }
-.personName{margin:0;font-size:22px;font-weight:700}
-.backBtn{
-  border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;
-}
+.personBadge{display:flex;align-items:center;gap:12px}
+.badgeCircle{width:44px;height:44px;border-radius:50%;background:#fff;border:3px solid rgba(255,255,255,0.18)}
+.personName{margin:0;font-size:20px;font-weight:800}
+.backBtn{border:0;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.12);color:#fff;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
 .container{max-width:1200px;margin:18px auto;padding:12px}
 .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-.dateBox{background:#fff;padding:10px;border-radius:8px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
-.dateRow{display:flex;gap:8px;align-items:center;margin-top:6px}
-.dateRow input[type="text"]{padding:6px;border-radius:6px;border:1px solid #ddd;width:100%}
-.smallBtn{padding:6px 8px;border-radius:6px;border:0;background:var(--accent2);color:#fff;cursor:pointer;font-size:13px}
-.ovRow{display:flex;gap:6px;align-items:center;margin-top:6px}
-.ovRow select{padding:6px;border-radius:6px;border:1px solid #ddd;flex:1}
-.iconBtn{border:0;background:transparent;cursor:pointer;font-size:14px}
+.editorGrid{display:grid;grid-template-columns:1fr 340px;gap:12px}
+@media(max-width:980px){ .editorGrid{grid-template-columns:1fr} }
+
+/* date boxes */
+.entryBox{background:#fff;padding:10px;border-radius:8px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
+.entryBoxHeader{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.entryRow{display:flex;gap:8px;align-items:center;margin-top:8px}
+.entryRow input[type="text"]{padding:8px;border-radius:8px;border:1px solid #ddd;width:100%}
+.smallBtn{padding:6px 8px;border-radius:8px;border:0;background:var(--accent2);color:#fff;cursor:pointer;font-size:13px}
+.iconBtn{border:0;background:transparent;cursor:pointer;font-size:16px;padding:6px;border-radius:6px}
+.adopt-wrap{display:flex;gap:8px;align-items:center;margin-top:8px}
+.ov-inline{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent); padding:8px; border-radius:6px; display:flex; gap:8px; align-items:center; margin-top:8px; }
+.ov-inline select{padding:8px;border-radius:8px;border:1px solid #ddd;flex:1}
+
+/* todos */
 .sideCard{background:#fff;padding:10px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
 .todo-item{display:flex;gap:6px;align-items:center;margin-bottom:8px}
 .todo-item input[type="text"]{flex:1;padding:6px;border-radius:6px;border:1px solid #ddd}
+
+/* helper */
+.kv{font-size:13px;color:#666}
+.note{font-size:13px;color:#555;margin-top:8px}
+.highlight{background:linear-gradient(90deg,#f0fbff,#e8f5ff);padding:6px;border-radius:6px}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1 class="personName" id="personName">Person</h1>
-  <button class="backBtn" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i> Übersicht</button>
+  <div class="personBadge">
+    <div class="badgeCircle" id="badgeColor"></div>
+    <div>
+      <div class="personName" id="personName">Person</div>
+      <div class="kv" id="personSub"></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="backBtn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i> Übersicht</button>
+  </div>
 </div>
 
 <div class="container">
   <div class="card">
-    <div id="dates"></div>
-  </div>
+    <div class="editorGrid">
+      <div id="leftCol"></div>
 
-  <div class="sideCard" style="margin-top:12px">
-    <h3><i class="fa-solid fa-list-check"></i> To-Do</h3>
-    <div id="todoList"></div>
-    <button class="smallBtn" onclick="addTodoItem()"><i class="fa-solid fa-plus"></i> Neue Aufgabe</button>
+      <div>
+        <div class="sideCard">
+          <h4><i class="fa-solid fa-list-check"></i> <span id="todoTitle">To-Do</span></h4>
+          <div id="todoList"></div>
+          <div style="margin-top:8px">
+            <button class="smallBtn" onclick="addTodoItem()"><i class="fa-solid fa-plus"></i> Neue Aufgabe</button>
+          </div>
+        </div>
+
+        <div class="sideCard" style="margin-top:12px">
+          <h4><i class="fa-solid fa-hotel"></i> Übernachtungstypen</h4>
+          <div id="overnightTypesList" style="margin-top:8px"></div>
+          <div style="margin-top:8px">
+            <button class="smallBtn" onclick="createOvernightType()"><i class="fa-solid fa-plus"></i> Neuer Typ</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
 <script>
-const params=new URLSearchParams(window.location.search);
-const person=params.get("person")||"";
-document.getElementById("personName").textContent=person;
-
-/* Daten laden */
-function loadData(){
-  let d=localStorage.getItem("tripData");
-  if(d) return JSON.parse(d);
-  return {entries:{},overnightTypes:[],todos:{}};
-}
-let data=loadData();
-
-/* Speichern */
-function saveData(){
-  localStorage.setItem("tripData",JSON.stringify(data));
-}
-
-/* Datumsarray */
-const start=new Date(2026,1,16);
-const end=new Date(2026,2,12);
-function getDateList(){
-  let arr=[];let days=Math.round((end-start)/86400000)+1;
-  for(let i=0;i<days;i++){arr.push(new Date(start.getTime()+i*86400000));}
-  return arr;
-}
-
-/* Übernachtungen-Dropdown bauen */
-function overnightSelectHTML(dateKey,selectedId){
-  let html=`<select onchange="changeOvernight('${dateKey}',this.value)">`;
-  html+=`<option value="">- Übernachtung -</option>`;
-  for(let o of data.overnightTypes){
-    html+=`<option value="${o.id}" ${selectedId==o.id?'selected':''}>${o.label}</option>`;
+/* ---------------------------
+   Shared config & translations
+   --------------------------- */
+const LANG = {
+  de: {
+    pageTitle: "Thailand 2026",
+    overnightTitle: "Übernachtung",
+    todoTitle: "To-Do",
+    addEntryLabel: "+ Eintrag",
+    btnDelete: "Löschen",
+    btnAddEntry: "+Eintrag",
+    defaultTodo: "Gültiger Reisepass (mind. bis 09/2016)",
+    persons: {Rouven:"Rouven",Daniel:"Daniel",Henrik:"Henrik",Benja:"Benja",Holger:"Holger"},
+    bookedLabel: "Gebucht",
+    addOvernight: "+ Übernachtung hinzufügen",
+    removeOvernight: "Übernachtung entfernen",
+    adoptLabel: "Eintrag übernehmen",
+    editLabel: "Bearbeiten",
+    delLabel: "Löschen",
+    overwriteAsk: "Beim Löschen dieses Typs: Einträge ebenfalls entfernen? Abbrechen = Typ wird entfernt, Einträge behalten werden aber ohne Typ gesetzt."
+  },
+  th: {
+    pageTitle: "ประเทศไทย 2026",
+    overnightTitle: "ที่พัก",
+    todoTitle: "รายการที่ต้องทำ",
+    addEntryLabel: "+ รายการ",
+    btnDelete: "ลบ",
+    btnAddEntry: "+รายการ",
+    defaultTodo: "หนังสือเดินทางที่ถูกต้อง (อย่างน้อยถึง 09/2016)",
+    persons: {Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"},
+    bookedLabel: "จองแล้ว",
+    addOvernight: "+ เพิ่มที่พัก",
+    removeOvernight: "ลบที่พัก",
+    adoptLabel: "นำรายการมาใช้",
+    editLabel: "แก้ไข",
+    delLabel: "ลบ",
+    overwriteAsk: "เมื่อลบประเภท: ต้องการลบรายการที่ใช้ประเภทนี้ด้วยหรือไม่? ยกเลิก = ลบประเภทแต่เก็บรายการไว้โดยไม่มีประเภท"
   }
-  html+=`<option value="__new__">+ Neuer Typ…</option>`;
-  html+="</select>";
-  return html;
-}
+};
 
-/* Render */
-function render(){
-  // sicherstellen, dass Person in entries existiert
-  if(!data.entries[person]) data.entries[person]={};
+let lang = 'de';
 
-  // Tage rendern
-  let html="";
-  for(let dt of getDateList()){
-    let key=dt.toISOString().slice(0,10);
-    if(!data.entries[person][key]) data.entries[person][key]=[];
-    let entries=data.entries[person][key];
-    html+=`<div class="dateBox">
-             <strong>${key}</strong>
-             <button class="smallBtn" onclick="addEntry('${key}')"><i class="fa-solid fa-plus"></i> Eintrag</button>`;
-    entries.forEach((e,idx)=>{
-      html+=`<div class="dateRow">
-               <input type="text" value="${e.text||""}" oninput="editEntry('${key}',${idx},this.value)">
-               <button class="iconBtn" onclick="deleteEntry('${key}',${idx})"><i class="fa-solid fa-trash"></i></button>
-             </div>`;
-    });
-    // Übernachtung
-    let selId=entries.length>0?entries[0].overnightId||"":"";
-    html+=`<div class="ovRow">${overnightSelectHTML(key,selId)}
-             <button class="iconBtn" onclick="editOvernightTypes()"><i class="fa-solid fa-gear"></i></button>
-           </div>`;
-    html+="</div>";
+/* persons & date range */
+const params = new URLSearchParams(window.location.search);
+const PERSON = params.get('person') || 'Rouven';
+const persons = ["Rouven","Daniel","Henrik","Benja","Holger"];
+const start = new Date(2026,1,16);
+const end   = new Date(2026,2,12);
+function pad(n){return String(n).padStart(2,'0');}
+function formatKey(d){ return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
+function formatLabel(d){ return pad(d.getDate()) + "." + pad(d.getMonth()+1) + "."; }
+function daysInRange(s,e){ const s0=new Date(s.getFullYear(),s.getMonth(),s.getDate()); const e0=new Date(e.getFullYear(),e.getMonth(),e.getDate()); return Math.round((e0-s0)/86400000)+1; }
+function dateByOffset(s,offset){ return new Date(s.getFullYear(), s.getMonth(), s.getDate()+offset); }
+function makeId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+
+/* storage */
+const STORAGE_KEY = "tripData_v2";
+
+/* default overnight types */
+const DEFAULT_OVERNIGHT_TYPES = [
+  { id: 1, label_de: "Flugzeug", label_th: "เครื่องบิน" },
+  { id: 2, label_de: "Hotel",    label_th: "โรงแรม" }
+];
+
+/* PRESET — same as index (kept consistent) */
+const PRESET = {
+  "2026-02-16":{ all:[ {de:"Abflug Frankfurt/Main Flughafen 20.55 Uhr", th:"ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น."} ] },
+  "2026-02-17":{ all:[ {de:"Ankunft Bangkok-Suvarnabhumi 13.45 Uhr", th:"ถึงกรุงเทพฯ สนามบินสุวรรณภูมิ 13:45 น."}, {de:"River Cruise", th:"ล่องเรือ"} ] },
+  "2026-02-19":{ Henrik:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ], Benja:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ], Holger:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ] },
+  "2026-02-24":{ Henrik:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ], Benja:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ], Holger:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ] },
+  "2026-02-25":{ Henrik:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ], Benja:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ], Holger:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ] },
+  "2026-02-26":{ all:[ {de:"Einweihungsfeier Sa Kaeo", th:"พิธีเปิดบ้าน จังหวัดสระแก้ว"} ] },
+  "2026-03-11":{ all:[ {de:"Abflug Bangkok-Suvarnabhumi 12.40 Uhr", th:"ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น."}, {de:"Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th:"ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น."} ] },
+  "2026-03-12":{ all:[ {de:"Osnabrück", th:"ออสนาบรู้ค"} ] }
+};
+
+/* data */
+let data = null;
+
+function createEmptyData(){
+  const d = { entries:{}, overnight:{}, overnightTypes:[], todos:{} };
+  const days = daysInRange(start,end);
+  for(let i=0;i<days;i++){
+    const dt = dateByOffset(start,i);
+    const k = formatKey(dt);
+    d.entries[k] = {};
+    persons.forEach(p=> d.entries[k][p]=[]);
   }
-  document.getElementById("dates").innerHTML=html;
-
-  // ToDos rendern
-  if(!data.todos[person]) data.todos[person]=[];
-  let todoHtml="";
-  data.todos[person].forEach((t,i)=>{
-    todoHtml+=`<div class="todo-item">
-                 <input type="text" value="${t}" oninput="editTodo(${i},this.value)">
-                 <button class="iconBtn" onclick="deleteTodo(${i})"><i class="fa-solid fa-trash"></i></button>
-               </div>`;
+  persons.forEach(p=>{
+    d.overnight[p] = {};
+    d.todos[p] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
   });
-  document.getElementById("todoList").innerHTML=todoHtml;
+  d.overnightTypes = DEFAULT_OVERNIGHT_TYPES.slice();
+  return d;
 }
 
-/* Entry functions */
-function addEntry(dateKey){
-  data.entries[person][dateKey].push({text:"",overnightId:""});
-  saveData();render();
-}
-function editEntry(dateKey,idx,val){
-  data.entries[person][dateKey][idx].text=val;
-  saveData();
-}
-function deleteEntry(dateKey,idx){
-  data.entries[person][dateKey].splice(idx,1);
-  saveData();render();
+function sameEntry(a,b){
+  if(!a||!b) return false;
+  const da=(a.de||"").trim(), ta=(a.th||"").trim(), db=(b.de||"").trim(), tb=(b.th||"").trim();
+  return (da!=="" && da===db) || (ta!=="" && ta===tb);
 }
 
-/* Overnight change */
-function changeOvernight(dateKey,val){
-  if(val==="__new__"){
-    let newLabel=prompt("Neuer Übernachtungstyp:");
-    if(newLabel){
-      let newId=Date.now();
-      data.overnightTypes.push({id:newId,label:newLabel});
-      // setzen für aktuellen Tag
-      setOvernight(dateKey,newId);
+function mergePresetInto(d){
+  for(const dateKey in PRESET){
+    if(!d.entries[dateKey]) continue;
+    const obj = PRESET[dateKey];
+    if(obj.all){
+      obj.all.forEach(item=>{
+        persons.forEach(p=>{
+          const list = d.entries[dateKey][p] || [];
+          const exists = list.some(e => sameEntry(e,item));
+          if(!exists) list.push({de:item.de, th:item.th});
+          d.entries[dateKey][p] = list;
+        });
+      });
     }
-  }else{
-    setOvernight(dateKey,val?parseInt(val):"");
+    persons.forEach(p=>{
+      if(obj[p]){
+        obj[p].forEach(item=>{
+          const list = d.entries[dateKey][p] || [];
+          const exists = list.some(e => sameEntry(e,item));
+          if(!exists) list.push({de:item.de, th:item.th});
+          d.entries[dateKey][p] = list;
+        });
+      }
+    });
   }
 }
-function setOvernight(dateKey,id){
-  if(data.entries[person][dateKey].length===0){
-    data.entries[person][dateKey].push({text:"",overnightId:id});
-  }else{
-    data.entries[person][dateKey][0].overnightId=id;
+
+/* load/save */
+function loadData(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw){
+    data = createEmptyData();
+    mergePresetInto(data);
+    // ensure Holger overnight default
+    if(!data.overnight["Holger"]) data.overnight["Holger"] = {};
+    data.overnight["Holger"]["2026-02-16"] = {overnightId:1, de:"Flugzeug", th:"เครื่องบิน", booked:false};
+    saveData();
+    return;
   }
-  saveData();render();
-}
-
-/* Bearbeiten/Löschen von Typen */
-function editOvernightTypes(){
-  let list=data.overnightTypes.map(o=>`${o.id}: ${o.label}`).join("\n");
-  alert("Übernachtungstypen:\n"+list+"\n\nLöschen: localStorage in DevTools bearbeiten oder hier erweitern.");
-}
-
-/* ToDo functions */
-function addTodoItem(){
-  data.todos[person].push("");
-  saveData();render();
-}
-function editTodo(i,val){
-  data.todos[person][i]=val;
+  try{
+    data = JSON.parse(raw);
+    if(!data.entries || !data.overnight || !data.overnightTypes || !data.todos){
+      data = createEmptyData();
+      mergePresetInto(data);
+    } else {
+      const days = daysInRange(start,end);
+      for(let i=0;i<days;i++){
+        const dt = dateByOffset(start,i);
+        const k = formatKey(dt);
+        if(!data.entries[k]) data.entries[k] = {};
+        persons.forEach(p=> { if(!data.entries[k][p]) data.entries[k][p]=[]; });
+      }
+      persons.forEach(p=>{
+        if(!data.overnight[p]) data.overnight[p] = {};
+        if(!data.todos[p]) data.todos[p] = [];
+      });
+      if(!Array.isArray(data.overnightTypes) || data.overnightTypes.length===0) data.overnightTypes = DEFAULT_OVERNIGHT_TYPES.slice();
+    }
+    // Holger overnight default if not present
+    if(!data.overnight["Holger"]) data.overnight["Holger"] = {};
+    if(!data.overnight["Holger"]["2026-02-16"]) data.overnight["Holger"]["2026-02-16"] = {overnightId:1, de:"Flugzeug", th:"เครื่องบิน", booked:false};
+    mergePresetInto(data);
+  } catch(e){
+    console.error("load error", e);
+    data = createEmptyData();
+    mergePresetInto(data);
+  }
   saveData();
 }
-function deleteTodo(i){
-  data.todos[person].splice(i,1);
-  saveData();render();
+
+function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+/* time parse + sort */
+function parseFirstTime(text){
+  if(!text) return null;
+  const m = String(text).match(/(\b\d{1,2})[.:](\d{2})\b/);
+  if(!m) return null;
+  const h = parseInt(m[1],10), min = parseInt(m[2],10);
+  if(isNaN(h)||isNaN(min)) return null;
+  return h*60+min;
+}
+function sortItemsByTime(list){
+  return list.slice().sort((a,b)=>{
+    const ta = parseFirstTime(a.de) ?? parseFirstTime(a.th) ?? Infinity;
+    const tb = parseFirstTime(b.de) ?? parseFirstTime(b.th) ?? Infinity;
+    return ta - tb;
+  });
 }
 
-render();
+/* helpers */
+function esc(s){ return String(s||"").replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,"&quot;"); }
+function overnightLabelForLang(t){
+  if(!t) return '';
+  return lang==='de' ? (t.label_de||'') : (t.label_th||'');
+}
+
+/* render overnight types list (side) */
+function renderOvernightTypesList(){
+  const wrap = document.getElementById('overnightTypesList');
+  let html = '';
+  data.overnightTypes.forEach(o=>{
+    html += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <div style="flex:1">${esc(lang==='de'?o.label_de:o.label_th)}</div>
+      <button class="iconBtn" title="${LANG[lang].editLabel}" onclick="editOvernightType(${o.id})"><i class="fa-solid fa-pen-to-square"></i></button>
+      <button class="iconBtn" title="${LANG[lang].delLabel}" onclick="deleteOvernightType(${o.id})"><i class="fa-solid fa-trash"></i></button>
+    </div>`;
+  });
+  wrap.innerHTML = html;
+}
+
+/* render left column: days & entries */
+function renderLeftCol(){
+  const left = document.getElementById('leftCol');
+  let html = '';
+  const days = daysInRange(start,end);
+  for(let i=0;i<days;i++){
+    const dt = dateByOffset(start,i);
+    const key = formatKey(dt);
+    const label = formatLabel(dt);
+    html += `<div class="entryBox" id="box-${key}">
+      <div class="entryBoxHeader">
+        <div><strong>${label}</strong> <span style="color:#888;margin-left:8px">${key}</span></div>
+        <div>
+          <button class="smallBtn" onclick="addEntry('${key}')"><i class="fa-solid fa-plus"></i> ${LANG[lang].addEntryLabel}</button>
+        </div>
+      </div>`;
+
+    // adoptable entries from others
+    const avail = getAvailableForAdopt(key);
+    if(avail.length>0){
+      html += `<div class="adopt-wrap">
+        <select id="adopt-${key}"><option value="-1">-- ${esc(lang === 'de' ? LANG.de.adoptLabel : LANG.th.adoptLabel)} --</option>`;
+      avail.forEach((a,idx)=>{
+        const txt = lang==='de' ? (a.de || a.th) : (a.th || a.de);
+        html += `<option value="${idx}">${esc(txt)} (${a.source})</option>`;
+      });
+      html += `</select><button class="smallBtn" onclick="adoptEntry('${key}')"><i class="fa-solid fa-hand-point-up"></i> ${esc(lang==='de'?LANG.de.adoptLabel:LANG.th.adoptLabel)}</button></div>`;
+    }
+
+    // entries (editable)
+    const entries = data.entries[key][PERSON] || [];
+    entries.forEach((e,idx)=>{
+      const parity = idx%2===0 ? 'item-odd' : 'item-even';
+      html += `<div class="entryRow ${parity}">
+        <input type="text" placeholder="DE" value="${esc(e.de)}" oninput="updateEntry('${key}',${idx},'de',this.value)">
+        <input type="text" placeholder="TH" value="${esc(e.th)}" oninput="updateEntry('${key}',${idx},'th',this.value)">
+        <button class="iconBtn" title="Löschen" onclick="deleteEntry('${key}',${idx})"><i class="fa-solid fa-trash"></i></button>
+      </div>`;
+    });
+
+    // overnight: show dropdown with available types + edit/delete buttons
+    const ov = data.overnight[PERSON] && data.overnight[PERSON][key] ? data.overnight[PERSON][key] : null;
+    const selectedId = ov && ov.overnightId ? ov.overnightId : "";
+    html += `<div class="ov-inline">
+      <div style="min-width:120px;font-weight:700">${esc(lang==='de'?LANG.de.overnightTitle:LANG.th.overnightTitle)}</div>
+      <select id="ovsel-${key}" onchange="changeOvernight('${key}',this.value)">
+        <option value="">--</option>`;
+    data.overnightTypes.forEach(t=>{
+      const lbl = lang==='de' ? t.label_de : t.label_th;
+      html += `<option value="${t.id}" ${t.id==selectedId ? 'selected' : ''}>${esc(lbl)}</option>`;
+    });
+    html += `<option value="__new__">+ ${esc(lang==='de'?'Neu':'ใหม่')}</option></select>
+      <button class="iconBtn" title="${esc(lang==='de'?LANG.de.editLabel:LANG.th.editLabel)}" onclick="manageOvernightTypes()"><i class="fa-solid fa-gear"></i></button>
+    </div>`;
+
+    html += `</div>`;
+  }
+  left.innerHTML = html;
+  renderTodos();
+  renderOvernightTypesList();
+}
+
+/* adopt helpers */
+function getAvailableForAdopt(dateKey){
+  const combined = [];
+  persons.forEach(p=>{
+    if(p===PERSON) return;
+    (data.entries[dateKey][p]||[]).forEach(e=> combined.push({de:e.de, th:e.th, source:p}));
+  });
+  const uniq = [];
+  const seen = new Set();
+  combined.forEach(item=>{
+    const key = ((item.de||"").trim() + "||" + (item.th||"").trim());
+    if(!seen.has(key)){ seen.add(key); uniq.push(item); }
+  });
+  const already = (data.entries[dateKey][PERSON]||[]).map(e => ((e.de||"").trim() + "||" + (e.th||"").trim()));
+  return uniq.filter(u => !already.includes(((u.de||"").trim() + "||" + (u.th||"").trim())));
+}
+
+/* entry handlers for person page */
+function addEntry(dateKey){
+  if(!data.entries[dateKey]) data.entries[dateKey] = {};
+  if(!data.entries[dateKey][PERSON]) data.entries[dateKey][PERSON] = [];
+  data.entries[dateKey][PERSON].push({de:'', th:''});
+  saveData();
+  renderLeftCol();
+  // focus new
+  setTimeout(()=>{ const idx = data.entries[dateKey][PERSON].length-1; const el = document.querySelector(`#box-${dateKey} .entryRow:nth-of-type(${idx+1}) input[placeholder="DE"]`); if(el) el.focus(); },80);
+}
+function updateEntry(dateKey, idx, field, value){
+  if(!data.entries[dateKey] || !data.entries[dateKey][PERSON]) return;
+  data.entries[dateKey][PERSON][idx][field] = value;
+  dedupeEntriesForDatePerson(dateKey, PERSON);
+  saveData();
+}
+function deleteEntry(dateKey, idx){
+  if(!confirm(lang==='de' ? 'Eintrag löschen?' : 'ต้องการลบรายการ?')) return;
+  data.entries[dateKey][PERSON].splice(idx,1);
+  saveData(); renderLeftCol();
+}
+function adoptEntry(dateKey){
+  const sel = document.getElementById(`adopt-${dateKey}`);
+  if(!sel) return;
+  const idx = parseInt(sel.value,10);
+  if(isNaN(idx) || idx<0) return;
+  const avail = getAvailableForAdopt(dateKey);
+  if(!avail[idx]) return;
+  const candidate = {de: avail[idx].de || '', th: avail[idx].th || ''};
+  const list = data.entries[dateKey][PERSON] || [];
+  const exists = list.some(e => sameEntry(e,candidate));
+  if(!exists){
+    data.entries[dateKey][PERSON].push(candidate);
+    saveData(); renderLeftCol();
+  } else {
+    alert(lang==='de' ? 'Eintrag existiert bereits.' : 'รายการนี้มีอยู่แล้ว');
+  }
+}
+function dedupeEntriesForDatePerson(dateKey, person){
+  if(!data.entries[dateKey] || !data.entries[dateKey][person]) return;
+  const seen = new Set(); const res = [];
+  data.entries[dateKey][person].forEach(e=>{
+    const k = ((e.de||"").trim() + "||" + (e.th||"").trim());
+    if(!seen.has(k)){ seen.add(k); res.push(e); }
+  });
+  data.entries[dateKey][person] = res;
+}
+
+/* overnight handlers on person page */
+function changeOvernight(dateKey, val){
+  if(val === "__new__"){
+    const label = prompt(lang==='de' ? 'Neuer Übernachtungstyp (DE):' : 'เพิ่มประเภทที่พัก (TH):');
+    if(!label) return;
+    const id = makeId();
+    // create in both languages by asking second label (quick)
+    if(lang==='de'){
+      const label_th = prompt('Thai-Bezeichnung (optional):', '');
+      data.overnightTypes.push({id:id, label_de: label, label_th: label_th || label});
+    } else {
+      const label_de = prompt('Deutsche Bezeichnung (optional):', '');
+      data.overnightTypes.push({id:id, label_de: label_de || label, label_th: label});
+    }
+    // set for this day
+    setOvernightForDay(dateKey, id);
+    saveData(); renderLeftCol(); return;
+  }
+  const idnum = val ? (isNaN(val)?val:parseInt(val)) : "";
+  setOvernightForDay(dateKey, idnum);
+  saveData(); renderLeftCol();
+}
+function setOvernightForDay(dateKey, id){
+  if(!data.overnight[PERSON]) data.overnight[PERSON] = {};
+  if(!data.overnight[PERSON][dateKey]) data.overnight[PERSON][dateKey] = {overnightId: null, de:'', th:'', booked:false};
+  if(!id){ // clear
+    data.overnight[PERSON][dateKey] = {};
+    // leave object empty to signify none
+  } else {
+    const t = data.overnightTypes.find(x => String(x.id) === String(id));
+    data.overnight[PERSON][dateKey] = {
+      overnightId: t ? t.id : id,
+      de: t ? (t.label_de || '') : '',
+      th: t ? (t.label_th || '') : '',
+      booked: false
+    };
+  }
+}
+
+/* manage overnight types */
+function createOvernightType(){
+  const label = prompt(lang==='de' ? 'Neuer Übernachtungstyp (DE):' : 'เพิ่มประเภทที่พัก (TH):');
+  if(!label) return;
+  const id = makeId();
+  if(lang==='de'){
+    const label_th = prompt('Thai-Bezeichnung (optional):', '');
+    data.overnightTypes.push({id:id, label_de: label, label_th: label_th || label});
+  } else {
+    const label_de = prompt('Deutsche Bezeichnung (optional):', '');
+    data.overnightTypes.push({id:id, label_de: label_de || label, label_th: label});
+  }
+  saveData(); renderOvernightTypesList(); renderLeftCol();
+}
+function editOvernightType(id){
+  const t = data.overnightTypes.find(x=>String(x.id)===String(id));
+  if(!t) return alert('Nicht gefunden');
+  if(lang==='de'){
+    const new_de = prompt('Neue Bezeichnung DE:', t.label_de) || t.label_de;
+    const new_th = prompt('Neue Bezeichnung TH:', t.label_th) || t.label_th;
+    t.label_de = new_de; t.label_th = new_th;
+  } else {
+    const new_th = prompt('ใหม่ (TH):', t.label_th) || t.label_th;
+    const new_de = prompt('Neue Bezeichnung DE:', t.label_de) || t.label_de;
+    t.label_th = new_th; t.label_de = new_de;
+  }
+  saveData(); renderOvernightTypesList(); renderLeftCol();
+}
+function deleteOvernightType(id){
+  const t = data.overnightTypes.find(x=>String(x.id)===String(id));
+  if(!t) return;
+  const msg = lang==='de' ? 'Beim Löschen dieses Typs: Einträge ebenfalls entfernen?' : 'เมื่อลบประเภท: ต้องการลบรายการที่ใช้ประเภทนี้ด้วยหรือไม่?';
+  const removeEntries = confirm(msg + '\n\nOK = Typ + zugeordnete Einträge entfernen\nAbbrechen = Typ entfernen, Einträge behalten (ohne Typ)');
+  // remove type
+  data.overnightTypes = data.overnightTypes.filter(x=>String(x.id)!==String(id));
+  if(removeEntries){
+    // remove overnight references across all persons/dates
+    for(const p of persons){
+      for(const dateKey in data.overnight[p]){
+        if(String(data.overnight[p][dateKey].overnightId) === String(id)){
+          delete data.overnight[p][dateKey];
+        }
+      }
+    }
+  } else {
+    // keep entries but clear overnightId/de/th for affected
+    for(const p of persons){
+      for(const dateKey in data.overnight[p]){
+        if(String(data.overnight[p][dateKey].overnightId) === String(id)){
+          data.overnight[p][dateKey].overnightId = null;
+          data.overnight[p][dateKey].de = '';
+          data.overnight[p][dateKey].th = '';
+        }
+      }
+    }
+  }
+  saveData(); renderOvernightTypesList(); renderLeftCol();
+}
+
+/* todos */
+function renderTodos(){
+  const wrap = document.getElementById('todoList');
+  if(!data.todos[PERSON]) data.todos[PERSON] = [];
+  let html = '';
+  data.todos[PERSON].forEach((t,i)=>{
+    html += `<div class="todo-item">
+      <input type="text" value="${esc(t.de||t)}" oninput="updateTodo(${i},this.value)">
+      <button class="iconBtn" onclick="deleteTodo(${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>`;
+  });
+  wrap.innerHTML = html;
+}
+function addTodoItem(){
+  if(!data.todos[PERSON]) data.todos[PERSON]=[];
+  data.todos[PERSON].push({id:makeId(), de:'', th:'', done:false});
+  saveData(); renderTodos();
+}
+function updateTodo(i,v){ if(!data.todos[PERSON]) return; data.todos[PERSON][i].de = v; saveData(); }
+function deleteTodo(i){ if(!confirm('Aufgabe löschen?')) return; data.todos[PERSON].splice(i,1); saveData(); renderTodos(); }
+
+/* helper: get available overnights from others to adopt for date */
+function getAvailableOvernightsForAdopt(dateKey){
+  const combined = [];
+  persons.forEach(p=>{
+    if(p === PERSON) return;
+    const ov = data.overnight[p] && data.overnight[p][dateKey] ? data.overnight[p][dateKey] : null;
+    if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.overnightId)){
+      combined.push({de:ov.de, th:ov.th, overnightId:ov.overnightId, source:p});
+    }
+  });
+  const uniq=[]; const seen=new Set();
+  combined.forEach(item=>{
+    const key = ((item.de||"").trim() + "||" + (item.th||"").trim() + "||" + (item.overnightId||""));
+    if(!seen.has(key)){ seen.add(key); uniq.push(item); }
+  });
+  // exclude if current person already has overnight for that date
+  if(data.overnight[PERSON] && data.overnight[PERSON][dateKey]) return [];
+  return uniq;
+}
+
+/* adopt overnight from others for date */
+function adoptOvernight(dateKey){
+  const sel = document.getElementById(`adoptov-${dateKey}`);
+  if(!sel) return;
+  const idx = parseInt(sel.value,10);
+  if(isNaN(idx) || idx<0) return;
+  const avail = getAvailableOvernightsForAdopt(dateKey);
+  if(!avail[idx]) return;
+  const a = avail[idx];
+  if(!data.overnight[PERSON]) data.overnight[PERSON] = {};
+  data.overnight[PERSON][dateKey] = {overnightId: a.overnightId || null, de: a.de || '', th: a.th || '', booked: false};
+  saveData(); renderLeftCol();
+}
+
+/* render available overnight adopt selects per day (if any) */
+function renderOvernightAdoptOptions(){
+  const days = daysInRange(start,end);
+  for(let i=0;i<days;i++){
+    const key = formatKey(dateByOffset(start,i));
+    const avail = getAvailableOvernightsForAdopt(key);
+    const container = document.getElementById(`ov-adopt-${key}`);
+    if(container){
+      if(avail.length>0){
+        let opts = `<select id="adoptov-${key}"><option value="-1">-- ${esc(lang==='de'?LANG.de.adoptLabel:LANG.th.adoptLabel)} --</option>`;
+        avail.forEach((a,idx)=> opts += `<option value="${idx}">${esc((lang==='de'? (a.de||a.th) : (a.th||a.de)) + ' (' + a.source + ')')}</option>`);
+        opts += `</select><button class="smallBtn" onclick="adoptOvernight('${key}')"><i class="fa-solid fa-hand-point-up"></i> ${esc(lang==='de'?LANG.de.adoptLabel:LANG.th.adoptLabel)}</button>`;
+        container.innerHTML = opts;
+      } else container.innerHTML = '';
+    }
+  }
+}
+
+/* render everything */
+function renderLeftAndSide(){
+  // name and badge color
+  document.getElementById('personName').textContent = LANG[lang].persons[PERSON] || PERSON;
+  document.getElementById('todoTitle').textContent = LANG[lang].todoTitle;
+  const badge = document.getElementById('badgeColor');
+  // color by person
+  const map = {
+    Rouven: 'linear-gradient(180deg,#fff0f0,#ffd9d9)',
+    Daniel: 'linear-gradient(180deg,#f0fff0,#d9ffd9)',
+    Henrik: 'linear-gradient(180deg,#eef4ff,#d9e7ff)',
+    Benja:  'linear-gradient(180deg,#fffaf0,#fff1d9)',
+    Holger: 'linear-gradient(180deg,#f7efff,#f0d9ff)'
+  };
+  badge.style.background = map[PERSON] || '#fff';
+  renderLeftCol();
+  renderOvernightTypesList();
+  renderOvernightAdoptOptions();
+  renderTodos();
+}
+
+/* navigation */
+function goBack(){ window.location.href = 'index.html'; }
+
+/* initial load */
+loadData();
+renderLeftAndSide();
+
+/* expose for console / debug */
+window.setLang = (l)=>{ lang = l; renderLeftAndSide(); };
+window.addEntry = addEntry;
+window.updateEntry = updateEntry;
+window.deleteEntry = deleteEntry;
+window.adoptEntry = adoptEntry;
+window.changeOvernight = changeOvernight;
+window.createOvernightType = createOvernightType;
+window.editOvernightType = editOvernightType;
+window.deleteOvernightType = deleteOvernightType;
+window.addTodoItem = addTodoItem;
+window.updateTodo = updateTodo;
+window.deleteTodo = deleteTodo;
 </script>
 </body>
 </html>
