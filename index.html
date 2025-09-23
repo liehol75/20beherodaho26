@@ -4,66 +4,72 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thailand 2026 — Übersicht</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.4/css/all.min.css">
 <style>
 :root{
   --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff;
-  --txt:#222;
-  --gray1:#fbfbfb; --gray2:#f0f0f0;
+  --txt:#222; --gray1:#fbfbfb; --gray2:#f0f0f0;
   --overnight-bg:#e8f5ff; --overnight-accent:#2b95ff;
 }
-*{box-sizing:border-box}
-body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",Arial,sans-serif;}
+body{background:var(--bg);color:var(--txt);}
 .header{
   background:linear-gradient(90deg,var(--accent),#00629a);
   color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
 }
-.header h1{margin:0;font-size:18px;font-weight:600}
+.header h1{margin:0;font-size:20px;font-weight:700}
 .langBtns{display:flex;gap:8px}
-button.langBtn{border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;}
-.container{max-width:1200px;margin:18px auto;padding:12px}
-.card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+button.langBtn{
+  border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;
+}
+.container{max-width:1200px;margin:18px auto;padding:12px;}
+.card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06);}
 .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .small{font-size:13px;color:#444}
-/* Table */
-.table-wrap{overflow:auto;border-radius:8px}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{border:1px solid #e2e2e2;padding:8px;text-align:center;vertical-align:top}
-thead th{position:sticky;top:0;background:#fafafa;z-index:5}
-.sticky-date{position:sticky;left:0;background:#fff;z-index:6;font-weight:700;width:88px;min-width:72px}
-/* entries */
-.entry{display:block;padding:8px;margin:6px auto;border-radius:6px;text-align:center;border:1px solid rgba(0,0,0,0.03);max-width:260px;word-wrap:break-word}
-.entry .meta{font-size:12px;color:#666;margin-top:4px}
-.entry .text{font-size:14px;white-space:normal;}
-td .entry.odd { background: var(--gray1); }
-td .entry.even{ background: var(--gray2); }
-/* overnight distinct */
-.entry.overnight{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent); }
-.entry.overnight .meta{ font-weight:700; color:var(--overnight-accent); }
-/* person base colors (header) */
+
+/* Calendar Table */
+.table-wrap{overflow:auto;border-radius:8px;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{border:1px solid #e2e2e2;padding:8px;text-align:center;vertical-align:top;}
+thead th{position:sticky;top:0;background:#fafafa;z-index:5;}
+.sticky-date{position:sticky;left:0;background:#fff;z-index:6;font-weight:700;width:72px;min-width:64px;}
+
+/* Entries */
+.entry{display:block;padding:8px;margin:6px 0;border-radius:6px;text-align:center;border:1px solid rgba(0,0,0,0.03);}
+.entry.odd{background:var(--gray1);}
+.entry.even{background:var(--gray2);}
+.entry.overnight{background:var(--overnight-bg);border-left:4px solid var(--overnight-accent);}
+.entry.overnight .meta{font-weight:700;color:var(--overnight-accent);}
+
+/* Person columns */
 .personColRouven{background: linear-gradient(180deg,#fff0f0,#ffd9d9);}
 .personColDaniel{background: linear-gradient(180deg,#f0fff0,#d9ffd9);}
 .personColHenrik{background: linear-gradient(180deg,#eef4ff,#d9e7ff);}
 .personColBenja{background: linear-gradient(180deg,#fffaf0,#fff1d9);}
 .personColHolger{background: linear-gradient(180deg,#f7efff,#f0d9ff);}
-/* weekend darker variants */
-.weekendRouven{background: linear-gradient(180deg,#ffd0d0,#ffb3b3);}
-.weekendDaniel{background: linear-gradient(180deg,#d0ffd0,#b3ffb3);}
-.weekendHenrik{background: linear-gradient(180deg,#c6d9ff,#9fbfff);}
-.weekendBenja{background: linear-gradient(180deg,#ffe8c2,#ffd18a);}
-.weekendHolger{background: linear-gradient(180deg,#ebd2ff,#d8b3ff);}
-.weekendDate{background:#ffd699;font-weight:700;color:#222}
-/* editor hints */
-.note{font-size:13px;color:#555;margin-top:8px}
-.personLink{display:inline-block;padding:6px 10px;border-radius:8px;text-decoration:none;font-weight:700;color:#fff;background:rgba(0,0,0,0.06)}
-/* responsive */
-@media(max-width:900px){
-  .sticky-date{display:none}
-  table, thead, tbody, th, td, tr{display:block}
-  thead tr{position:relative}
-  tr{margin-bottom:8px;border:1px solid #eee;border-radius:8px}
-  td{border:0;padding:8px}
-}
+.weekendDate{background:#ffd699;font-weight:700;color:#222;}
+
+/* Person page enhancements */
+.editorHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;position:sticky;top:0;background:#fff;padding:12px 0;z-index:10;}
+.personName{font-weight:800;font-size:22px;color:var(--accent);}
+.smallBtn{padding:8px 12px;border-radius:8px;border:0;background:var(--accent2);color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;}
+
+/* Editor Grid */
+.editorGrid{display:grid;grid-template-columns:1fr 300px;gap:12px;margin-top:12px;}
+@media(max-width:980px){ .editorGrid{grid-template-columns:1fr;} }
+.entryBox{background:#fff;padding:10px;border-radius:8px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.03);}
+.entryRow{display:flex;gap:8px;align-items:center;margin-top:8px;}
+.entryRow input[type="text"]{padding:6px;border-radius:6px;border:1px solid #ddd;flex:1;}
+.entryRow .btn{padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:#fafafa;cursor:pointer;}
+.adopt-wrap{display:flex;gap:8px;align-items:center;margin-top:8px;}
+.adopt-wrap select{padding:6px;border-radius:6px;border:1px solid #ddd;}
+.sideCard{background:#fff;padding:10px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.03);}
+.sideCard h4{margin:0 0 8px 0;}
+.todo-item{display:flex;gap:6px;align-items:center;margin-bottom:8px;}
+.todo-item input[type="text"]{flex:1;padding:6px;border-radius:6px;border:1px solid #ddd;}
+.todo-actions button{padding:6px;border-radius:6px;border:0;background:#f0f0f0;cursor:pointer;}
+.kv{font-size:13px;color:#666;}
+.note{font-size:13px;color:#555;margin-top:8px;}
 </style>
 </head>
 <body>
@@ -71,19 +77,20 @@ td .entry.even{ background: var(--gray2); }
 <div class="header">
   <h1 id="pageTitle">Thailand 2026</h1>
   <div class="langBtns">
-    <button class="langBtn" onclick="setLang('de')"><i class="fa-solid fa-language"></i> Deutsch</button>
-    <button class="langBtn" onclick="setLang('th')"><i class="fa-solid fa-language"></i> ไทย</button>
+    <button class="langBtn" onclick="setLang('de')">Deutsch</button>
+    <button class="langBtn" onclick="setLang('th')">ไทย</button>
   </div>
 </div>
 
 <div class="container">
   <div class="card">
     <div class="controls">
-      <div class="small" id="rangeInfo"></div>
+      <div class="small kv" id="rangeInfo"></div>
       <div style="flex:1"></div>
-      <div class="small" id="langLabel"></div>
+      <div class="small kv">Sprache: <strong id="langLabel">Deutsch</strong></div>
     </div>
 
+    <!-- Übersicht -->
     <div id="overview">
       <div class="table-wrap">
         <table id="calendarTable" aria-label="Reiseübersicht">
@@ -91,296 +98,192 @@ td .entry.even{ background: var(--gray2); }
           <tbody id="calendarBody"></tbody>
         </table>
       </div>
-      <p class="note">Klicke auf einen Namen, um die persönliche Seite zu öffnen. Hover zeigt Buchungsstatus.</p>
+      <p class="note">Klicke auf einen Namen, um die persönliche Seite (inline Editor) zu öffnen.</p>
     </div>
+
+    <!-- Editor -->
+    <div id="editor" style="display:none;margin-top:14px;">
+      <div class="editorHeader">
+        <div class="personName" id="editorName">Person</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="smallBtn" onclick="closeEditor()"><i class="fa fa-arrow-left"></i> <span id="closeLabel">Zurück</span></button>
+        </div>
+      </div>
+
+      <div class="editorGrid">
+        <div id="personCalendarList"></div>
+        <div>
+          <div class="sideCard">
+            <h4 id="todoTitle">To-Do</h4>
+            <div id="todoList"></div>
+            <div style="margin-top:8px">
+              <button class="smallBtn" onclick="addTodoItem()"><i class="fa fa-plus"></i> Neue Aufgabe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-/* ---------------------------
-   Übersetzungen (DE / TH)
-   --------------------------- */
+/* ========== Konfiguration & Übersetzungen ========== */
 const LANG = {
   de: {
     pageTitle: "Thailand 2026",
     closeLabel: "Zurück",
     overnightTitle: "Übernachtung",
     todoTitle: "To-Do",
+    addEntryLabel: "+ Eintrag",
+    btnDelete: "Löschen",
+    btnAddEntry: "+Eintrag",
+    defaultTodo: "Gültiger Reisepass (mind. bis 09/2016)",
+    persons: {Rouven:"Rouven",Daniel:"Daniel",Henrik:"Henrik",Benja:"Benja",Holger:"Holger"},
     bookedLabel: "Gebucht",
-    adoptLabel: "Eintrag übernehmen",
-    persons: {Rouven:"Rouven",Daniel:"Daniel",Henrik:"Henrik",Benja:"Benja",Holger:"Holger"}
+    addOvernight: "+ Übernachtung hinzufügen",
+    removeOvernight: "Übernachtung entfernen",
+    adoptLabel: "Eintrag übernehmen"
   },
   th: {
     pageTitle: "ประเทศไทย 2026",
     closeLabel: "กลับ",
     overnightTitle: "ที่พัก",
     todoTitle: "รายการที่ต้องทำ",
+    addEntryLabel: "+ รายการ",
+    btnDelete: "ลบ",
+    btnAddEntry: "+รายการ",
+    defaultTodo: "หนังสือเดินทางที่ถูกต้อง (อย่างน้อยถึง 09/2016)",
+    persons: {Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"},
     bookedLabel: "จองแล้ว",
-    adoptLabel: "นำรายการมาใช้",
-    persons: {Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"}
+    addOvernight: "+ เพิ่มที่พัก",
+    removeOvernight: "ลบที่พัก",
+    adoptLabel: "นำรายการมาใช้"
   }
 };
 
-let lang = 'de';
+let lang='de';
+const persons=["Rouven","Daniel","Henrik","Benja","Holger"];
+const start=new Date(2026,1,16);
+const end=new Date(2026,2,12);
 
-/* persons & date range (safe) */
-const persons = ["Rouven","Daniel","Henrik","Benja","Holger"];
-const start = new Date(2026,1,16); // 16 Feb 2026
-const end   = new Date(2026,2,12); // 12 Mar 2026
+/* Preset Einträge */
+const preset={
+"2026-02-16":{ all:[{de:"Abflug Frankfurt/Main Flughafen 20.55 Uhr", th:"ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น."}]},
+"2026-02-17":{ all:[{de:"Ankunft Bangkok-Suvarnabhumi 13.45 Uhr", th:"ถึงกรุงเทพฯ สนามบินสุวรรณภูมิ 13:45 น."},{de:"River Cruise", th:"ล่องเรือ"}]},
+"2026-02-19":{ Henrik:[{de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"}], Benja:[{de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"}], Holger:[{de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"}]},
+"2026-02-24":{ Henrik:[{de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"}], Benja:[{de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"}], Holger:[{de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"}]},
+"2026-02-25":{ Henrik:[{de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."}], Benja:[{de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว"}], Holger:[{de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว"}]},
+"2026-02-26":{ all:[{de:"Einweihungsfeier Sa Kaeo", th:"พิธีเปิดบ้าน จังหวัดสระแก้ว"}]},
+"2026-03-11":{ all:[{de:"Abflug Bangkok-Suvarnabhumi 12.40 Uhr", th:"ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น."},{de:"Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th:"ถึงสนามบินแฟร็งก์เฟิร์ต 19:05 น."}]},
+"2026-03-12":{ all:[{de:"Osnabrück", th:"ออสนาบรู้ค"}]}
+};
 
-/* helper date functions (DST-safe) */
+/* Storage */
+const STORAGE_KEY="trip2026_v_final";
+let data=null;
+
+/* Helpers */
 function pad(n){return String(n).padStart(2,'0');}
-function formatLabel(d){ return pad(d.getDate()) + "." + pad(d.getMonth()+1) + "."; }
-function formatKey(d){ return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
-function daysInRange(s,e){ const s0=new Date(s.getFullYear(),s.getMonth(),s.getDate()); const e0=new Date(e.getFullYear(),e.getMonth(),e.getDate()); return Math.round((e0-s0)/86400000)+1; }
-function dateByOffset(s,offset){ return new Date(s.getFullYear(), s.getMonth(), s.getDate()+offset); }
+function formatLabel(d){return pad(d.getDate())+"."+pad(d.getMonth()+1)+".";}
+function formatKey(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function dateRangeText(){return formatLabel(start)+" — "+formatLabel(end);}
+function makeId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function escAttr(s){return String(s||"").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function sameEntry(a,b){if(!a||!b)return false; const da=(a.de||"").trim();const ta=(a.th||"").trim();const db=(b.de||"").trim();const tb=(b.th||"").trim();return(da!==""&&da===db)||(ta!==""&&ta===tb);}
+function sortItemsByTime(list){return list.slice().sort((a,b)=>{const ta=parseFirstTime(a.de)??parseFirstTime(a.th)??Infinity;const tb=parseFirstTime(b.de)??parseFirstTime(b.th)??Infinity;return ta-tb;});}
+function parseFirstTime(text){if(!text)return null; const m=String(text).match(/(\b\d{1,2})[.:](\d{2})\b/); if(!m)return null; return parseInt(m[1],10)*60+parseInt(m[2],10);}
 
-/* storage key */
-const STORAGE_KEY = "tripData_v2";
-
-/* default preset (from original) with corrected Thai translations */
-const PRESET = {
-  "2026-02-16":{ all:[
-    {de:"Abflug Frankfurt/Main Flughafen 20.55 Uhr", th:"ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น."}
-  ]},
-  "2026-02-17":{ all:[
-    {de:"Ankunft Bangkok-Suvarnabhumi 13.45 Uhr", th:"ถึงกรุงเทพฯ สนามบินสุวรรณภูมิ 13:45 น."},
-    {de:"River Cruise", th:"ล่องเรือ"}
-  ]},
-  "2026-02-19":{ Henrik:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ],
-                 Benja:[  {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ],
-                 Holger:[ {de:"Familienfest Sa Kaeo", th:"งานเลี้ยงครอบครัว จังหวัดสระแก้ว"} ] },
-  "2026-02-24":{ Henrik:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ],
-                 Benja:[  {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ],
-                 Holger:[ {de:"Upasampada-Feier Sa Kaeo", th:"งานฉลองอุปสมบท จังหวัดสระแก้ว"} ] },
-  "2026-02-25":{ Henrik:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ],
-                 Benja:[  {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ],
-                 Holger:[ {de:"Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th:"พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น."} ] },
-  "2026-02-26":{ all:[ {de:"Einweihungsfeier Sa Kaeo", th:"พิธีเปิดบ้าน จังหวัดสระแก้ว"} ] },
-  "2026-03-11":{ all:[
-    {de:"Abflug Bangkok-Suvarnabhumi 12.40 Uhr", th:"ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น."},
-    {de:"Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th:"ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น."}
-  ] },
-  "2026-03-12":{ all:[ {de:"Osnabrück", th:"ออสนาบรู้ค"} ] }
-};
-
-/* default overnight types (centralized), with DE/TH labels */
-const DEFAULT_OVERNIGHT_TYPES = [
-  { id: 1, label_de: "Flugzeug", label_th: "เครื่องบิน" },
-  { id: 2, label_de: "Hotel",    label_th: "โรงแรม" }
-];
-
-/* data structure:
-  data = {
-    entries: { "YYYY-MM-DD": { person: [ {de,th}, ... ] } },
-    overnight: { person: { "YYYY-MM-DD": {overnightId, de, th, booked } } },
-    overnightTypes: [ {id,label_de,label_th} ],
-    todos: { person: [ {id,de,th,done}, ... ] }
-  }
-*/
-let data = null;
-
+/* ========== Daten laden ========== */
 function createEmptyData(){
-  const d = { entries:{}, overnight:{}, overnightTypes:[], todos:{} };
-  const days = daysInRange(start,end);
-  for(let i=0;i<days;i++){
-    const dt = dateByOffset(start,i);
-    const key = formatKey(dt);
-    d.entries[key] = {};
-    persons.forEach(p=> d.entries[key][p] = []);
-  }
-  persons.forEach(p=>{
-    d.overnight[p] = {};
-    d.todos[p] = [ { id: makeId(), de: "Gültiger Reisepass (mind. bis 09/2016)", th: "หนังสือเดินทางที่ถูกต้อง (อย่างน้อยถึง 09/2016)", done: false } ];
-  });
-  d.overnightTypes = DEFAULT_OVERNIGHT_TYPES.slice();
+  const d={entries:{},overnight:{},todos:{}};
+  for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+    const key=formatKey(dt); d.entries[key]={}; persons.forEach(p=>d.entries[key][p]=[]);}
+  persons.forEach(p=>{d.overnight[p]={};d.todos[p]=[{id:makeId(),de:LANG.de.defaultTodo,th:LANG.th.defaultTodo,done:false}];});
   return d;
 }
+function mergePresetInto(d){for(const dateKey in preset){if(!d.entries[dateKey])continue; const obj=preset[dateKey]; if(obj.all){obj.all.forEach(item=>{persons.forEach(p=>{const list=d.entries[dateKey][p]||[]; if(!list.some(e=>sameEntry(e,item))) list.push({de:item.de,th:item.th}); d.entries[dateKey][p]=list;});});} persons.forEach(p=>{if(obj[p]){obj[p].forEach(item=>{const list=d.entries[dateKey][p]||[]; if(!list.some(e=>sameEntry(e,item))) list.push({de:item.de,th:item.th}); d.entries[dateKey][p]=list;});}}}}
+function loadData(){const raw=localStorage.getItem(STORAGE_KEY);if(!raw){data=createEmptyData();mergePresetInto(data);saveData();return;}try{data=JSON.parse(raw);if(!data.entries||!data.overnight||!data.todos){data=createEmptyData();mergePresetInto(data);saveData();}else{for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){const k=formatKey(dt);if(!data.entries[k])data.entries[k]={};persons.forEach(p=>{if(!data.entries[k][p])data.entries[k][p]=[];});}persons.forEach(p=>{if(!data.overnight[p])data.overnight[p]={};if(!data.todos[p])data.todos[p]=[{id:makeId(),de:LANG.de.defaultTodo,th:LANG.th.defaultTodo,done:false}];});mergePresetInto(data);}}catch(e){console.error("load error",e);data=createEmptyData();mergePresetInto(data);saveData();}}
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));if(!editorOpen) renderOverview();}
 
-function makeId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
-
-function loadData(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if(!raw){
-    data = createEmptyData();
-    mergePresetInto(data);
-    // ensure Holger overnight 2026-02-16 = Flugzeug (id 1)
-    if(!data.overnight["Holger"]) data.overnight["Holger"] = {};
-    data.overnight["Holger"]["2026-02-16"] = {overnightId:1, de:"Flugzeug", th:"เครื่องบิน", booked:false};
-    saveData();
-    return;
-  }
-  try{
-    data = JSON.parse(raw);
-    // back-compat & ensure structure
-    if(!data.entries || !data.overnight || !data.overnightTypes || !data.todos){
-      data = createEmptyData();
-      mergePresetInto(data);
-    } else {
-      // ensure dates and persons exist
-      const days = daysInRange(start,end);
-      for(let i=0;i<days;i++){
-        const dt = dateByOffset(start,i);
-        const k = formatKey(dt);
-        if(!data.entries[k]) data.entries[k] = {};
-        persons.forEach(p=> { if(!data.entries[k][p]) data.entries[k][p] = []; });
-      }
-      persons.forEach(p=>{
-        if(!data.overnight[p]) data.overnight[p] = {};
-        if(!data.todos[p] || !Array.isArray(data.todos[p])) data.todos[p] = [];
-      });
-      // ensure there is at least the default overnight types
-      if(!Array.isArray(data.overnightTypes) || data.overnightTypes.length===0) data.overnightTypes = DEFAULT_OVERNIGHT_TYPES.slice();
-    }
-    // ensure Holger overnight default exists
-    if(!data.overnight["Holger"]) data.overnight["Holger"] = {};
-    if(!data.overnight["Holger"]["2026-02-16"]) data.overnight["Holger"]["2026-02-16"] = {overnightId:1, de:"Flugzeug", th:"เครื่องบิน", booked:false};
-    mergePresetInto(data);
-  } catch(e){
-    console.error("load error", e);
-    data = createEmptyData();
-    mergePresetInto(data);
-  }
-  saveData();
-}
-
-function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-
-/* sameEntry logic from original */
-function sameEntry(a,b){
-  if(!a||!b) return false;
-  const da=(a.de||"").trim(), ta=(a.th||"").trim(), db=(b.de||"").trim(), tb=(b.th||"").trim();
-  return (da!=="" && da===db) || (ta!=="" && ta===tb);
-}
-
-/* merge preset */
-function mergePresetInto(d){
-  for(const dateKey in PRESET){
-    if(!d.entries[dateKey]) continue;
-    const obj = PRESET[dateKey];
-    if(obj.all){
-      obj.all.forEach(item=>{
-        persons.forEach(p => {
-          const list = d.entries[dateKey][p] || [];
-          const exists = list.some(e => sameEntry(e,item));
-          if(!exists) list.push({de:item.de, th:item.th});
-          d.entries[dateKey][p] = list;
-        });
-      });
-    }
-    persons.forEach(p=>{
-      if(obj[p]){
-        obj[p].forEach(item => {
-          const list = d.entries[dateKey][p] || [];
-          const exists = list.some(e => sameEntry(e,item));
-          if(!exists) list.push({de:item.de, th:item.th});
-          d.entries[dateKey][p] = list;
-        });
-      }
-    });
-  }
-}
-
-/* time parsing + sort */
-function parseFirstTime(text){
-  if(!text) return null;
-  const m = String(text).match(/(\b\d{1,2})[.:](\d{2})\b/);
-  if(!m) return null;
-  const h = parseInt(m[1],10), min = parseInt(m[2],10);
-  if(isNaN(h)||isNaN(min)) return null;
-  return h*60+min;
-}
-function sortItemsByTime(list){
-  return list.slice().sort((a,b)=>{
-    const ta = parseFirstTime(a.de) ?? parseFirstTime(a.th) ?? Infinity;
-    const tb = parseFirstTime(b.de) ?? parseFirstTime(b.th) ?? Infinity;
-    return ta - tb;
-  });
-}
-
-/* render overview */
-const calendarHead = () => document.getElementById('calendarHead');
-const calendarBody = () => document.getElementById('calendarBody');
-const pageTitle = () => document.getElementById('pageTitle');
-const rangeInfo = () => document.getElementById('rangeInfo');
-
-function overnightLabel(id){
-  const t = data.overnightTypes.find(x=>x.id===id);
-  if(!t) return '';
-  return lang === 'de' ? (t.label_de || '') : (t.label_th || '');
-}
-
+/* ========== Übersicht rendern ========== */
+const calendarHead=document.getElementById('calendarHead');
+const calendarBody=document.getElementById('calendarBody');
+const pageTitle=document.getElementById('pageTitle');
+const rangeInfo=document.getElementById('rangeInfo');
 function renderOverview(){
-  pageTitle().textContent = LANG[lang].pageTitle;
-  rangeInfo().textContent = formatLabel(start) + " — " + formatLabel(end);
-  document.getElementById('langLabel').textContent = (lang==='de' ? 'Deutsch' : 'ไทย');
+  pageTitle.textContent=LANG[lang].pageTitle;
+  rangeInfo.textContent=dateRangeText();
+  document.getElementById('langLabel').textContent=(lang==='de'?'Deutsch':'ไทย');
+  let headHtml="<tr><th class='sticky-date'>"+(lang==='de'?"Datum":"วันที่")+"</th>";
+  persons.forEach(p=>{const name=LANG[lang].persons[p]||p;headHtml+=`<th><button class="langBtn" style="padding:8px 12px;border-radius:8px" onclick="openEditor('${p}')">${escAttr(name)}</button></th>`;});
+  headHtml+="</tr>"; calendarHead.innerHTML=headHtml;
+  let bodyHtml=""; for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+    const key=formatKey(dt); const label=formatLabel(dt); const isWeekend=(dt.getDay()===0||dt.getDay()===6); const dateClass=isWeekend?"sticky-date weekendDate":"sticky-date";
+    bodyHtml+=`<tr><td class="${dateClass}">${label}</td>`;
+    persons.forEach((p,i)=>{const entries=data.entries[key][p]||[];let entryHtml="";entries.forEach((e,j)=>{const cls=(j%2===0)?"even":"odd";entryHtml+=`<div class="entry ${cls}">${lang==='de'?escAttr(e.de):escAttr(e.th)}</div>`;}); const overn=data.overnight[p][key]?`<div class="entry overnight">${LANG[lang].bookedLabel}</div>`:""; entryHtml+=overn; bodyHtml+=`<td class="personCol${p}">${entryHtml}</td>`;});
+    bodyHtml+="</tr>";}
+  calendarBody.innerHTML=bodyHtml;
+}
 
-  // header
-  let headHtml = "<tr><th class='sticky-date'>" + (lang==='de' ? "Datum" : "วันที่") + "</th>";
-  persons.forEach(p=>{
-    const name = LANG[lang].persons[p] || p;
-    headHtml += `<th class="personCol${p}"><button class="personLink" onclick="openPerson('${p}')">${escAttr(name)}</button></th>`;
-  });
-  headHtml += "</tr>";
-  calendarHead().innerHTML = headHtml;
+/* ========== Editor ========== */
+let editorOpen=false;
+const editorDiv=document.getElementById('editor');
+const editorName=document.getElementById('editorName');
+function openEditor(person){
+  editorOpen=true;
+  editorDiv.style.display='block';
+  editorName.textContent=LANG[lang].persons[person]||person;
+  renderPersonCalendar(person);
+  renderTodoList(person);
+}
+function closeEditor(){editorOpen=false; editorDiv.style.display='none'; renderOverview();}
 
-  // body
-  let bodyHtml = "";
-  const days = daysInRange(start,end);
-  for(let i=0;i<days;i++){
-    const dt = dateByOffset(start,i);
-    const key = formatKey(dt);
-    const label = formatLabel(dt);
-    const isWeekend = (dt.getDay()===0 || dt.getDay()===6);
-    const dateClass = isWeekend ? "sticky-date weekendDate" : "sticky-date";
-    bodyHtml += `<tr><td class="${dateClass}">${label}</td>`;
-    persons.forEach(p=>{
-      const entries = (data.entries[key] && data.entries[key][p]) ? data.entries[key][p] : [];
-      const ov = (data.overnight[p] && data.overnight[p][key]) ? data.overnight[p][key] : null;
-
-      // combine entries + overnight (overnight as item if present and non-empty)
-      const combined = entries.map(e=> ({...e, _type:'entry'}));
-      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.overnightId)){
-        combined.push({...ov, _type:'overnight'});
-      }
-      const sorted = sortItemsByTime(combined);
-
-      const htmlEntries = sorted.map((e,idx)=>{
-        const text = (lang==='de') ? (e.de || e.th || '') : (e.th || e.de || '');
-        const baseCls = e._type === 'overnight' ? 'entry overnight' : 'entry';
-        const parity = (idx % 2 === 0) ? 'odd' : 'even';
-        const meta = e._type === 'overnight' ? (e.overnightId ? `<div class="meta"><i class="fa-solid fa-hotel"></i> ${overnightLabel(e.overnightId)}</div>` : `<div class="meta">${e.de||e.th||''}</div>`) : '';
-        const booked = e._type==='overnight' && e.booked ? `<span title="${LANG[lang].bookedLabel}"> <i class="fa-solid fa-check" style="color:var(--overnight-accent)"></i></span>` : '';
-        return `<div class="${baseCls} ${parity}"><div class="text">${escAttr(text)}</div>${meta}${booked}</div>`;
-      }).join('');
-
-      bodyHtml += `<td class="${isWeekend ? 'weekend' + p : ''}">${htmlEntries}</td>`;
+/* Person Calendar Editor */
+function renderPersonCalendar(person){
+  const container=document.getElementById('personCalendarList'); container.innerHTML="";
+  for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+    const key=formatKey(dt); const label=formatLabel(dt); const dayDiv=document.createElement('div'); dayDiv.className="entryBox";
+    dayDiv.innerHTML=`<strong>${label}</strong>`;
+    const entries=data.entries[key][person]||[];
+    entries.forEach((e,j)=>{
+      const row=document.createElement('div'); row.className="entryRow";
+      const inp=document.createElement('input'); inp.type="text"; inp.value=(lang==='de'?e.de:e.th);
+      inp.onchange=()=>{if(lang==='de'){e.de=inp.value;}else{e.th=inp.value;}saveData();}
+      const btnDel=document.createElement('button'); btnDel.className="btn"; btnDel.innerHTML='<i class="fa fa-trash"></i>'; btnDel.onclick=()=>{entries.splice(j,1);saveData(); renderPersonCalendar(person);}
+      row.appendChild(inp); row.appendChild(btnDel); dayDiv.appendChild(row);
     });
-    bodyHtml += "</tr>";
+    // Overnight
+    const overn=data.overnight[person][key]||false;
+    const ovBtn=document.createElement('button'); ovBtn.className="smallBtn"; ovBtn.innerHTML=overnightLabel(overn); ovBtn.onclick=()=>{data.overnight[person][key]=!data.overnight[person][key];saveData(); renderPersonCalendar(person);}
+    dayDiv.appendChild(ovBtn);
+    // Add Entry
+    const addBtn=document.createElement('button'); addBtn.className="smallBtn"; addBtn.innerHTML=LANG[lang].addEntryLabel; addBtn.onclick=()=>{
+      entries.push({de:"",th:""}); saveData(); renderPersonCalendar(person);}
+    dayDiv.appendChild(addBtn);
+    container.appendChild(dayDiv);
   }
-  calendarBody().innerHTML = bodyHtml;
 }
 
-/* open person page */
-function openPerson(person){
-  window.location.href = `person.html?person=${encodeURIComponent(person)}`;
+function overnightLabel(state){return state?LANG[lang].removeOvernight:LANG[lang].addOvernight;}
+
+/* Todo */
+function renderTodoList(person){
+  const todoDiv=document.getElementById('todoList'); todoDiv.innerHTML="";
+  (data.todos[person]||[]).forEach((t,i)=>{
+    const row=document.createElement('div'); row.className="todo-item";
+    const inp=document.createElement('input'); inp.type="text"; inp.value=(lang==='de'?t.de:t.th); inp.onchange=()=>{if(lang==='de'){t.de=inp.value;}else{t.th=inp.value;} saveData();}
+    const btnDel=document.createElement('button'); btnDel.innerHTML='<i class="fa fa-trash"></i>'; btnDel.onclick=()=>{data.todos[person].splice(i,1); saveData(); renderTodoList(person);}
+    row.appendChild(inp); row.appendChild(btnDel);
+    todoDiv.appendChild(row);
+  });
 }
 
-/* utility */
-function escAttr(s){ return String(s||"").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function addTodoItem(){const person=editorName.textContent; const key=persons.find(p=>LANG[lang].persons[p]===person); data.todos[key].push({id:makeId(),de:LANG.de.defaultTodo,th:LANG.th.defaultTodo,done:false}); saveData(); renderTodoList(key);}
 
-function setLang(l){
-  lang = l;
-  renderOverview();
-}
-
-/* initial load */
-loadData();
-renderOverview();
-
-/* expose for console if needed */
-window.setLang = setLang;
-window.openPerson = openPerson;
+/* ========== Language ========== */
+function setLang(l){lang=l;document.getElementById('closeLabel').textContent=LANG[lang].closeLabel; renderOverview(); if(editorOpen) renderPersonCalendar(editorName.textContent);}
+loadData(); renderOverview();
 </script>
 </body>
 </html>
