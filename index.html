@@ -4,113 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thailand 2026 — Übersicht</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-p1Cm7b6Y1K1K6YV0+q3s0V9qk6+Hq3G5z3Gv7eQp6k7K5Y9s1fY3N8K1Y3J6m9z6z3Gv7eQp6k7K5Y9s1fY3N8A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
   --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff;
-  --txt:#222;
-  --gray1:#fbfbfb;
-  --gray2:#f0f0f0;
-  --overnight-bg:#e8f5ff;
-  --overnight-accent:#2b95ff;
+  --txt:#222; --gray1:#fbfbfb; --gray2:#f0f0f0;
+  --overnight-bg:#e8f5ff; --overnight-accent:#2b95ff;
 }
 *{box-sizing:border-box}
 body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
-.header{
-  background:linear-gradient(90deg,var(--accent),#00629a);
-  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
-  gap:12px;
-}
+.header{background:linear-gradient(90deg,var(--accent),#00629a);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .header h1{margin:0;font-size:18px;font-weight:600}
 .langBtns{display:flex;gap:8px}
-button.langBtn{
-  border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;
-}
+button.langBtn{border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;}
 .container{max-width:1200px;margin:18px auto;padding:12px}
 .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-.small{font-size:13px;color:#444}
-
-/* Table */
 .table-wrap{overflow:auto;border-radius:8px}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{border:1px solid #e2e2e2;padding:8px;text-align:center;vertical-align:top}
 thead th{position:sticky;top:0;background:#fafafa;z-index:5}
 .sticky-date{position:sticky;left:0;background:#fff;z-index:6;font-weight:700;width:72px;min-width:64px}
-
-/* entries */
 .entry{display:block;padding:8px;margin:6px auto;border-radius:6px;text-align:center;border:1px solid rgba(0,0,0,0.03);max-width:260px;word-wrap:break-word}
-.entry .meta{font-size:12px;color:#666;margin-top:4px}
 .entry .text{font-size:14px;white-space:normal;}
-
-/* alternating greys in overview */
-td .entry.odd { background: var(--gray1); }
-td .entry.even{ background: var(--gray2); }
-
-/* overnight distinct */
-.entry.overnight{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent); }
-.entry.overnight .meta{ font-weight:700; color:var(--overnight-accent); }
-
-/* person base colors */
+.entry.odd { background: var(--gray1); }
+.entry.even{ background: var(--gray2); }
+.entry.overnight{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent);}
+.entry.overnight .text{ font-weight:700; color:var(--overnight-accent); }
 .personColRouven{background: linear-gradient(180deg,#fff0f0,#ffd9d9);}
 .personColDaniel{background: linear-gradient(180deg,#f0fff0,#d9ffd9);}
 .personColHenrik{background: linear-gradient(180deg,#eef4ff,#d9e7ff);}
 .personColBenja{background: linear-gradient(180deg,#fffaf0,#fff1d9);}
 .personColHolger{background: linear-gradient(180deg,#f7efff,#f0d9ff);}
-
-/* weekend darker variants */
 .weekendRouven{background: linear-gradient(180deg,#ffd0d0,#ffb3b3);}
 .weekendDaniel{background: linear-gradient(180deg,#d0ffd0,#b3ffb3);}
 .weekendHenrik{background: linear-gradient(180deg,#c6d9ff,#9fbfff);}
 .weekendBenja{background: linear-gradient(180deg,#ffe8c2,#ffd18a);}
 .weekendHolger{background: linear-gradient(180deg,#ebd2ff,#d8b3ff);}
-
 .weekendDate{background:#ffd699;font-weight:700;color:#222}
-
-/* editor styles */
 .editorHeader{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
 .personBadge{display:flex;align-items:center;gap:10px}
 .badgeCircle{width:48px;height:48px;border-radius:50%;display:inline-block}
-.personName{font-weight:900;font-size:24px} /* größer + fett */
+.personName{font-weight:900;font-size:24px}
 .editorGrid{display:grid;grid-template-columns:1fr 360px;gap:12px}
 @media(max-width:980px){ .editorGrid{grid-template-columns:1fr} }
-
-/* left column: calendar */
 .entryBox{background:#fff;padding:10px;border-radius:8px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
-.entryBox strong{display:inline-block;width:auto;font-size:16px;font-weight:700}
+.entryBox strong{display:inline-block;font-size:16px;font-weight:700}
 .entryRow{display:flex;gap:8px;align-items:center;margin-top:8px}
 .entryRow input[type="text"]{padding:6px;border-radius:6px;border:1px solid #ddd;width:100%}
 .entryRow .btn{padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:#fafafa;cursor:pointer}
 .smallBtn{padding:8px 14px;border-radius:8px;border:0;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700}
-
-/* alternate greys in editor for entries */
-.entryBox .entryRow.item-odd{ background: var(--gray1); border-radius:6px; padding:6px; margin-top:6px; display:flex; gap:8px; align-items:center; }
-.entryBox .entryRow.item-even{ background: var(--gray2); border-radius:6px; padding:6px; margin-top:6px; display:flex; gap:8px; align-items:center; }
+.entryBox .entryRow.item-odd{ background: var(--gray1); border-radius:6px; padding:6px; display:flex; gap:8px; align-items:center; }
+.entryBox .entryRow.item-even{ background: var(--gray2); border-radius:6px; padding:6px; display:flex; gap:8px; align-items:center; }
 .entryBox .entryRow input[type="text"]{ border:0; background:transparent; padding:6px; width:100%; }
-
-/* overnight row styling in editor */
 .ov-inline{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent); padding:8px; border-radius:6px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
-
-/* adopt UI */
-.adopt-wrap{display:flex;gap:8px;align-items:center;margin-top:8px}
-.adopt-wrap select{padding:6px;border-radius:6px;border:1px solid #ddd;flex:1}
-
-/* right column: todos */
 .sideCard{background:#fff;padding:10px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.03);margin-top:12px}
 .sideCard h4{margin:0 0 8px 0}
-
-/* todos */
-.todo-item{display:flex;gap:6px;align-items:center;margin-bottom:8px}
-.todo-item input[type="text"]{flex:1;padding:6px;border-radius:6px;border:1px solid #ddd}
-.todo-actions button{padding:6px;border-radius:6px;border:0;background:#f0f0f0;cursor:pointer}
-
-/* misc */
-.kv{font-size:13px;color:#666}
-.note{font-size:13px;color:#555;margin-top:8px}
 .separator{height:2px;background:#ddd;margin:20px 0}
 </style>
 </head>
 <body>
+
 <div class="header">
   <h1>Thailand 2026 – Übersicht</h1>
   <div class="langBtns">
@@ -125,13 +78,10 @@ td .entry.even{ background: var(--gray2); }
 </div>
 
 <script>
-/* ------------------- Daten ---------------------- */
-
 let currentLang='DE';
 let currentPerson=null; 
 let editorOpen=false;
 
-/* Personen */
 const persons=[
   {id:'rouven',name:'Rouven',class:'personColRouven',weekend:'weekendRouven'},
   {id:'daniel',name:'Daniel',class:'personColDaniel',weekend:'weekendDaniel'},
@@ -140,49 +90,23 @@ const persons=[
   {id:'holger',name:'Holger',class:'personColHolger',weekend:'weekendHolger'}
 ];
 
-/* Datumsbereich */
-const startDate=new Date(2026,2,6); //6.3.
-const endDate=new Date(2026,2,15);  //15.3.
+const startDate=new Date(2026,2,6);
+const endDate=new Date(2026,2,15);
 let dates=[];
-for(let d=new Date(startDate);d<=endDate;d.setDate(d.getDate()+1)){
-  dates.push(new Date(d));
-}
+for(let d=new Date(startDate);d<=endDate;d.setDate(d.getDate()+1))dates.push(new Date(d));
 
-/* Daten laden */
 let data=JSON.parse(localStorage.getItem('thailand2026')||'{}');
+if(!data.overnights)data.overnights={};
 
-/* Presets */
-const preset={};
-persons.forEach(p=>preset[p.id]={});
-dates.forEach(date=>{
-  const key=formatDateKey(date);
-  persons.forEach(p=>{
-    if(!preset[p.id][key])preset[p.id][key]=[];
-  });
-});
-
-/* Overnights */
-if(!data.overnights)data.overnights={}; // pro Tag {DE,TH}
-
-/* save */
 function saveData(){
   localStorage.setItem('thailand2026',JSON.stringify(data));
   if(!editorOpen)renderOverview();
 }
 
-/* ------------------- Hilfen ---------------------- */
-function formatDateKey(date){
-  return date.toISOString().split('T')[0];
-}
-function escAttr(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function sameEntry(a,b){
-  // beide Felder müssen übereinstimmen
-  return (a.DE===b.DE && a.TH===b.TH);
-}
+function formatDateKey(date){return date.toISOString().split('T')[0];}
+function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function sameEntry(a,b){return (a.DE===b.DE && a.TH===b.TH);}
 
-/* ------------------- Render Übersicht ---------------------- */
 function renderOverview(){
   let html='<div class="table-wrap"><table><thead><tr><th class="sticky-date">Datum</th>';
   persons.forEach(p=>html+=`<th>${p.name}</th>`);
@@ -196,7 +120,6 @@ function renderOverview(){
       const arr=data[p.id]?.[key]||[];
       html+='<td>';
       let cnt=0;
-      // Übernachtung anzeigen wenn existiert
       if(data.overnights[key]){
         const ov=data.overnights[key];
         const show=currentLang==='DE'?ov.DE:ov.TH;
@@ -219,7 +142,6 @@ function renderOverview(){
   document.getElementById('overview').innerHTML=html;
 }
 
-/* ------------------- Editor ---------------------- */
 function openEditor(personId){
   currentPerson=personId;
   editorOpen=true;
@@ -235,34 +157,23 @@ function closeEditor(){
   renderOverview();
 }
 
-/* build editor */
 function renderEditor(){
   const person=persons.find(p=>p.id===currentPerson);
   if(!data[person.id])data[person.id]={};
-
   let html='';
   html+='<div class="editorHeader">';
   html+=`<div class="personBadge"><span class="badgeCircle ${person.class}"></span><span class="personName">${person.name}</span></div>`;
   html+=`<button class="smallBtn" onclick="closeEditor()"><i class="fa fa-arrow-left"></i> Zurück</button>`;
-  html+='</div>';
-
-  html+='<div class="editorGrid">';
-  html+='<div>';
-
+  html+='</div><div class="editorGrid"><div>';
   dates.forEach(date=>{
     const key=formatDateKey(date);
     const wend=[0,6].includes(date.getDay());
     if(!data[person.id][key])data[person.id][key]=[];
-
     html+=`<div class="entryBox ${wend?'weekendDate':''}">`;
     html+=`<strong>${date.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'})}</strong>`;
-    
-    // neue Einträge
     html+=`<div class="entryRow"><input id="newDE-${key}" placeholder="Neuer Eintrag DE">
            <input id="newTH-${key}" placeholder="TH">
            <button class="btn" onclick="addEntry('${key}')">+</button></div>`;
-
-    // Übernachtung – am 12.03. keine
     if(!(date.getDate()===12 && date.getMonth()===2)){
       html+=`<div class="ov-inline">
               <input id="ovDE-${key}" placeholder="Übernachtung DE" value="${escAttr(data.overnights[key]?.DE||'')}">
@@ -270,8 +181,6 @@ function renderEditor(){
               <button class="btn" onclick="saveOvernight('${key}')">Speichern</button>
             </div>`;
     }
-
-    // bestehende Einträge
     data[person.id][key].forEach((e,i)=>{
       const cls=i%2?'item-even':'item-odd';
       html+=`<div class="entryRow ${cls}">
@@ -280,23 +189,12 @@ function renderEditor(){
                <button class="btn" onclick="deleteEntry('${key}',${i})"><i class="fa fa-trash"></i></button>
              </div>`;
     });
-
-    html+='</div>'; //entryBox
+    html+='</div>';
   });
-
-  html+='</div>'; //left
-
-  /* rechte Spalte */
-  html+='<div>';
-  html+='<div class="sideCard"><h4>To-Do-Liste</h4><div>hier Todo UI …</div></div>';
-  html+='</div>'; //right
-
-  html+='</div>'; //grid
-
+  html+='</div><div><div class="sideCard"><h4>To-Do-Liste</h4><div>hier Todo UI …</div></div></div></div>';
   document.getElementById('editor').innerHTML=html;
 }
 
-/* Aktionen Editor */
 function addEntry(key){
   const de=document.getElementById(`newDE-${key}`).value.trim();
   const th=document.getElementById(`newTH-${key}`).value.trim();
@@ -310,39 +208,28 @@ function addEntry(key){
   renderEditor();
 }
 function editEntry(key,index,value,lang){
-  data[currentPerson][key][index][lang]=value;
-  saveData();
+  data[currentPerson][key][index][lang]=value; saveData();
 }
 function deleteEntry(key,index){
-  data[currentPerson][key].splice(index,1);
-  saveData();
-  renderEditor();
+  data[currentPerson][key].splice(index,1); saveData(); renderEditor();
 }
 function saveOvernight(key){
   const de=document.getElementById(`ovDE-${key}`).value.trim();
   const th=document.getElementById(`ovTH-${key}`).value.trim();
   if(!de&&!th){ delete data.overnights[key]; }
   else{ data.overnights[key]={DE:de,TH:th}; }
-  saveData();
-  renderEditor();
+  saveData(); renderEditor();
 }
-
-/* Sprache */
-function setLang(l){
-  currentLang=l;
-  if(editorOpen)renderEditor(); else renderOverview();
-}
-
-/* init */
+function setLang(l){currentLang=l; if(editorOpen)renderEditor(); else renderOverview();}
 if(!data || Object.keys(data).length===0){
   persons.forEach(p=>{
     data[p.id]={};
     dates.forEach(d=>data[p.id][formatDateKey(d)]=[]);
   });
-  data.overnights={};
-  saveData();
+  data.overnights={}; saveData();
 }
 renderOverview();
 </script>
+
 </body>
 </html>
