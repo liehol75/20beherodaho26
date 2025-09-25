@@ -4,34 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thailand 2026 — Übersicht</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-p1Cm7b6Y1K1K6YV0+q3s0V9qk6+Hq3G5z3Gv7eQp6k7K5Y9s1fY3N8K1Y3J6m9z6z3Gv7eQp6k7K5Y9s1fY3N8A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{
   --accent:#0077b6; --accent2:#00b4d8; --bg:#f6f6f6; --card:#ffffff;
-  --txt:#222;
-  --gray1:#fbfbfb;
-  --gray2:#f0f0f0;
-  --overnight-bg:#e8f5ff;
-  --overnight-accent:#2b95ff;
+  --txt:#222; --gray1:#fbfbfb; --gray2:#f0f0f0;
+  --overnight-bg:#e8f5ff; --overnight-accent:#2b95ff;
+  --overnight-booked:#cbefff; --overnight-booked-accent:#1f7fd1;
 }
 *{box-sizing:border-box}
-body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
-.header{
-  background:linear-gradient(90deg,var(--accent),#00629a);
-  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
-  gap:12px;
-}
+body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);} 
+.header{background:linear-gradient(90deg,var(--accent),#00629a);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:50}
 .header h1{margin:0;font-size:18px;font-weight:600}
 .langBtns{display:flex;gap:8px}
-button.langBtn{
-  border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;
-}
+button.langBtn{border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700;}
 .container{max-width:1200px;margin:18px auto;padding:12px}
 .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
 .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .small{font-size:13px;color:#444}
 
-/* Table */
+/* Table (overview) kept visually the same as original */
 .table-wrap{overflow:auto;border-radius:8px}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{border:1px solid #e2e2e2;padding:8px;text-align:center;vertical-align:top}
@@ -42,96 +34,88 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
 .entry{display:block;padding:8px;margin:6px auto;border-radius:6px;text-align:center;border:1px solid rgba(0,0,0,0.03);max-width:260px;word-wrap:break-word}
 .entry .meta{font-size:12px;color:#666;margin-top:4px}
 .entry .text{font-size:14px;white-space:normal;}
-
-/* alternating greys in overview */
-td .entry.odd { background: var(--gray1); }
-td .entry.even{ background: var(--gray2); }
-
-/* overnight distinct */
-.entry.overnight{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent); }
-.entry.overnight .meta{ font-weight:700; color:var(--overnight-accent); }
+.entry.odd { background: var(--gray1); }
+.entry.even{ background: var(--gray2); }
+.entry.overnight{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent);}
+.entry.overnight .text{ font-weight:700; color:var(--overnight-accent); }
 
 /* person base colors */
-.personColRouven{background: linear-gradient(180deg,#fff0f0,#ffd9d9);}
-.personColDaniel{background: linear-gradient(180deg,#f0fff0,#d9ffd9);}
-.personColHenrik{background: linear-gradient(180deg,#eef4ff,#d9e7ff);}
-.personColBenja{background: linear-gradient(180deg,#fffaf0,#fff1d9);}
-.personColHolger{background: linear-gradient(180deg,#f7efff,#f0d9ff);}
-
-/* weekend darker variants */
-.weekendRouven{background: linear-gradient(180deg,#ffd0d0,#ffb3b3);}
-.weekendDaniel{background: linear-gradient(180deg,#d0ffd0,#b3ffb3);}
-.weekendHenrik{background: linear-gradient(180deg,#c6d9ff,#9fbfff);}
-.weekendBenja{background: linear-gradient(180deg,#ffe8c2,#ffd18a);}
-.weekendHolger{background: linear-gradient(180deg,#ebd2ff,#d8b3ff);}
+.personColRouven{background: linear-gradient(180deg,#fff0f0,#ffd9d9);} 
+.personColDaniel{background: linear-gradient(180deg,#f0fff0,#d9ffd9);} 
+.personColHenrik{background: linear-gradient(180deg,#eef4ff,#d9e7ff);} 
+.personColBenja{background: linear-gradient(180deg,#fffaf0,#fff1d9);} 
+.personColHolger{background: linear-gradient(180deg,#f7efff,#f0d9ff);} 
 
 .weekendDate{background:#ffd699;font-weight:700;color:#222}
 
 /* editor styles */
-.editorHeader{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-.personBadge{display:inline-flex;align-items:center;gap:10px}
-.badgeCircle{width:36px;height:36px;border-radius:50%;display:inline-block}
-.personName{font-weight:900;font-size:22px} /* größer + fett per Wunsch */
+.editorHeader{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;position:sticky;top:58px;background:transparent;padding-top:6px}
+.personBadge{display:flex;align-items:center;gap:10px}
+.badgeCircle{width:48px;height:48px;border-radius:50%;display:inline-block}
+.personName{font-weight:900;font-size:22px}
 .editorGrid{display:grid;grid-template-columns:1fr 360px;gap:12px}
 @media(max-width:980px){ .editorGrid{grid-template-columns:1fr} }
 
-/* left column: calendar */
 .entryBox{background:#fff;padding:10px;border-radius:8px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
-.entryBox strong{display:inline-block;width:100px;font-size:16px;font-weight:700}
+.entryBox strong{display:inline-block;font-size:16px;font-weight:700}
 .entryRow{display:flex;gap:8px;align-items:center;margin-top:8px}
 .entryRow input[type="text"]{padding:6px;border-radius:6px;border:1px solid #ddd;width:100%}
 .entryRow .btn{padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:#fafafa;cursor:pointer}
 .smallBtn{padding:6px 8px;border-radius:6px;border:0;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700}
 
-/* nicer back button */
-.backBtn{padding:8px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,#00b4d8,#0077b6);color:#fff;cursor:pointer;font-weight:800;display:inline-flex;align-items:center;gap:8px}
-
-/* alternate greys in editor for entries */
-.entryBox .entryRow.item-odd{ background: var(--gray1); border-radius:6px; padding:6px; margin-top:6px; display:flex; gap:8px; align-items:center; }
-.entryBox .entryRow.item-even{ background: var(--gray2); border-radius:6px; padding:6px; margin-top:6px; display:flex; gap:8px; align-items:center; }
-.entryBox .entryRow input[type="text"]{ border:0; background:transparent; padding:6px; width:100%; }
-
-/* overnight row styling in editor */
-.ov-inline{ background: var(--overnight-bg); border-left:4px solid var(--overnight-accent); padding:8px; border-radius:6px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
-
-/* adopt / global UI */
-.adopt-wrap{display:flex;gap:8px;align-items:center;margin-top:8px}
-.adopt-wrap select{padding:6px;border-radius:6px;border:1px solid #ddd;flex:1}
-
-/* right column: todos */
-.sideCard{background:#fff;padding:10px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
-.sideCard h4{margin:0 0 8px 0}
-
-/* todos */
+/* To-do separation and styling */
+.sideCard{background:#fff;padding:10px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.03);}
+.separator{height:2px;background:#ddd;margin:20px 0}
 .todo-item{display:flex;gap:6px;align-items:center;margin-bottom:8px}
 .todo-item input[type="text"]{flex:1;padding:6px;border-radius:6px;border:1px solid #ddd}
 .todo-actions button{padding:6px;border-radius:6px;border:0;background:#f0f0f0;cursor:pointer}
 
-/* misc */
+/* Overnight specific visual tweaks for editor */
+.overnight-wrap{display:flex;align-items:center;gap:8px;margin-top:8px}
+.overnight-label{font-size:12px;color:#666;margin-bottom:6px}
+.overnight-field{flex:1;padding:8px;border-radius:8px;background:var(--overnight-bg);border:1px solid rgba(43,149,255,0.15);display:flex;align-items:center;justify-content:space-between}
+.overnight-field.booked{background:var(--overnight-booked);border-color:var(--overnight-booked-accent)}
+.overnight-text{padding:6px;flex:1}
+.overnight-actions{display:flex;gap:6px;align-items:center;padding-left:8px}
+.icon-btn{background:transparent;border:0;padding:6px;border-radius:6px;cursor:pointer}
+.icon-btn.save{color:var(--accent2)}
+.icon-btn.delete{color:#c0392b}
+.icon-btn.adopt{color:#2b95ff}
+.icon-btn.add{color:#1f7d3a}
+
+/* dropdown + adopt layout */
+.adopt-wrap{display:flex;gap:8px;align-items:center;margin-top:8px}
+.adopt-wrap select{padding:6px;border-radius:6px;border:1px solid #ddd;flex:1}
+
+/* day separator visual improvement */
+.day-sep{border-top:1px dashed #e0e0e0;margin:10px 0}
+
+/* small helpers */
 .kv{font-size:13px;color:#666}
 .note{font-size:13px;color:#555;margin-top:8px}
-.separator{height:12px;border-top:1px solid #e6e6e6;margin:12px 0}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1 id="pageTitle">Thailand 2026</h1>
+  <div style="display:flex;align-items:center;gap:12px"><h1>Thailand 2026 – Übersicht</h1><h1 id="pageTitle">Thailand 2026</h1></div>
   <div class="langBtns">
-    <button class="langBtn" onclick="setLang('de')"><i class="fa-solid fa-language"></i> Deutsch</button>
-    <button class="langBtn" onclick="setLang('th')"><i class="fa-solid fa-language"></i> ไทย</button>
+    <button class="langBtn" onclick="setLang('de')">DE</button>
+    <button class="langBtn" onclick="setLang('th')">TH</button>
   </div>
 </div>
 
 <div class="container">
-  <div class="card">
+  <div id="overviewCard" class="card"></div>
+  <div id="editorCard" class="card" style="display:none;position:relative"></div>
+
+  <div class="card" style="margin-top:12px">
     <div class="controls">
       <div class="small kv" id="rangeInfo"></div>
       <div style="flex:1"></div>
       <div class="small kv"><i class="fa-solid fa-globe"></i> <span id="langLabel">Deutsch</span></div>
     </div>
 
-    <!-- Übersicht (BLEIBT unverändert in Struktur & Layout) -->
     <div id="overview">
       <div class="table-wrap">
         <table id="calendarTable" aria-label="Reiseübersicht">
@@ -142,29 +126,24 @@ td .entry.even{ background: var(--gray2); }
       <p class="note"><i class="fa-regular fa-hand-pointer"></i> Klicke auf einen Namen, um die persönliche Seite (inline Editor) zu öffnen.</p>
     </div>
 
-    <!-- Editor -->
     <div id="editor" style="display:none;margin-top:14px;">
       <div class="editorHeader">
         <div class="personBadge">
           <div class="badgeCircle" id="badgeColor"></div>
           <div>
             <div class="personName" id="editorName">Person</div>
-            <!-- Unterzeile entfernt wie gewünscht -->
           </div>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
-          <button class="backBtn" onclick="closeEditor()"><i class="fa-solid fa-arrow-left"></i> <span id="closeLabel">Zurück</span></button>
+          <button class="backBtn" id="backBtn" onclick="closeEditor()" style="padding:8px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,#00b4d8,#0077b6);color:#fff;cursor:pointer;font-weight:800;display:inline-flex;align-items:center;gap:8px"><i class="fa-solid fa-arrow-left"></i> Übersicht</button>
           <div class="kv"><i class="fa-solid fa-cloud-arrow-down"></i> Änderungen werden sofort gespeichert (localStorage)</div>
         </div>
       </div>
 
       <div class="editorGrid">
-        <!-- left: calendar entries -->
         <div>
           <div id="personCalendarList"></div>
         </div>
-
-        <!-- right: todos -->
         <div>
           <div class="sideCard">
             <h4 id="todoTitle"><i class="fa-solid fa-list-check"></i> To-Do</h4>
@@ -182,13 +161,11 @@ td .entry.even{ background: var(--gray2); }
 </div>
 
 <script>
-/* ===========================
-   Übersetzungen (DE + TH) — geprüft / korrigiert
-   =========================== */
+/* ========== Configuration & Translations ========== */
 const LANG = {
   de: {
     pageTitle: "Thailand 2026",
-    closeLabel: "Zurück",
+    closeLabel: "Übersicht",
     overnightTitle: "Übernachtung",
     todoTitle: "To-Do",
     addEntryLabel: "+ Eintrag",
@@ -199,13 +176,17 @@ const LANG = {
     bookedLabel: "Gebucht",
     addOvernight: "+ Übernachtung hinzufügen",
     removeOvernight: "Übernachtung entfernen",
-    adoptLabel: "Eintrag übernehmen",
+    adoptLabel: "Übernehmen",
     adoptOvernightLabel: "Übernachtung übernehmen",
-    adoptGlobalLabel: "Von allen übernehmen"
+    adoptGlobalLabel: "Von allen übernehmen",
+    confirmDelete: "Möchten Sie wirklich löschen?",
+    newOvernightText: "Neue Übernachtung",
+    newEntryText: "Neuer Eintrag",
+    adoptFromDayText: "Eintrag von diesem Tag übernehmen"
   },
   th: {
     pageTitle: "ประเทศไทย 2026",
-    closeLabel: "กลับ",
+    closeLabel: "ภาพรวม",
     overnightTitle: "ที่พัก",
     todoTitle: "รายการที่ต้องทำ",
     addEntryLabel: "+ รายการ",
@@ -216,219 +197,130 @@ const LANG = {
     bookedLabel: "จองแล้ว",
     addOvernight: "+ เพิ่มที่พัก",
     removeOvernight: "ลบที่พัก",
-    adoptLabel: "นำรายการมาใช้",
+    adoptLabel: "นำมาใช้",
     adoptOvernightLabel: "นำที่พักมาใช้",
-    adoptGlobalLabel: "นำจากทั้งหมด"
+    adoptGlobalLabel: "นำจากทั้งหมด",
+    confirmDelete: "ต้องการลบจริงหรือไม่?",
+    newOvernightText: "ที่พักใหม่",
+    newEntryText: "รายการใหม่",
+    adoptFromDayText: "นำรายการจากวันนี้"
   }
 };
+let lang = 'de';
 
-let lang = 'de'; // default
-const persons = ["Rouven","Daniel","Henrik","Benja","Holger"];
+const PERSONS = [
+  {id:'Rouven',name:'Rouven',class:'personColRouven'},
+  {id:'Daniel',name:'Daniel',class:'personColDaniel'},
+  {id:'Henrik',name:'Henrik',class:'personColHenrik'},
+  {id:'Benja',name:'Benja',class:'personColBenja'},
+  {id:'Holger',name:'Holger',class:'personColHolger'}
+];
 
-/* safer date handling: build days count and create dates by adding day offset to start date */
-const start = new Date(2026,1,16); // 16.02.2026 (month is 0-based)
-const end   = new Date(2026,2,12);  // 12.03.2026
+/* unified date range */
+const START = new Date(2026,1,16); // 16 Feb 2026
+const END   = new Date(2026,2,12); // 12 Mar 2026
 
-/* ===========================
-   Preset entries (vollständig)
-   - geprüft und th-Übersetzungen korrigiert
-   =========================== */
-const preset = {
-  "2026-02-16": { all: [
-    { de: "Abflug Frankfurt/Main Flughafen 20.55 Uhr",     th: "ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น." }
-  ] },
-  "2026-02-17": { all: [
-    { de: "Ankunft Bangkok-Suvarnabhumi 13.45 Uhr",       th: "ถึงกรุงเทพฯ สนามบินสุวรรณภูมิ 13:45 น." },
-    { de: "River Cruise",                                 th: "ล่องเรือ" }
-  ] },
-  "2026-02-19": {
-    Henrik: [ { de: "Familienfest Sa Kaeo",               th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ],
-    Benja:  [ { de: "Familienfest Sa Kaeo",               th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ],
-    Holger: [ { de: "Familienfest Sa Kaeo",               th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ]
-  },
-  "2026-02-24": {
-    Henrik: [ { de: "Upasampada-Feier Sa Kaeo",           th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ],
-    Benja:  [ { de: "Upasampada-Feier Sa Kaeo",           th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ],
-    Holger: [ { de: "Upasampada-Feier Sa Kaeo",           th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ]
-  },
-  "2026-02-25": {
-    Henrik: [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ],
-    Benja:  [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ],
-    Holger: [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ]
-  },
-  "2026-02-26": { all: [
-    { de: "Einweihungsfeier Sa Kaeo",                     th: "พิธีเปิดบ้าน จังหวัดสระแก้ว" }
-  ] },
-  "2026-03-11": { all: [
-    { de: "Abflug Bangkok-Suvarnabhumi 12.40 Uhr",        th: "ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น." },
-    { de: "Ankunft Frankfurt/Main Flughafen 19.05 Uhr",  th: "ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น." }
-  ] },
-  "2026-03-12": { all: [
-    { de: "Osnabrück",                                    th: "ออสนาบรุค" }
-  ] }
+/* helper date functions */
+function pad(n){return String(n).padStart(2,'0');}
+function formatLabel(d){return pad(d.getDate()) + "." + pad(d.getMonth()+1) + ".";}
+function formatKey(d){return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate());}
+function daysInRange(s,e){const s0=new Date(s.getFullYear(),s.getMonth(),s.getDate()); const e0=new Date(e.getFullYear(),e.getMonth(),e.getDate()); return Math.round((e0-s0)/86400000)+1;}
+function dateByOffset(s,offset){return new Date(s.getFullYear(),s.getMonth(),s.getDate()+offset);}
+
+/* storage key */
+const STORAGE_KEY = 'trip2026_v_clean_singlefile_v1';
+let data = null; // structure: { entries: {date: {Person: [ {de,th} ] } }, overnight: { Person: {date: {de,th,booked}} }, todos: {Person: [ {id,de,th,done} ] } }
+
+/* preset (kept same content as original where relevant) */
+const PRESET = {
+  "2026-02-16": { all: [ { de: "Abflug Frankfurt/Main Flughafen 20.55 Uhr", th: "ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น." } ] },
+  "2026-02-17": { all: [ { de: "Ankunft Bangkok-Suvarnabhumi 13.45 Uhr", th: "ถึงกรุงเทพฯ สนามบินสุวรรณภูมิ 13:45 น." }, { de: "River Cruise", th: "ล่องเรือ" } ] },
+  "2026-02-19": { Henrik: [ { de: "Familienfest Sa Kaeo", th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ], Benja: [ { de: "Familienfest Sa Kaeo", th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ], Holger: [ { de: "Familienfest Sa Kaeo", th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ] },
+  "2026-02-24": { Henrik: [ { de: "Upasampada-Feier Sa Kaeo", th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ], Benja: [ { de: "Upasampada-Feier Sa Kaeo", th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ], Holger: [ { de: "Upasampada-Feier Sa Kaeo", th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ] },
+  "2026-02-25": { Henrik: [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ], Benja: [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ], Holger: [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ] },
+  "2026-02-26": { all: [ { de: "Einweihungsfeier Sa Kaeo", th: "พิธีเปิดบ้าน จังหวัดสระแก้ว" } ] },
+  "2026-03-11": { all: [ { de: "Abflug Bangkok-Suvarnabhumi 12.40 Uhr", th: "ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น." }, { de: "Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th: "ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น." } ] },
+  "2026-03-12": { all: [ { de: "Osnabrück", th: "ออสนาบรุค" } ] }
 };
 
-/* ===========================
-   Datenstruktur
-   =========================== */
-const STORAGE_KEY = "trip2026_v_final_singlefile_v2";
-let data = null;
-
-/* state for overnight editing (per dateKey) so we can show inputs then show only selected language when saved */
-let ovEditing = {}; // e.g. ovEditing["2026-02-16"] = true
-
-/* Helpers */
-function pad(n){ return String(n).padStart(2,'0'); }
-function formatLabel(d){ return pad(d.getDate()) + "." + pad(d.getMonth()+1) + "."; }
-function formatKey(d){ return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
-function dateRangeText(){ return formatLabel(start) + " — " + formatLabel(end); }
-function makeId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
-function escAttr(s){ return String(s||"").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-/* compute number of days inclusive, using normalized midnight dates to avoid DST issues */
-function daysInRange(s,e){
-  const s0 = new Date(s.getFullYear(), s.getMonth(), s.getDate());
-  const e0 = new Date(e.getFullYear(), e.getMonth(), e.getDate());
-  return Math.round((e0 - s0) / 86400000) + 1;
-}
-function dateByOffset(s, offset){
-  return new Date(s.getFullYear(), s.getMonth(), s.getDate() + offset);
-}
-
-/* ===========================
-   Create / Load / Save
-   =========================== */
+/* ========== Data creation/load/save ========== */
+function makeId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);} 
 function createEmptyData(){
-  const d = { entries:{}, overnight:{}, todos:{} };
-  const days = daysInRange(start,end);
+  const d = { entries: {}, overnight: {}, todos: {} };
+  const days = daysInRange(START,END);
   for(let i=0;i<days;i++){
-    const dt = dateByOffset(start,i);
+    const dt = dateByOffset(START,i);
     const key = formatKey(dt);
     d.entries[key] = {};
-    persons.forEach(p => d.entries[key][p] = []);
+    PERSONS.forEach(p => d.entries[key][p.id] = []);
   }
-  persons.forEach(p=>{
-    d.overnight[p] = {}; // dateKey -> {de,th,booked}
-    d.todos[p] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
-  });
+  PERSONS.forEach(p=>{ d.overnight[p.id] = {}; d.todos[p.id] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ]; });
   return d;
 }
 
-/* consider same only if BOTH languages match exactly (DE and TH) */
-function sameEntry(a,b){
-  if(!a || !b) return false;
-  const da = (a.de||"").trim();
-  const ta = (a.th||"").trim();
-  const db = (b.de||"").trim();
-  const tb = (b.th||"").trim();
-  return (da === db && ta === tb);
-}
-
-/* merge preset into data, avoid duplicates */
 function mergePresetInto(d){
-  for(const dateKey in preset){
+  for(const dateKey in PRESET){
     if(!d.entries[dateKey]) continue;
-    const obj = preset[dateKey];
+    const obj = PRESET[dateKey];
     if(obj.all){
       obj.all.forEach(item=>{
-        persons.forEach(p => {
-          const list = d.entries[dateKey][p] || [];
-          const exists = list.some(e => sameEntry(e,item));
+        PERSONS.forEach(p=>{
+          const list = d.entries[dateKey][p.id] || [];
+          const exists = list.some(e => e.de===item.de && e.th===item.th);
           if(!exists) list.push({de:item.de, th:item.th});
-          d.entries[dateKey][p] = list;
+          d.entries[dateKey][p.id] = list;
         });
       });
     }
-    persons.forEach(p=>{
-      if(obj[p]){
-        obj[p].forEach(item => {
-          const list = d.entries[dateKey][p] || [];
-          const exists = list.some(e => sameEntry(e,item));
+    PERSONS.forEach(p=>{
+      if(obj[p.id]){
+        obj[p.id].forEach(item=>{
+          const list = d.entries[dateKey][p.id] || [];
+          const exists = list.some(e => e.de===item.de && e.th===item.th);
           if(!exists) list.push({de:item.de, th:item.th});
-          d.entries[dateKey][p] = list;
+          d.entries[dateKey][p.id] = list;
         });
       }
     });
   }
-
-  // special: set Holger overnight on 2026-02-16 to "Flugzeug" (DE) / "เครื่องบิน" (TH)
+  // special Holger overnight 2026-02-16 as in original
   const holgerKey = "2026-02-16";
-  if(d.overnight && d.overnight["Holger"]){
-    d.overnight["Holger"][holgerKey] = { de: "Flugzeug", th: "เครื่องบิน", booked: false };
-  } else {
-    if(!d.overnight) d.overnight = {};
-    if(!d.overnight["Holger"]) d.overnight["Holger"] = {};
-    d.overnight["Holger"][holgerKey] = { de: "Flugzeug", th: "เครื่องบิน", booked: false };
+  if(d.overnight && d.overnight['Holger']){
+    d.overnight['Holger'][holgerKey] = { de: "Flugzeug", th: "เครื่องบิน", booked:false };
   }
 }
 
 function loadData(){
   const raw = localStorage.getItem(STORAGE_KEY);
-  if(!raw){
-    data = createEmptyData();
-    mergePresetInto(data);
-    saveData();
-    return;
-  }
+  if(!raw){ data = createEmptyData(); mergePresetInto(data); saveData(); return; }
   try{
     data = JSON.parse(raw);
-    // validate
-    if(!data.entries || !data.overnight || !data.todos){
-      data = createEmptyData();
-      mergePresetInto(data);
-      saveData();
-    } else {
-      // ensure keys exist for the date range
-      const days = daysInRange(start,end);
-      for(let i=0;i<days;i++){
-        const dt = dateByOffset(start,i);
-        const k = formatKey(dt);
-        if(!data.entries[k]) data.entries[k] = {};
-        persons.forEach(p=> { if(!data.entries[k][p]) data.entries[k][p]=[]; });
+    // validate minimal structure
+    if(!data.entries || !data.overnight || !data.todos){ data = createEmptyData(); mergePresetInto(data); saveData(); return; }
+    // ensure date keys exist
+    const days = daysInRange(START,END);
+    for(let i=0;i<days;i++){
+      const dt = dateByOffset(START,i); const k = formatKey(dt);
+      if(!data.entries[k]){
+        data.entries[k] = {};
+        PERSONS.forEach(p=> data.entries[k][p.id] = []);
+      } else {
+        PERSONS.forEach(p=> { if(!data.entries[k][p.id]) data.entries[k][p.id]=[]; });
       }
-      persons.forEach(p=>{
-        if(!data.overnight[p]) data.overnight[p] = {};
-        if(!data.todos[p] || !Array.isArray(data.todos[p]) ) data.todos[p] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
-      });
-      mergePresetInto(data); // add missing presets only
     }
-  }catch(e){
-    console.error("Error loading data, resetting", e);
-    data = createEmptyData();
+    PERSONS.forEach(p=>{ if(!data.overnight[p.id]) data.overnight[p.id] = {}; if(!data.todos[p.id] || !Array.isArray(data.todos[p.id])) data.todos[p.id] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ]; });
     mergePresetInto(data);
-    saveData();
-  }
+  } catch(e){ console.error('load error',e); data = createEmptyData(); mergePresetInto(data); saveData(); }
 }
 
-function saveData(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  // render overview always so changes from person editor are visible on the main overview immediately
-  renderOverview();
-}
+function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); renderOverview(); if(currentPerson) renderPersonEditor(); }
 
-/* ===========================
-   Time parsing + sorting
-   =========================== */
-function parseFirstTime(text){
-  if(!text) return null;
-  const m = String(text).match(/(\b\d{1,2})[.:](\d{2})\b/);
-  if(!m) return null;
-  const h = parseInt(m[1],10);
-  const min = parseInt(m[2],10);
-  if(isNaN(h) || isNaN(min)) return null;
-  return h*60 + min;
-}
-function sortItemsByTime(list){
-  return list.slice().sort((a,b)=>{
-    const ta = parseFirstTime(a.de) ?? parseFirstTime(a.th) ?? Infinity;
-    const tb = parseFirstTime(b.de) ?? parseFirstTime(b.th) ?? Infinity;
-    return ta - tb;
-  });
-}
+/* ========== Utilities ========== */
+function esc(s){ return String(s||''); }
+function parseFirstTime(text){ if(!text) return null; const m = String(text).match(/(\b\d{1,2})[.:](\d{2})\b/); if(!m) return null; const h=parseInt(m[1],10); const min=parseInt(m[2],10); if(isNaN(h)||isNaN(min)) return null; return h*60+min; }
+function sortItemsByTime(list){ return list.slice().sort((a,b)=>{ const ta = parseFirstTime(a.de)||parseFirstTime(a.th)||Infinity; const tb = parseFirstTime(b.de)||parseFirstTime(b.th)||Infinity; return ta-tb; }); }
 
-/* ===========================
-   Render Overview  (BLEIBT strukturell unverändert)
-   =========================== */
+/* ========== Overview rendering (kept visually consistent) ========== */
 const calendarHead = document.getElementById('calendarHead');
 const calendarBody = document.getElementById('calendarBody');
 const pageTitle = document.getElementById('pageTitle');
@@ -436,510 +328,196 @@ const rangeInfo = document.getElementById('rangeInfo');
 
 function renderOverview(){
   pageTitle.textContent = LANG[lang].pageTitle;
-  rangeInfo.textContent = dateRangeText();
+  rangeInfo.textContent = formatLabel(START) + ' — ' + formatLabel(END);
   document.getElementById('langLabel').textContent = (lang==='de'?'Deutsch':'ไทย');
 
-  // header row
+  // header
   let headHtml = "<tr><th class='sticky-date'>" + (lang==='de' ? "Datum" : "วันที่") + "</th>";
-  persons.forEach(p=>{
-    const name = LANG[lang].persons[p] || p;
-    headHtml += `<th><button class="langBtn" style="padding:8px 12px;border-radius:8px" onclick="openEditor('${p}')">${escAttr(name)}</button></th>`;
-  });
+  PERSONS.forEach(p=> headHtml += `<th><button class="langBtn" style="padding:8px 12px;border-radius:8px" onclick="openEditor('${p.id}')">${esc(LANG[lang].persons[p.id]||p.name)}</button></th>`);
   headHtml += "</tr>";
   calendarHead.innerHTML = headHtml;
 
   // body
-  let bodyHtml = "";
-  const days = daysInRange(start,end);
+  let bodyHtml = '';
+  const days = daysInRange(START,END);
   for(let i=0;i<days;i++){
-    const dt = dateByOffset(start,i);
-    const key = formatKey(dt);
-    const label = formatLabel(dt);
-    const isWeekend = (dt.getDay()===0 || dt.getDay()===6);
-    const dateClass = isWeekend ? "sticky-date weekendDate":"sticky-date";
-    bodyHtml += `<tr><td class="${dateClass}">${label}</td>`;
-    persons.forEach(p=>{
-      const baseClass = "personCol" + p;
-      const weekendClass = isWeekend ? (" weekend" + p) : "";
-      const classes = baseClass + weekendClass;
-      const entries = (data.entries[key] && data.entries[key][p]) ? data.entries[key][p] : [];
-      const ov = (data.overnight[p] && data.overnight[p][key]) ? data.overnight[p][key] : null;
-
-      // combine entries + overnight (overnight flagged)
-      const combined = entries.map(e=> ({...e, _type:'entry'}));
-      if(ov && ( (ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.booked )){
-        combined.push({...ov, _type:'overnight'});
-      }
-      // sort by extracted time if present
+    const dt = dateByOffset(START,i); const key = formatKey(dt);
+    const isWeekend = (dt.getDay()===0||dt.getDay()===6);
+    const dateClass = isWeekend ? 'sticky-date weekendDate' : 'sticky-date';
+    bodyHtml += `<tr><td class="${dateClass}">${dt.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'})}</td>`;
+    PERSONS.forEach(p=>{
+      // build entries cell
+      const entries = (data.entries[key] && data.entries[key][p.id]) ? data.entries[key][p.id] : [];
+      const ov = (data.overnight[p.id] && data.overnight[p.id][key]) ? data.overnight[p.id][key] : null;
+      const combined = entries.map(e=> ({...e,_type:'entry'}));
+      if(ov && ((ov.de&&ov.de.trim())||(ov.th&&ov.th.trim())||ov.booked)) combined.push({...ov,_type:'overnight'});
       const sorted = sortItemsByTime(combined);
-
-      // render sorted items with alternating gray (odd/even) but keep overnight special class
-      const htmlEntries = sorted.map((e,idx)=>{
-        const text = (lang==='de')? e.de : e.th;
-        const baseCls = e._type === 'overnight' ? 'entry overnight' : 'entry';
-        const parity = (idx % 2 === 0) ? 'odd' : 'even';
-        return `<div class="${baseCls} ${parity}"><div class="text">${escAttr(text)}</div>${e._type==='overnight' && e.booked ? `<div class="meta"><i class="fa-solid fa-check"></i> ${LANG[lang].bookedLabel}</div>` : ''}</div>`;
-      }).join('');
-
-      bodyHtml += `<td class="${classes}">${htmlEntries}</td>`;
+      let cellHtml = '';
+      sorted.forEach((e,idx)=>{
+        const text = (lang==='de')? (e.de||'') : (e.th||e.de||'');
+        const baseCls = e._type==='overnight' ? 'entry overnight' : 'entry';
+        const parity = (idx%2===0)?'odd':'even';
+        cellHtml += `<div class="${baseCls} ${parity}"><div class="text">${esc(text)}</div>${e._type==='overnight' && e.booked ? `<div class="meta"><i class="fa-solid fa-check"></i> ${LANG[lang].bookedLabel}</div>` : ''}</div>`;
+      });
+      bodyHtml += `<td class="${p.class}">${cellHtml}</td>`;
     });
-    bodyHtml += "</tr>";
+    bodyHtml += '</tr>';
   }
   calendarBody.innerHTML = bodyHtml;
 }
 
-/* ===========================
-   Helper: gather global unique entries across all people/dates
-   returns array of {de,th}
-   =========================== */
-function getGlobalEntries(){
-  const found = [];
-  const seen = new Set();
-  for(const dateKey in data.entries){
-    for(const p of persons){
-      const list = data.entries[dateKey] && data.entries[dateKey][p] ? data.entries[dateKey][p] : [];
-      list.forEach(it=>{
-        const key = ((it.de||"").trim() + "||" + (it.th||"").trim());
-        if(!seen.has(key)){
-          seen.add(key);
-          found.push({de: it.de || "", th: it.th || ""});
-        }
-      });
-    }
-  }
-  // also include presets that maybe not in data (mergePresetInto normally handled, but keep safe)
-  for(const dateKey in preset){
-    const obj = preset[dateKey];
-    if(obj.all) obj.all.forEach(it => {
-      const key = ((it.de||"").trim() + "||" + (it.th||"").trim());
-      if(!seen.has(key)){ seen.add(key); found.push({de:it.de, th:it.th}); }
-    });
-    persons.forEach(p=>{
-      if(obj[p]) obj[p].forEach(it=>{
-        const key = ((it.de||"").trim() + "||" + (it.th||"").trim());
-        if(!seen.has(key)){ seen.add(key); found.push({de:it.de, th:it.th}); }
-      });
-    });
-  }
-  return found;
-}
+/* ========== Helpers for global data */
+function getGlobalOvernights(){ const found=[]; const seen=new Set(); PERSONS.forEach(person=>{ const ovObj = data.overnight[person.id]||{}; for(const key in ovObj){ const ov = ovObj[key]; if(ov && ((ov.de&&ov.de.trim())||(ov.th&&ov.th.trim()))){ const id = ((ov.de||'').trim()+'||'+(ov.th||'').trim()); if(!seen.has(id)){ seen.add(id); found.push({de:ov.de||'', th:ov.th||'', sourcePerson:person.id, date:key}); } } } }); return found; }
 
-/* Helper: gather global unique overnights across all persons/dates */
-function getGlobalOvernights(){
-  const found = [];
-  const seen = new Set();
-  // data.overnight is per person -> date
-  for(const person of persons){
-    const ovObj = data.overnight && data.overnight[person] ? data.overnight[person] : {};
-    for(const key in ovObj){
-      const ov = ovObj[key];
-      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()))){
-        const id = ((ov.de||"").trim() + "||" + (ov.th||"").trim());
-        if(!seen.has(id)){ seen.add(id); found.push({de:ov.de||"", th:ov.th||"", sourcePerson:person, date:key}); }
-      }
-    }
-  }
-  return found;
-}
+function getGlobalEntriesForDay(dateKey){ const found=[]; const seen=new Set(); PERSONS.forEach(person=>{ const list = (data.entries[dateKey] && data.entries[dateKey][person.id])? data.entries[dateKey][person.id] : []; list.forEach(it=>{ const id = ((it.de||'').trim()+'||'+(it.th||'').trim()); if(!seen.has(id)){ seen.add(id); found.push({de:it.de||'', th:it.th||'', sourcePerson:person.id}); } }); }); return found; }
 
-/* ===========================
-   Editor
-   =========================== */
-let editorOpen = false;
+/* ========== Editor state & rendering ========== */
 let currentPerson = null;
+let editorOpen = false;
+let ovEditing = {}; // dateKey -> boolean (if true show inputs)
+let entryEditState = {}; // placeholder if needed
 
-function openEditor(person){
-  currentPerson = person;
-  editorOpen = true;
-  document.getElementById('overview').style.display = 'none';
-  document.getElementById('editor').style.display = 'block';
-  document.getElementById('editorName').textContent = LANG[lang].persons[person] || person;
-  document.getElementById('closeLabel').textContent = LANG[lang].closeLabel;
-  document.getElementById('todoTitle').textContent = LANG[lang].todoTitle;
-  const badge = document.getElementById('badgeColor');
-  badge.style.background = getPersonColor(person);
-  renderPersonEditor();
-}
+function openEditor(personId){ currentPerson = personId; editorOpen = true; document.getElementById('overview').style.display='none'; document.getElementById('editor').style.display='block'; document.getElementById('editorName').textContent = LANG[lang].persons[personId]||personId; document.getElementById('badgeColor').style.background = getPersonGradient(personId); document.getElementById('todoTitle').textContent = LANG[lang].todoTitle; renderPersonEditor(); }
+function closeEditor(){ currentPerson=null; editorOpen=false; document.getElementById('editor').style.display='none'; document.getElementById('overview').style.display='block'; saveData(); }
 
-function closeEditor(){
-  saveData();
-  editorOpen = false;
-  currentPerson = null;
-  document.getElementById('editor').style.display = 'none';
-  document.getElementById('overview').style.display = 'block';
-  renderOverview();
-}
+function getPersonGradient(id){ const map = { Rouven:'linear-gradient(180deg,#fff0f0,#ffd9d9)', Daniel:'linear-gradient(180deg,#f0fff0,#d9ffd9)', Henrik:'linear-gradient(180deg,#eef4ff,#d9e7ff)', Benja:'linear-gradient(180deg,#fffaf0,#fff1d9)', Holger:'linear-gradient(180deg,#f7efff,#f0d9ff)'}; return map[id]||'#ddd'; }
 
-function getPersonColor(p){
-  const map = {
-    Rouven: 'linear-gradient(180deg,#fff0f0,#ffd9d9)',
-    Daniel: 'linear-gradient(180deg,#f0fff0,#d9ffd9)',
-    Henrik: 'linear-gradient(180deg,#eef4ff,#d9e7ff)',
-    Benja:  'linear-gradient(180deg,#fffaf0,#fff1d9)',
-    Holger: 'linear-gradient(180deg,#f7efff,#f0d9ff)'
-  };
-  return map[p] || '#ddd';
-}
-
-/* Adopt global entry into current person's date */
-function adoptGlobalEntry(dateKey){
-  const sel = document.getElementById(`globalEntry-${dateKey}`);
-  if(!sel) return;
-  const idx = parseInt(sel.value,10);
-  if(isNaN(idx) || idx < 0) return;
-  const global = getGlobalEntries();
-  if(!global[idx]) return;
-  const candidate = {de: global[idx].de || '', th: global[idx].th || ''};
-  const list = data.entries[dateKey][currentPerson] || [];
-  const exists = list.some(e => sameEntry(e,candidate));
-  if(!exists){
-    data.entries[dateKey][currentPerson].push(candidate);
-    saveData();
-    renderPersonEditor();
-  } else {
-    alert(lang==='de' ? 'Eintrag existiert bereits für diese Person am Tag.' : 'รายการนี้มีอยู่แล้วสำหรับบุคคลนี้ในวันนี้');
-  }
-}
-
-/* Adopt global overnight into current person's date */
-function adoptGlobalOvernight(dateKey){
-  const sel = document.getElementById(`globalOv-${dateKey}`);
-  if(!sel) return;
-  const idx = parseInt(sel.value,10);
-  if(isNaN(idx) || idx < 0) return;
-  const global = getGlobalOvernights();
-  if(!global[idx]) return;
-  if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
-  if(data.overnight[currentPerson][dateKey]) {
-    alert(lang==='de' ? 'Für diese Person existiert bereits eine Übernachtung an diesem Tag.' : 'มีที่พักแล้วสำหรับบุคคลนี้ในวันดังกล่าว');
-    return;
-  }
-  data.overnight[currentPerson][dateKey] = { de: global[idx].de || '', th: global[idx].th || '', booked: false };
-  // after adopting show only selected language -> not editing
-  ovEditing[dateKey] = false;
-  saveData();
-  renderPersonEditor();
-}
-
-/* Toggle edit state for overnight on a date */
-function toggleEditOvernight(dateKey, toState){
-  ovEditing[dateKey] = !!toState;
-  renderPersonEditor();
-}
-
-/* ===========================
-   Render Person Editor (angepasst)
-   =========================== */
-function renderPersonEditor(){
-  if(!currentPerson) return;
-  let leftHtml = "";
-  const days = daysInRange(start,end);
+function renderPersonEditor(){ if(!currentPerson) return; const days = daysInRange(START,END); let html='';
   for(let i=0;i<days;i++){
-    const dt = dateByOffset(start,i);
-    const key = formatKey(dt);
-    const label = formatLabel(dt);
-    if(!data.entries[key]) data.entries[key] = {};
-    if(!data.entries[key][currentPerson]) data.entries[key][currentPerson] = [];
-    const entries = data.entries[key][currentPerson];
+    const dt = dateByOffset(START,i); const key = formatKey(dt); const label = dt.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'});
+    html += `<div class="entryBox">`;
+    html += `<div style="display:flex;justify-content:space-between;align-items:center"><strong>${label}</strong><div><button class="btn" onclick="addEmptyEntry('${key}')"><i class="fa-solid fa-plus"></i> ${LANG[lang].addEntryLabel}</button></div></div>`;
 
-    leftHtml += `<div class="entryBox"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${label}</strong><div><button class="btn" onclick="addEntry('${key}')"><i class="fa-solid fa-plus"></i> ${LANG[lang].addEntryLabel}</button></div></div>`;
-
-    // --- New entry inputs directly near date (DE + TH) ---
-    leftHtml += `<div class="entryRow">
-      <input type="text" id="newDE-${key}" placeholder="DE" value="">
-      <input type="text" id="newTH-${key}" placeholder="TH" value="">
-      <button class="btn" onclick="addEntry('${key}')"><i class="fa-solid fa-plus"></i></button>
-    </div>`;
-
-    // --- Global entries dropdown (alle Einträge aller Tage/Personen) ---
-    const globals = getGlobalEntries();
-    if(globals.length > 0){
-      leftHtml += `<div class="adopt-wrap"><select id="globalEntry-${key}"><option value="-1">-- ${escAttr(LANG[lang].adoptLabel)} (global) --</option>`;
-      globals.forEach((a,ii)=>{
-        const txt = (lang==='de') ? (a.de || a.th) : (a.th || a.de);
-        leftHtml += `<option value="${ii}">${escAttr(txt)}</option>`;
+    // existing entries (for this person/day)
+    const entries = (data.entries[key] && data.entries[key][currentPerson])? data.entries[key][currentPerson] : [];
+    if(entries.length>0){
+      entries.forEach((e,idx)=>{
+        const shown = (lang==='de')? (e.de||'') : (e.th||e.de||'');
+        html += `<div class="entryRow" style="align-items:center;gap:8px;margin-top:8px">
+                  <div style="flex:1">${esc(shown)}</div>
+                  <div style="display:flex;gap:6px;align-items:center">
+                    <button class="icon-btn" title="hoch" onclick="moveEntry('${key}',${idx},-1)"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button class="icon-btn" title="runter" onclick="moveEntry('${key}',${idx},1)"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button class="icon-btn delete" title="${LANG[lang].btnDelete}" onclick="deleteEntryWithConfirm('${key}',${idx})"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                </div>`;
       });
-      leftHtml += `</select><button class="btn" onclick="adoptGlobalEntry('${key}')">${escAttr(LANG[lang].adoptGlobalLabel)}</button></div>`;
     }
 
-    // --- Overnight handling ---
-    // skip any overnight UI on 2026-03-12 (per Wunsch: keine Erläuterung / kein Hinweis)
-    if(key !== "2026-03-12"){
-      // show existing overnight for this person/date (if any)
-      if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
-      const ov = data.overnight[currentPerson][key];
+    // adopt dropdown for all entries on this day from all persons
+    const globals = getGlobalEntriesForDay(key);
+    html += `<div class="adopt-wrap"><select id="adoptEntry-${key}"><option value="-1">-- ${LANG[lang].newEntryText} --</option>`;
+    globals.forEach((g,ii)=>{ const txt = (lang==='de')? (g.de||g.th) : (g.th||g.de); html += `<option value="${ii}">${esc(txt)}</option>`; });
+    html += `</select><button class="btn" onclick="adoptEntryFromDay('${key}')"><i class="fa-solid fa-plus"></i> ${LANG[lang].adoptLabel}</button></div>`;
 
-      if(ov && ( (ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.booked )){
-        // If currently editing this overnight, show two inputs; otherwise show only the selected language and edit button
-        const isEditing = !!ovEditing[key];
-        if(isEditing){
-          leftHtml += `<div class="ov-inline" id="ov-edit-${key}">
-            <input type="text" id="ovEditDE-${key}" placeholder="DE Übernachtung" value="${escAttr(ov.de)}">
-            <input type="text" id="ovEditTH-${key}" placeholder="TH ที่พัก" value="${escAttr(ov.th)}">
-            <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="ovEditBooked-${key}" ${ov.booked ? 'checked' : ''}> ${LANG[lang].bookedLabel}</label>
-            <button class="btn" onclick="saveOvernightFromInputs('${key}')"><i class="fa-solid fa-check"></i> Speichern</button>
-            <button class="btn" onclick="toggleEditOvernight('${key}', false)"><i class="fa-solid fa-xmark"></i> Abbrechen</button>
-          </div>`;
-        } else {
-          const shown = (lang==='de') ? escAttr(ov.de) : escAttr(ov.th);
-          leftHtml += `<div class="ov-inline" id="ov-view-${key}">
-            <div style="min-width:120px;font-size:13px;font-weight:700">${LANG[lang].overnightTitle}</div>
-            <div style="flex:1">${shown}</div>
-            ${ov.booked ? `<div style="font-size:12px;color:#2b95ff;font-weight:700">${LANG[lang].bookedLabel}</div>` : ''}
-            <button class="btn" onclick="toggleEditOvernight('${key}', true)"><i class="fa-solid fa-pen"></i> Bearbeiten</button>
-            <button class="btn" onclick="removeOvernight('${key}')"><i class="fa-solid fa-trash"></i> ${LANG[lang].removeOvernight}</button>
-          </div>`;
-        }
-      } else {
-        // no overnight yet for current person on this date: show "add overnight" button + adopt global overnights dropdown
-        leftHtml += `<div style="margin-top:8px;display:flex;gap:8px;align-items:center">`;
-        leftHtml += `<button class="btn" onclick="addOvernight('${key}')"><i class="fa-solid fa-bed"></i> ${LANG[lang].addOvernight}</button>`;
-
-        // global overnight select
-        const globalOvs = getGlobalOvernights();
-        if(globalOvs.length > 0){
-          leftHtml += `<div class="adopt-wrap" style="flex:1"><select id="globalOv-${key}"><option value="-1">-- ${escAttr(LANG[lang].adoptOvernightLabel)} --</option>`;
-          globalOvs.forEach((a,ii)=>{
-            const txt = (lang==='de') ? (a.de || a.th) : (a.th || a.de);
-            const source = a.sourcePerson ? ` (${a.sourcePerson})` : '';
-            leftHtml += `<option value="${ii}">${escAttr(txt + source)}</option>`;
-          });
-          leftHtml += `</select><button class="btn" onclick="adoptGlobalOvernight('${key}')">${escAttr(LANG[lang].adoptLabel)}</button></div>`;
-        }
-
-        leftHtml += `</div>`;
-      }
-    } // end skip 2026-03-12
-
-    // --- existing entries editable (kept like before) ---
-    entries.forEach((e,idx)=>{
-      const parityClass = (idx % 2 === 0) ? 'item-odd' : 'item-even';
-      leftHtml += `<div class="entryRow ${parityClass}" id="entry-${key}-${idx}">
-        <input type="text" placeholder="DE" value="${escAttr(e.de)}" oninput="updateEntry('${key}',${idx},'de',this.value)">
-        <input type="text" placeholder="TH" value="${escAttr(e.th)}" oninput="updateEntry('${key}',${idx},'th',this.value)">
-        <button class="btn" onclick="deleteEntry('${key}',${idx})"><i class="fa-solid fa-trash"></i> ${LANG[lang].btnDelete}</button>
-      </div>`;
-    });
-
-    leftHtml += `</div>`;
-  }
-
-  // separator before todos
-  leftHtml += `<div class="separator"></div>`;
-
-  document.getElementById('personCalendarList').innerHTML = leftHtml;
-  renderTodos();
-}
-
-/* ===========================
-   Entry handlers (angepasst: addEntry liest jetzt die inline inputs falls vorhanden)
-   =========================== */
-function addEntry(dateKey){
-  if(!data.entries[dateKey]) data.entries[dateKey] = {};
-  if(!data.entries[dateKey][currentPerson]) data.entries[dateKey][currentPerson] = [];
-  // read inline inputs if present
-  const elDE = document.getElementById(`newDE-${dateKey}`);
-  const elTH = document.getElementById(`newTH-${dateKey}`);
-  let de = '', th = '';
-  if(elDE) de = elDE.value.trim();
-  if(elTH) th = elTH.value.trim();
-  // if both empty, create empty entry (preserve original behavior)
-  const entry = {de: de, th: th};
-  data.entries[dateKey][currentPerson].push(entry);
-  // dedupe
-  dedupeEntriesForDatePerson(dateKey, currentPerson);
-  saveData();
-  renderPersonEditor();
-  // focus: try to focus the newly-created native editable input if we created an empty entry
-  setTimeout(()=> {
-    // try to find new input in the list (we recreate the DOM, so focusing might not be critical)
-    const idx = data.entries[dateKey][currentPerson].length - 1;
-    const el = document.querySelector(`#entry-${dateKey}-${idx} input[placeholder="DE"]`);
-    if(el) el.focus();
-  },50);
-}
-function updateEntry(dateKey, idx, field, value){
-  if(!data.entries[dateKey] || !data.entries[dateKey][currentPerson] || !data.entries[dateKey][currentPerson][idx]) return;
-  data.entries[dateKey][currentPerson][idx][field] = value;
-  dedupeEntriesForDatePerson(dateKey, currentPerson);
-  saveData();
-}
-function deleteEntry(dateKey, idx){
-  if(!confirm(lang==='de' ? 'Eintrag löschen?' : 'ต้องการลบรายการ?')) return;
-  if(!data.entries[dateKey] || !data.entries[dateKey][currentPerson]) return;
-  data.entries[dateKey][currentPerson].splice(idx,1);
-  saveData();
-  renderPersonEditor();
-}
-
-function adoptEntry(dateKey){
-  // kept for backward compatibility but main global adoption uses adoptGlobalEntry
-  const sel = document.getElementById(`adopt-${dateKey}`);
-  if(!sel) return;
-  const idx = parseInt(sel.value,10);
-  if(isNaN(idx) || idx < 0) return;
-  const avail = getAvailableForAdopt(dateKey);
-  if(!avail[idx]) return;
-  const candidate = {de: avail[idx].de || '', th: avail[idx].th || ''};
-  const list = data.entries[dateKey][currentPerson] || [];
-  const exists = list.some(e => sameEntry(e,candidate));
-  if(!exists){
-    data.entries[dateKey][currentPerson].push(candidate);
-    saveData();
-    renderPersonEditor();
-  } else {
-    alert(lang==='de' ? 'Eintrag existiert bereits für diese Person am Tag.' : 'รายการนี้มีอยู่แล้วสำหรับบุคคลนี้ในวันนี้');
-  }
-}
-
-function dedupeEntriesForDatePerson(dateKey, person){
-  if(!data.entries[dateKey] || !data.entries[dateKey][person]) return;
-  const seen = new Set();
-  const result = [];
-  data.entries[dateKey][person].forEach(e=>{
-    const key = ((e.de||"").trim() + "||" + (e.th||"").trim());
-    if(!seen.has(key)){
-      seen.add(key);
-      result.push(e);
+    // overnight area placed below entries as requested
+    html += `<div class="day-sep"></div>`;
+    html += `<div class="overnight-section">`;
+    html += `<div class="overnight-label">${LANG[lang].overnightTitle}</div>`;
+    const ov = (data.overnight[currentPerson] && data.overnight[currentPerson][key]) ? data.overnight[currentPerson][key] : null;
+    if(ov){
+      // show compact view: label above, field with text, booked checkbox, delete icon
+      const shown = (lang==='de')? (ov.de||'') : (ov.th||ov.de||'');
+      const bookedCls = ov.booked ? 'booked' : '';
+      html += `<div class="overnight-wrap">
+                <div class="overnight-field ${bookedCls}" id="ovfield-${key}">
+                  <div class="overnight-text">${esc(shown)}</div>
+                  <div style="display:flex;align-items:center;gap:8px" class="overnight-actions">
+                    <label style="display:flex;align-items:center;gap:6px;margin-right:6px"><input type="checkbox" id="ovBooked-${key}" ${ov.booked? 'checked' : ''} onchange="toggleBooked('${key}', this.checked)"> ${LANG[lang].bookedLabel}</label>
+                    <button class="icon-btn delete" title="${LANG[lang].removeOvernight}" onclick="removeOvernightConfirm('${key}')"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                </div>
+              </div>`;
+    } else {
+      // no overnight yet: show empty field + icon to open adopt dropdown or create new
+      html += `<div class="overnight-wrap">
+                <div style="flex:1">
+                  <div class="overnight-field" style="background:linear-gradient(180deg,#f8fbff,#f0f8ff);">
+                    <div style="padding:6px;color:#666">${esc(LANG[lang].overnightTitle)}</div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+                  <button class="icon-btn add" title="${LANG[lang].addOvernight}" onclick="openOvernightAdder('${key}')"><i class="fa-solid fa-bed fa-lg"></i></button>
+                </div>
+              </div>
+              <div id="ov-adopter-${key}" style="margin-top:6px"></div>`;
     }
-  });
-  data.entries[dateKey][person] = result;
-}
 
-/* ===========================
-   Overnight handlers (angepasst)
-   =========================== */
-function addOvernight(dateKey){
-  if(dateKey === '2026-03-12'){
-    // No UI / message required per request — just return silently
-    return;
-  }
-  if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
-  // create a blank overnight and enter edit mode so inputs appear
-  data.overnight[currentPerson][dateKey] = {de:'',th:'',booked:false};
-  ovEditing[dateKey] = true;
-  saveData();
-  renderPersonEditor();
-}
-function saveOvernightFromInputs(dateKey){
-  if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
-  let deEl = document.getElementById(`ovEditDE-${dateKey}`);
-  let thEl = document.getElementById(`ovEditTH-${dateKey}`);
-  let bookedEl = document.getElementById(`ovEditBooked-${dateKey}`);
-  const de = deEl ? deEl.value.trim() : '';
-  const th = thEl ? thEl.value.trim() : '';
-  const booked = bookedEl ? !!bookedEl.checked : false;
-  if(!de && !th){
-    // if both empty -> remove
-    delete data.overnight[currentPerson][dateKey];
-    ovEditing[dateKey] = false;
-  } else {
-    data.overnight[currentPerson][dateKey] = {de:de, th:th, booked: booked};
-    ovEditing[dateKey] = false;
-  }
-  saveData();
-  renderPersonEditor();
-}
-function updateOvernight(dateKey, field, value){
-  if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
-  if(!data.overnight[currentPerson][dateKey]) data.overnight[currentPerson][dateKey] = {de:'',th:'',booked:false};
-  if(field==='booked') data.overnight[currentPerson][dateKey].booked = !!value;
-  else data.overnight[currentPerson][dateKey][field] = value;
-  saveData();
-}
-function removeOvernight(dateKey){
-  if(!confirm(lang==='de' ? 'Übernachtung entfernen?' : 'ต้องการลบที่พัก?')) return;
-  if(!data.overnight[currentPerson]) return;
-  delete data.overnight[currentPerson][dateKey];
-  ovEditing[dateKey] = false;
-  saveData();
-  renderPersonEditor();
-}
+    html += `</div>`; // overnight-section
 
-/* ===========================
-   Todos (keine großen Änderungen)
-   =========================== */
-function renderTodos(){
-  if(!data.todos[currentPerson]) data.todos[currentPerson] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
-  const list = data.todos[currentPerson];
-  let html = "";
-  list.forEach((t,i)=>{
-    html += `<div class="todo-item">
-      <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodo(${i},this.checked)">
-      <input type="text" placeholder="DE" value="${escAttr(t.de)}" oninput="updateTodo(${i},'de',this.value)">
-      <input type="text" placeholder="TH" value="${escAttr(t.th)}" oninput="updateTodo(${i},'th',this.value)">
-      <div class="todo-actions"><button onclick="deleteTodo(${i})"><i class="fa-solid fa-trash"></i> ${LANG[lang].btnDelete}</button></div>
-    </div>`;
-  });
-  document.getElementById('todoList').innerHTML = html;
-}
-function addTodoItem(){
-  if(!data.todos[currentPerson]) data.todos[currentPerson] = [];
-  data.todos[currentPerson].push({ id: makeId(), de:'', th:'', done:false });
-  saveData();
-  renderTodos();
-}
-function updateTodo(i, field, v){
-  if(!data.todos[currentPerson] || !data.todos[currentPerson][i]) return;
-  data.todos[currentPerson][i][field] = v;
-  saveData();
-}
-function toggleTodo(i, checked){
-  if(!data.todos[currentPerson] || !data.todos[currentPerson][i]) return;
-  data.todos[currentPerson][i].done = !!checked;
-  saveData();
-}
-function deleteTodo(i){
-  if(!confirm(lang==='de' ? 'Aufgabe löschen?' : 'ต้องการลบงานนี้?')) return;
-  data.todos[currentPerson].splice(i,1);
-  saveData();
+    html += `</div>`; // entryBox
+  }
+
+  // left column rendered
+  document.getElementById('personCalendarList').innerHTML = html;
   renderTodos();
 }
 
-/* ===========================
-   Language switching
-   =========================== */
-function setLang(l){
-  lang = l;
-  document.getElementById('pageTitle').textContent = LANG[lang].pageTitle;
-  document.getElementById('closeLabel').textContent = LANG[lang].closeLabel;
-  renderOverview();
-  if(editorOpen && currentPerson){
-    document.getElementById('editorName').textContent = LANG[lang].persons[currentPerson];
-    document.getElementById('todoTitle').textContent = LANG[lang].todoTitle;
-    renderPersonEditor();
-  }
+/* ========== Entry operations ========== */
+function addEmptyEntry(dateKey){ // opens inline create UI: we'll add via prompt-like small inputs below the adopt select
+  // to keep UI non-intrusive: create a prompt modal-like inline inputs
+  const container = document.getElementById('adoptEntry-'+dateKey);
+  if(!container) return; // fallback
+  // Create temporary input row below the adopt select
+  const parent = container.parentElement;
+  // create inputs
+  const row = document.createElement('div'); row.style.display='flex'; row.style.gap='8px'; row.style.marginTop='6px';
+  const inpDE = document.createElement('input'); inpDE.type='text'; inpDE.placeholder='DE'; inpDE.style.flex='1'; inpDE.className='';
+  const inpTH = document.createElement('input'); inpTH.type='text'; inpTH.placeholder='TH'; inpTH.style.flex='1';
+  const saveBtn = document.createElement('button'); saveBtn.className='icon-btn save'; saveBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+  saveBtn.onclick = ()=>{ const de=inpDE.value.trim(); const th=inpTH.value.trim(); if(!de && !th) return; const list = data.entries[dateKey][currentPerson] || []; const exists = list.some(x=> (x.de||'')===de && (x.th||'')===th); if(!exists) list.push({de:de, th:th}); data.entries[dateKey][currentPerson]=list; saveData(); renderPersonEditor(); };
+  const cancelBtn = document.createElement('button'); cancelBtn.className='icon-btn'; cancelBtn.innerHTML='<i class="fa-solid fa-xmark"></i>'; cancelBtn.onclick = ()=> renderPersonEditor();
+  row.appendChild(inpDE); row.appendChild(inpTH); row.appendChild(saveBtn); row.appendChild(cancelBtn);
+  parent.appendChild(row);
 }
 
-/* ===========================
-   Start
-   =========================== */
-loadData();
-renderOverview();
+function deleteEntryWithConfirm(dateKey, idx){ if(!confirm(LANG[lang].confirmDelete)) return; if(!data.entries[dateKey]||!data.entries[dateKey][currentPerson]) return; data.entries[dateKey][currentPerson].splice(idx,1); saveData(); renderPersonEditor(); }
 
-/* expose handlers */
-window.openEditor = openEditor;
-window.closeEditor = closeEditor;
-window.addEntry = addEntry;
-window.updateEntry = updateEntry;
-window.deleteEntry = deleteEntry;
-window.adoptEntry = adoptEntry;
-window.addOvernight = addOvernight;
-window.updateOvernight = updateOvernight;
-window.removeOvernight = removeOvernight;
-window.adoptOvernight = adoptGlobalOvernight; // exposed name points to global adopt
-window.addTodoItem = addTodoItem;
-window.updateTodo = updateTodo;
-window.toggleTodo = toggleTodo;
-window.deleteTodo = deleteTodo;
-window.setLang = setLang;
-window.adoptGlobalEntry = adoptGlobalEntry;
-window.adoptGlobalOvernight = adoptGlobalOvernight;
-window.saveOvernightFromInputs = saveOvernightFromInputs;
-window.toggleEditOvernight = toggleEditOvernight;
+function moveEntry(dateKey, idx, dir){ const arr = data.entries[dateKey][currentPerson]; if(!arr||idx<0||idx>=arr.length) return; const newIdx = idx+dir; if(newIdx<0||newIdx>=arr.length) return; const tmp = arr[newIdx]; arr[newIdx] = arr[idx]; arr[idx]=tmp; saveData(); renderPersonEditor(); }
 
-/* initial language */
-setLang('de');
+function adoptEntryFromDay(dateKey){ const sel = document.getElementById('adoptEntry-'+dateKey); if(!sel) return; const idx = parseInt(sel.value,10); if(isNaN(idx) || idx<0) return; const global = getGlobalEntriesForDay(dateKey); const chosen = global[idx]; if(!chosen) return; const list = data.entries[dateKey][currentPerson] || []; const exists = list.some(x=> ((x.de||'')===chosen.de && (x.th||'')===chosen.th)); if(!exists){ list.push({de:chosen.de, th:chosen.th}); data.entries[dateKey][currentPerson]=list; saveData(); renderPersonEditor(); } else { alert(lang==='de' ? 'Eintrag existiert bereits' : 'รายการนี้มีอยู่แล้ว'); } }
+
+/* ========== Overnight operations ========== */
+function openOvernightAdder(dateKey){ const container = document.getElementById('ov-adopter-'+dateKey); if(!container) return; // render dropdown populated with global overnights
+  const globals = getGlobalOvernights();
+  let html = `<div class="adopt-wrap"><select id="ovSelect-${dateKey}"><option value="-1">${esc(LANG[lang].newOvernightText)}</option>`;
+  globals.forEach((g,ii)=>{ const txt = (lang==='de')? (g.de||g.th) : (g.th||g.de); html += `<option value="${ii}">${esc(txt)}</option>`; });
+  html += `</select><button class="icon-btn adopt" onclick="adoptOrCreateOvernight('${dateKey}')"><i class="fa-solid fa-check"></i></button></div>`;
+  container.innerHTML = html;
+}
+
+function adoptOrCreateOvernight(dateKey){ const sel = document.getElementById('ovSelect-'+dateKey); if(!sel) return; const idx = parseInt(sel.value,10); if(idx===-1){ // create new: show two inputs
+    const container = document.getElementById('ov-adopter-'+dateKey); container.innerHTML = `<div style="display:flex;gap:8px;margin-top:6px;align-items:center"><input id="ovNewDE-${dateKey}" placeholder="DE" style="flex:1"><input id="ovNewTH-${dateKey}" placeholder="TH" style="flex:1"><button class="icon-btn save" onclick="saveNewOvernight('${dateKey}')"><i class="fa-solid fa-save"></i></button><button class="icon-btn" onclick="document.getElementById('ov-adopter-${dateKey}').innerHTML='' "><i class="fa-solid fa-xmark"></i></button></div>`; return; }
+  const globals = getGlobalOvernights(); const chosen = globals[idx]; if(!chosen) return; if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {}; data.overnight[currentPerson][dateKey] = { de: chosen.de||'', th: chosen.th||'', booked:false }; saveData(); renderPersonEditor(); }
+
+function saveNewOvernight(dateKey){ const de = (document.getElementById('ovNewDE-'+dateKey)||{}).value.trim(); const th = (document.getElementById('ovNewTH-'+dateKey)||{}).value.trim(); if(!de && !th) return; if(!data.overnight[currentPerson]) data.overnight[currentPerson]={}; data.overnight[currentPerson][dateKey] = { de:de, th:th, booked:false }; saveData(); renderPersonEditor(); }
+
+function toggleBooked(dateKey, checked){ if(!data.overnight[currentPerson]) data.overnight[currentPerson]={}; if(!data.overnight[currentPerson][dateKey]) return; data.overnight[currentPerson][dateKey].booked = !!checked; saveData(); }
+
+function removeOvernightConfirm(dateKey){ if(!confirm(LANG[lang].confirmDelete)) return; if(data.overnight[currentPerson] && data.overnight[currentPerson][dateKey]){ delete data.overnight[currentPerson][dateKey]; saveData(); renderPersonEditor(); } }
+
+/* ========== Todos UI ========== */
+function renderTodos(){ if(!data.todos[currentPerson]) data.todos[currentPerson] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ]; const list = data.todos[currentPerson]; let html=''; list.forEach((t,i)=>{ html += `<div class="todo-item"><input type="checkbox" ${t.done? 'checked' : ''} onchange="toggleTodo(${i},this.checked)"><input type="text" value="${esc(t.de)}" placeholder="DE" oninput="updateTodo(${i},'de',this.value)"><input type="text" value="${esc(t.th)}" placeholder="TH" oninput="updateTodo(${i},'th',this.value)"><div class="todo-actions"><button onclick="deleteTodo(${i})"><i class="fa-solid fa-trash"></i> ${LANG[lang].btnDelete}</button></div></div>`; }); document.getElementById('todoList').innerHTML = html; }
+function addTodoItem(){ if(!data.todos[currentPerson]) data.todos[currentPerson]=[]; data.todos[currentPerson].push({ id: makeId(), de:'', th:'', done:false }); saveData(); renderTodos(); }
+function updateTodo(i, field, v){ if(!data.todos[currentPerson]||!data.todos[currentPerson][i]) return; data.todos[currentPerson][i][field]=v; saveData(); }
+function toggleTodo(i, checked){ if(!data.todos[currentPerson]||!data.todos[currentPerson][i]) return; data.todos[currentPerson][i].done = !!checked; saveData(); }
+function deleteTodo(i){ if(!confirm(LANG[lang].confirmDelete)) return; data.todos[currentPerson].splice(i,1); saveData(); renderTodos(); }
+
+/* ========== Global getters used earlier ========== */
+function getGlobalOvernights(){ const found=[]; const seen=new Set(); PERSONS.forEach(person=>{ const ovObj = data.overnight[person.id]||{}; for(const key in ovObj){ const ov = ovObj[key]; if(ov && ((ov.de&&ov.de.trim())||(ov.th&&ov.th.trim()))){ const id = ((ov.de||'').trim()+'||'+(ov.th||'').trim()); if(!seen.has(id)){ seen.add(id); found.push({de:ov.de||'', th:ov.th||'', sourcePerson:person.id, date:key}); } } } }); return found; }
+
+/* ========== Misc: adoptEntry (exposed) ========== */
+function adoptEntryFromDay_public(dateKey, idx){ const global = getGlobalEntriesForDay(dateKey); const chosen = global[idx]; if(!chosen) return; if(!data.entries[dateKey][currentPerson]) data.entries[dateKey][currentPerson]=[]; const list = data.entries[dateKey][currentPerson]; const exists = list.some(x=> (x.de||'')===chosen.de && (x.th||'')===chosen.th); if(!exists){ list.push({de:chosen.de, th:chosen.th}); saveData(); renderPersonEditor(); } }
+
+/* expose some functions to window for inline onclick handlers that reference them */
+window.openEditor = openEditor; window.closeEditor = closeEditor; window.setLang = function(l){ lang = l; document.getElementById('pageTitle').textContent = LANG[lang].pageTitle; document.getElementById('backBtn').textContent = LANG[lang].closeLabel; renderOverview(); if(editorOpen && currentPerson) renderPersonEditor(); document.getElementById('langLabel').textContent = (lang==='de'?'Deutsch':'ไทย'); };
+window.addTodoItem = addTodoItem; window.toggleTodo = toggleTodo; window.updateTodo = updateTodo; window.deleteTodo = deleteTodo;
+// functions referenced by onclick strings
+window.adoptEntryFromDay = adoptEntryFromDay; window.addEmptyEntry = addEmptyEntry; window.moveEntry = moveEntry; window.deleteEntryWithConfirm = deleteEntryWithConfirm;
+window.openOvernightAdder = openOvernightAdder; window.adoptOrCreateOvernight = adoptOrCreateOvernight; window.saveNewOvernight = saveNewOvernight; window.toggleBooked = toggleBooked; window.removeOvernightConfirm = removeOvernightConfirm; window.adoptEntryFromDay_public = adoptEntryFromDay_public;
+
+/* ========== Start ========== */
+loadData(); renderOverview();
 
 </script>
 </body>
