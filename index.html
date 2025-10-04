@@ -22,8 +22,8 @@ body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color
   color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:100;
 }
 .header .title{font-size:18px;font-weight:700;margin:0}
-.header .langBtns{display:flex;gap:8px}
-.langBtn{border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700}
+.langBtns{display:flex;gap:8px}
+button.langBtn{border:0;padding:8px 12px;border-radius:8px;background:var(--accent2);color:#fff;cursor:pointer;font-weight:700}
 
 /* Layout */
 .container{max-width:1200px;margin:18px auto;padding:12px}
@@ -140,7 +140,7 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
     </div>
   </div>
 
-  <!-- Editor (Personenseite) -->
+  <!-- Editor (Personseite) -->
   <div id="editorCard" class="card" style="display:none;margin-top:14px;">
     <div class="editorHeader">
       <div class="personBadge">
@@ -231,14 +231,8 @@ const LANGTEXT = {
     newEntryText: "กิจกรรมใหม่",
     newLocationText: "ที่ตั้งใหม่",
     confirmDelete: "ต้องการลบจริงหรือไม่?",
-    dayNames: ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"],
-    placeDefaults: [
-      {de:'Bangkok', th:'กรุงเทพมหานคร'},
-      {de:'Sa Kaeo', th:'สระแก้ว'},
-      {de:'Koh Lanta', th:'อเกาะลันตา'},
-      {de:'Phuket', th:'ภูเก็ต'}
-    ],
-    specialActivities: { /* same content as de but kept in LANGTEXT.de used earlier for exact strings */ }
+    dayNames: ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"]
+    // specialActivities handled from de for consistency; placeDefaults same as de but labels used per language
   }
 };
 
@@ -252,7 +246,7 @@ const PERSONS = [
   {id:'Benja', name:'Benja', class:'personColBenja'},
   {id:'Holger', name:'Holger', class:'personColHolger'}
 ];
-const STORAGE_KEY = 'trip2026_complete_v1';
+const STORAGE_KEY = 'trip2026_complete_vfinal';
 const SPECIAL_OVERDATE = '2026-02-16'; // special overnight only on this date
 
 /* data model:
@@ -282,7 +276,7 @@ function createEmptyData(){
     PERSONS.forEach(p => d.entries[k][p.id] = []);
   }
   PERSONS.forEach(p => { d.overnight[p.id] = {}; d.locations[p.id] = {}; d.todos[p.id] = [ { id: makeId(), de: LANGTEXT.de.defaultTodo, th: LANGTEXT.th ? LANGTEXT.th.defaultTodo : LANGTEXT.de.defaultTodo, done:false } ]; });
-  // no pools yet; preset applied next
+  // prefill nothing else; preset merged afterwards
   return d;
 }
 
@@ -301,14 +295,13 @@ function mergePresetInto(d){
       });
     });
   }
-  // special overnight default for Holger on 2026-02-16 as requested earlier (keeps parity)
+  // special overnight default for Holger on 2026-02-16
   if(d.overnight && d.overnight['Holger']){
-    d.overnight['Holger'][SPECIAL_OVERDATE] = { de: LANGTEXT.de.overnight16, th: LANGTEXT.th ? LANGTEXT.th.overnight16 || LANGTEXT.de.overnight16 : LANGTEXT.de.overnight16, booked:false };
-    // add to pool overnight for that date (but rule says only available as special on that date)
+    d.overnight['Holger'][SPECIAL_OVERDATE] = { de: "Flugzeug", th: "เครื่องบิน", booked:false };
     if(!d.pools.overnight[SPECIAL_OVERDATE]) d.pools.overnight[SPECIAL_OVERDATE] = [];
-    const k = (LANGTEXT.de.overnight16||'').trim() + '||' + (LANGTEXT.th?LANGTEXT.th.overnight16 || LANGTEXT.de.overnight16:LANGTEXT.de.overnight16).trim();
+    const k = "Flugzeug||เครื่องบิน";
     if(!d.pools.overnight[SPECIAL_OVERDATE].some(x => ((x.de||'')+'||'+(x.th||'')).trim() === k)) {
-      d.pools.overnight[SPECIAL_OVERDATE].push({de: LANGTEXT.de.overnight16, th: LANGTEXT.th ? LANGTEXT.th.overnight16 || LANGTEXT.de.overnight16 : LANGTEXT.de.overnight16});
+      d.pools.overnight[SPECIAL_OVERDATE].push({de:"Flugzeug", th:"เครื่องบิน"});
     }
   }
 }
@@ -369,7 +362,7 @@ function addToPool(category, dateKey, item){
 /* Retrieve deduplicated activity options for date (preset + pool + any person's entries), returns array of {de,th,source} */
 function getActivityOptions(dateKey){
   const opts = []; const seen = new Set();
-  // preset (LANGTEXT.de.specialActivities)
+  // preset
   const preset = LANGTEXT.de.specialActivities[dateKey] || [];
   preset.forEach(it=>{
     const k = ((it.de||'').trim()+'||'+(it.th||'').trim());
@@ -396,7 +389,7 @@ function getActivityOptions(dateKey){
 /* Overnight options: exclude special "Flugzeug" on other dates */
 function getOvernightOptions(dateKey){
   const opts = []; const seen = new Set();
-  // pool
+  // pool for date
   if(data.pools && data.pools.overnight && data.pools.overnight[dateKey]){
     data.pools.overnight[dateKey].forEach(it=>{
       const k = ((it.de||'').trim()+'||'+(it.th||'').trim());
@@ -417,8 +410,8 @@ function getOvernightOptions(dateKey){
 /* Place options: include defaults + pool + locations across persons */
 function getPlaceOptions(dateKey){
   const opts = []; const seen = new Set();
-  // defaults
-  const defaults = LANGTEXT.de.placeDefaults || LANGTEXT[lang].placeDefaults;
+  // defaults from LANGTEXT.de.placeDefaults
+  const defaults = LANGTEXT.de.placeDefaults || [];
   defaults.forEach(d=>{
     const k = ((d.de||'').trim()+'||'+(d.th||'').trim());
     if(!seen.has(k)){ seen.add(k); opts.push({de:d.de, th:d.th, source:'default'}); }
@@ -484,13 +477,12 @@ function renderOverview(){
       if(loc && ((loc.de && loc.de.trim()) || (loc.th && loc.th.trim()))) combined.push({...loc, _type:'location'});
       entries.forEach(e=> combined.push({...e, _type:'entry'}));
       if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.booked)) combined.push({...ov, _type:'overnight'});
-      // stable ordering: location first, then activities (sorted by any time parse if needed), then overnight last
+      // stable ordering: location first, then activities, then overnight last
       let cellHtml = '';
       combined.forEach((e, idx)=>{
         const text = (lang==='de') ? (e.de||'') : (e.th||e.de||'');
         let baseCls = (e._type==='overnight') ? 'entry overnight' : (e._type==='location' ? 'location-box' : 'entry');
         const parity = (idx % 2 === 0) ? 'odd' : 'even';
-        // For location, render special box
         if(e._type==='location'){
           cellHtml += `<div class="location-box">${esc(text)}</div>`;
         } else {
@@ -566,10 +558,10 @@ function renderPersonEditor(){
     html += `<div class="location-box">`;
     const loc = (data.locations[currentPerson] && data.locations[currentPerson][key]) ? data.locations[currentPerson][key] : null;
     const shownLoc = loc ? (lang==='de' ? loc.de : loc.th) : '';
-    html += `<div style="flex:1;text-align:center;font-weight:700">${esc(shownLoc || (lang==='de' ? LANGTEXT.de.newLocation : LANGTEXT.th.newLocation))}</div>`;
+    html += `<div style="flex:1;text-align:center;font-weight:700">${esc(shownLoc || (lang==='de' ? LANGTEXT.de.newLocationText : LANGTEXT.th.newLocationText))}</div>`;
     html += `</div>`;
     // Adopt / New place controls
-    html += `<div class="adopt-wrap"><select id="placeSelect-${key}"><option value="-1">-- ${esc(lang==='de' ? LANGTEXT.de.newLocation : LANGTEXT.th.newLocation)} --</option>`;
+    html += `<div class="adopt-wrap"><select id="placeSelect-${key}"><option value="-1">-- ${esc(lang==='de' ? LANGTEXT.de.newLocationText : LANGTEXT.th.newLocationText)} --</option>`;
     const placeOpts = getPlaceOptions(key);
     placeOpts.forEach((p,pi)=>{ const txt = (lang==='de'?p.de:p.th); html += `<option value="${pi}">${esc(txt)}${p.source?' ('+p.source+')':''}</option>`; });
     html += `</select><button class="icon-btn adopt" onclick="adoptPlace('${key}')"><i class="fa-solid fa-hand-point-up"></i></button>`;
@@ -652,7 +644,7 @@ function renderPersonEditor(){
 
 /* ========== Entry operations ========== */
 function deleteEntryConfirm(dateKey, idx){
-  if(!confirm(LANGTEXT[lang].confirmDelete)) return;
+  if(!confirm((lang==='de'?LANGTEXT.de.confirmDelete:LANGTEXT.th.confirmDelete))) return;
   if(!data.entries[dateKey] || !data.entries[dateKey][currentPerson]) return;
   data.entries[dateKey][currentPerson].splice(idx,1);
   saveData();
@@ -712,10 +704,9 @@ function openOvernightPicker(dateKey){
   let html = `<div class="adopt-wrap"><select id="ovSelect-${dateKey}"><option value="-1">${esc(lang==='de'?LANGTEXT.de.newOvernightText:LANGTEXT.th.newOvernightText)}</option>`;
   // if special date -> include special option but only that one, as requested
   if(dateKey === SPECIAL_OVERDATE){
-    html += `<option value="__special__">${esc(lang==='de'?LANGTEXT.de.overnight16: (LANGTEXT.th && LANGTEXT.th.overnight16?LANGTEXT.th.overnight16:LANGTEXT.de.overnight16))}</option>`;
+    html += `<option value="__special__">${esc(lang==='de'? 'Flugzeug' : 'เครื่องบิน')}</option>`;
   }
   globals.forEach((g,ii)=>{
-    // ensure "Flugzeug" appears only on special date: we already excluded others by not populating pool with it for other dates
     const txt = (lang==='de') ? (g.de||g.th) : (g.th||g.de);
     html += `<option value="${ii}">${esc(txt)}</option>`;
   });
@@ -730,9 +721,8 @@ function ovAdoptOrCreate(dateKey){
   if(val === '__special__'){
     // set special overnight
     if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
-    data.overnight[currentPerson][dateKey] = { de: LANGTEXT.de.overnight16, th: LANGTEXT.th ? (LANGTEXT.th.overnight16 || LANGTEXT.de.overnight16) : LANGTEXT.de.overnight16, booked:false };
-    // also add to pool for that date if not present (we keep special present only for that date)
-    addToPool('overnight', dateKey, {de: LANGTEXT.de.overnight16, th: LANGTEXT.th ? (LANGTEXT.th.overnight16 || LANGTEXT.de.overnight16) : LANGTEXT.de.overnight16});
+    data.overnight[currentPerson][dateKey] = { de: "Flugzeug", th: "เครื่องบิน", booked:false };
+    addToPool('overnight', dateKey, {de:"Flugzeug", th:"เครื่องบิน"});
     saveData(); renderPersonEditor(); return;
   }
   const idx = parseInt(val,10);
@@ -777,7 +767,7 @@ function toggleOvernightBooked(dateKey, checked){
 }
 
 function removeOvernightConfirm(dateKey){
-  if(!confirm(LANGTEXT[lang].confirmDelete)) return;
+  if(!confirm((lang==='de'?LANGTEXT.de.confirmDelete:LANGTEXT.th.confirmDelete))) return;
   if(data.overnight[currentPerson] && data.overnight[currentPerson][dateKey]){
     delete data.overnight[currentPerson][dateKey];
     saveData(); renderPersonEditor();
@@ -823,7 +813,7 @@ function saveNewPlace(dateKey){
 }
 
 function deleteLocationConfirm(dateKey){
-  if(!confirm(LANGTEXT[lang].confirmDelete)) return;
+  if(!confirm((lang==='de'?LANGTEXT.de.confirmDelete:LANGTEXT.th.confirmDelete))) return;
   if(data.locations[currentPerson] && data.locations[currentPerson][dateKey]){
     delete data.locations[currentPerson][dateKey];
     saveData(); renderPersonEditor();
@@ -852,7 +842,7 @@ function renderTodos(){
   wrap.innerHTML = html;
 }
 
-function openNewTodoArea(){ document.getElementById('newTodo-de').focus && document.getElementById('newTodo-de').focus(); }
+function openNewTodoArea(){ const el = document.getElementById('newTodo-de'); if(el) el.focus(); }
 
 function saveNewTodo(){
   const de = (document.getElementById('newTodo-de')||{}).value || '';
@@ -876,24 +866,22 @@ function updateTodo(i, fieldLang, v){
   saveData();
 }
 function deleteTodo(i){
-  if(!confirm(LANGTEXT[lang].confirmDelete)) return;
+  if(!confirm((lang==='de'?LANGTEXT.de.confirmDelete:LANGTEXT.th.confirmDelete))) return;
   data.todos[currentPerson].splice(i,1);
   saveData();
   renderTodos();
 }
 
-/* ========== Overnight types list (side) - manage types (kept but not interfering) ========== */
+/* ========== Overnight types list (side) - manage types display ========== */
 function renderOvernightTypesList(){
   const wrap = document.getElementById('overnightTypesList');
-  // Show the pool aggregated across all dates (unique by label in current language)
+  // Show aggregated unique overnight labels (in current language)
   const seen = new Set();
   let html = '';
-  // gather all overnight options from pools across dates
   const flat = [];
   if(data.pools && data.pools.overnight){
     for(const d in data.pools.overnight) data.pools.overnight[d].forEach(o => flat.push(o));
   }
-  // also include any overnight set by persons
   PERSONS.forEach(p=>{
     for(const d in data.overnight[p.id]){
       const o = data.overnight[p.id][d];
@@ -915,7 +903,6 @@ function setLang(l){
   document.getElementById('pageTitle').textContent = LANGTEXT[lang].pageTitle || 'Thailand 2026';
   document.getElementById('langLabel').textContent = (lang==='de' ? 'Deutsch' : 'ไทย');
   document.getElementById('overviewHint').textContent = LANGTEXT[lang].overviewHint || '';
-  // update any open editor labels
   if(currentPerson){
     document.getElementById('editorName').textContent = LANGTEXT[lang].persons[currentPerson] || currentPerson;
   }
@@ -945,8 +932,6 @@ window.removeOvernightConfirm = removeOvernightConfirm;
 window.adoptPlace = adoptPlace;
 window.saveNewPlace = saveNewPlace;
 window.deleteLocationConfirm = deleteLocationConfirm;
-window.addTodoItem = addTodoItem;
-window.renderTodos = renderTodos;
 window.addToPool = addToPool;
 window.getActivityOptions = getActivityOptions;
 window.getOvernightOptions = getOvernightOptions;
