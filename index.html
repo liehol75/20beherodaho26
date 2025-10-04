@@ -11,6 +11,7 @@
   --txt:#222; --gray1:#fbfbfb; --gray2:#f0f0f0;
   --overnight-bg:#e8f5ff; --overnight-accent:#2b95ff;
   --overnight-booked:#cbefff; --overnight-booked-accent:#1f7fd1;
+  --person-btn-bg:#f0f8ff; --person-btn-border:rgba(0,0,0,0.04);
 }
 *{box-sizing:border-box}
 body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color:var(--txt);}
@@ -18,7 +19,7 @@ body{font-family:"Segoe UI",Arial,sans-serif;margin:0;background:var(--bg);color
 /* Header (sticky) */
 .header{
   background:linear-gradient(90deg,var(--accent),#00629a);
-  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:100;
+  color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:200;
 }
 .header .title{font-size:18px;font-weight:700;margin:0}
 .langBtns{display:flex;gap:8px}
@@ -56,12 +57,21 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
 .weekendDate{background:#ffd699;font-weight:700;color:#222}
 
 /* Editor */
-.editorHeader{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;position:sticky;top:58px;background:transparent;padding-top:6px;z-index:95}
+.editorHeader{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;position:sticky;top:58px;background:transparent;padding-top:6px;z-index:195}
 .personBadge{display:flex;align-items:center;gap:10px}
 .badgeCircle{width:48px;height:48px;border-radius:50%;display:inline-block}
 .personName{font-weight:900;font-size:22px}
 .editorGrid{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:980px){ .editorGrid{grid-template-columns:1fr 360px} }
+
+/* Sticky person controls (buttons) */
+.personControlsWrapper{position:sticky;top:58px;z-index:190;background:transparent;padding:6px 0}
+.personControls{display:flex;gap:12px;align-items:center;justify-content:space-between;max-width:100%;padding:6px;border-radius:10px}
+.personControls .leftGroup, .personControls .centerGroup, .personControls .rightGroup{display:flex;gap:8px;align-items:center}
+.personBtn{
+  min-width:120px; padding:8px 14px;border-radius:10px;border:1px solid var(--person-btn-border);background:var(--person-btn-bg);
+  display:inline-flex;justify-content:center;align-items:center;gap:8px;cursor:pointer;font-weight:700;
+}
 
 /* day box */
 .entryBox{background:#fff;padding:12px;border-radius:8px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.03)}
@@ -101,6 +111,7 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
 /* helpers */
 .kv{font-size:13px;color:#666}
 .note{font-size:13px;color:#555;margin-top:8px}
+.placeBox{background:linear-gradient(90deg,#fff8e6,#fff0d1);padding:8px;border-radius:8px;font-weight:700;text-align:center}
 </style>
 </head>
 <body>
@@ -132,34 +143,43 @@ thead th{position:sticky;top:0;background:#fafafa;z-index:5}
       <p class="note" id="overviewHint">Klicke auf einen Namen, um die persönliche Seite (inline Editor) zu öffnen.</p>
     </div>
 
-    <!-- To-Do unter der Übersicht -->
-    <div id="todoOverview" class="todoContainer" style="display:none;">
-      <h4 id="todoOverviewTitle">To-Do</h4>
-      <div id="overviewTodoList"></div>
-    </div>
-  </div>
-
-  <!-- Editor (Personenseiten) -->
-  <div id="editorCard" class="card" style="display:none;margin-top:14px;">
-    <div class="editorHeader">
-      <div class="personBadge">
-        <div class="badgeCircle" id="badgeColor"></div>
-        <div><div class="personName" id="editorName">Person</div></div>
+    <!-- Editor (Personenseiten) -->
+    <div id="editorCard" class="card" style="display:none;margin-top:14px;">
+      <div class="editorHeader">
+        <div class="personBadge">
+          <div class="badgeCircle" id="badgeColor"></div>
+          <div><div class="personName" id="editorName">Person</div></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="smallBtn" id="backBtn" onclick="closeEditor()"><i class="fa-solid fa-arrow-left"></i> Übersicht</button>
+        </div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="smallBtn" id="backBtn" onclick="closeEditor()"><i class="fa-solid fa-arrow-left"></i> Übersicht</button>
+
+      <!-- Sticky person controls: Kalender | To-Do-Liste | Übersicht -->
+      <div class="personControlsWrapper" id="personControlsWrapper" style="display:none;">
+        <div class="personControls">
+          <div class="leftGroup">
+            <button class="personBtn" id="btnCalendar" onclick="switchPersonView('calendar')">Kalender</button>
+          </div>
+          <div class="centerGroup" style="flex:1;justify-content:center">
+            <button class="personBtn" id="btnTodos" onclick="switchPersonView('todos')">To-Do-Liste</button>
+          </div>
+          <div class="rightGroup">
+            <button class="personBtn" id="btnOverview" onclick="closeEditor()">Übersicht</button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="editorGrid">
-      <div id="personCalendarList"></div>
+      <div class="editorGrid">
+        <div id="personCalendarList"></div>
 
-      <!-- Right column: To-Do for person (moved into editor right column on wide screens; under calendar on narrow screens) -->
-      <div id="personTodos" class="todoContainer" style="display:none;">
-        <h4 id="todoTitle">To-Do</h4>
-        <div id="todoList"></div>
-        <div style="margin-top:8px">
-          <button class="smallBtn" onclick="addTodoItem()"><i class="fa-solid fa-plus"></i> <span id="newTaskLabel">Neue Aufgabe</span></button>
+        <!-- Right column: To-Do for person -->
+        <div id="personTodos" class="todoContainer" style="display:none;">
+          <h4 id="todoTitle">To-Do</h4>
+          <div id="todoList"></div>
+          <div style="margin-top:8px">
+            <button class="smallBtn" onclick="addTodoItem()"><i class="fa-solid fa-plus"></i> <span id="newTaskLabel">Neue Aufgabe</span></button>
+          </div>
         </div>
       </div>
     </div>
@@ -180,7 +200,7 @@ const LANG = {
     overviewHint: "Klicke auf einen Namen, um die persönliche Seite (inline Editor) zu öffnen.",
     addEntryLabel: "+ Eintrag",
     btnDelete: "Löschen",
-    defaultTodo: "Gültiger Reisepass (mind. bis 09/2016)",
+    defaultTodo: "Gültiger Reisepass (mind. bis 09/2026)",
     persons: {Rouven:"Rouven",Daniel:"Daniel",Henrik:"Henrik",Benja:"Benja",Holger:"Holger"},
     bookedLabel: "Gebucht",
     addOvernight: "+ Übernachtung",
@@ -189,27 +209,46 @@ const LANG = {
     newOvernightText: "Neue Übernachtung",
     newEntryText: "Neuer Eintrag",
     confirmDelete: "Möchten Sie wirklich löschen?",
-    dayNames: ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"]
+    dayNames: ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],
+    overviewNameHint: "Klicke auf einen Namen, um die persönliche Seite (inline Editor) zu öffnen.",
+    entryNewPlace: "Neuer Ort",
+    overnightNewOption: "Neue Übernachtung",
+    activityNewOption: "Neuer Eintrag",
+    placeDefaults: [
+      {de:"Bangkok", th:"กรุงเทพมหานคร"},
+      {de:"Sa Kaeo", th:"สระแก้ว"},
+      {de:"Koh Lanta", th:"เกาะลันตา"},
+      {de:"Phuket", th:"ภูเก็ต"}
+    ]
   },
   th: {
     pageTitle: "ประเทศไทย 2026",
     closeLabel: "ภาพรวม",
     overnightTitle: "ที่พัก",
-    todoTitle: "รายการที่ต้องทำ",
+    todoTitle: "รายการสิ่งที่ต้องทำ",
     newTaskLabel: "งานใหม่",
-    overviewHint: "คลิกที่ชื่อเพื่อเปิดหน้าเฉพาะบุคคล",
+    overviewHint: "คลิกที่ชื่อเพื่อเปิดหน้าส่วนตัว (ตัวแก้ไขแบบอินไลน์)",
     addEntryLabel: "+ รายการ",
     btnDelete: "ลบ",
-    defaultTodo: "หนังสือเดินทางที่ถูกต้อง (อย่างน้อยถึง 09/2016)",
+    defaultTodo: "หนังสือเดินทางที่ถูกต้อง (อย่างน้อยถึง 09/2026)",
     persons: {Rouven:"รูเวน",Daniel:"แดเนียล",Henrik:"เฮนริก",Benja:"เบนจา",Holger:"โฮลเกอร์"},
     bookedLabel: "จองแล้ว",
     addOvernight: "+ เพิ่มที่พัก",
     removeOvernight: "ลบที่พัก",
     adoptLabel: "นำมาใช้",
-    newOvernightText: "ที่พักใหม่",
-    newEntryText: "รายการใหม่",
+    newOvernightText: "ที่พักค้างคืนใหม่",
+    newEntryText: "กิจกรรมใหม่",
     confirmDelete: "ต้องการลบจริงหรือไม่?",
-    dayNames: ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"]
+    dayNames: ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"],
+    entryNewPlace: "ที่ตั้งใหม่",
+    overnightNewOption: "ที่พักค้างคืนใหม่",
+    activityNewOption: "กิจกรรมใหม่",
+    placeDefaults: [
+      {de:"Bangkok", th:"กรุงเทพมหานคร"},
+      {de:"Sa Kaeo", th:"สระแก้ว"},
+      {de:"Koh Lanta", th:"เกาะลันตา"},
+      {de:"Phuket", th:"ภูเก็ต"}
+    ]
   }
 };
 
@@ -228,22 +267,34 @@ const PERSONS = [
   {id:'Holger', name:'Holger', class:'personColHolger'}
 ];
 
-/* preset (same as original) */
+/* PRESET (keeps dropdown suggestions, NOT merged into personal entries) */
 const PRESET = {
-  "2026-02-16": { all: [ { de: "Abflug Frankfurt/Main Flughafen 20.55 Uhr", th: "ออกเดินทางจากสนามบินแฟรังก์เฟิร์ต 20:55 น." } ] },
-  "2026-02-17": { all: [ { de: "Ankunft Bangkok-Suvarnabhumi 13.45 Uhr", th: "ถึงกรุงเทพฯ สนามบินสุวรรณภูมิ 13:45 น." }, { de: "River Cruise", th: "ล่องเรือ" } ] },
-  "2026-02-19": { Henrik: [ { de: "Familienfest Sa Kaeo", th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ], Benja: [ { de: "Familienfest Sa Kaeo", th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ], Holger: [ { de: "Familienfest Sa Kaeo", th: "งานเลี้ยงครอบครัว จังหวัดสระแก้ว" } ] },
-  "2026-02-24": { Henrik: [ { de: "Upasampada-Feier Sa Kaeo", th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ], Benja: [ { de: "Upasampada-Feier Sa Kaeo", th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ], Holger: [ { de: "Upasampada-Feier Sa Kaeo", th: "งานฉลองอุปสมบท จังหวัดสระแก้ว" } ] },
-  "2026-02-25": { Henrik: [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ], Benja: [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ], Holger: [ { de: "Upasampada-Zeremonie Sa Kaeo 08.00 Uhr", th: "พิธีอุปสมบท จังหวัดสระแก้ว 08:00 น." } ] },
-  "2026-02-26": { all: [ { de: "Einweihungsfeier Sa Kaeo", th: "พิธีเปิดบ้าน จังหวัดสระแก้ว" } ] },
-  "2026-03-11": { all: [ { de: "Abflug Bangkok-Suvarnabhumi 12.40 Uhr", th: "ออกเดินทางจากสนามบินสุวรรณภูมิ 12:40 น." }, { de: "Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th: "ถึงสนามบินแฟรังก์เฟิร์ต 19:05 น." } ] },
-  "2026-03-12": { all: [ { de: "Osnabrück", th: "ออสนาบรุค" } ] }
+  "2026-02-16": { all: [ { de: "Abflug Frankfurt/Main Flughafen 20.55 Uhr", th: "ออกเดินทางจากสนามบินแฟรงก์เฟิร์ต/หลัก เวลา 20:55 น." } ] },
+  "2026-02-17": { all: [ { de: "Ankunft Bangkok-Suvarnabhumi 13.45 Uhr", th: "ถึงกรุงเทพฯ-สุวรรณภูมิ เวลา 13:45 น." }, { de: "Chao Phraya Bootstour", th: "ทัวร์เรือบนแม่น้ำเจ้าพระยา" } ] },
+  "2026-02-19": { all: [ { de: "Familienfeier", th: "การเฉลิมฉลองในครอบครัว" } ] },
+  "2026-02-24": { all: [ { de: "Upasampada-Feier / Wat Don Din Daeng", th: "พิธีอุปสมบท / วัดดอนดินแดง" } ] },
+  "2026-02-25": { all: [ { de: "Upasampada-Zeremonie", th: "พิธีอุปสมบท / วัดดอนดินแดง" } ] },
+  "2026-02-26": { all: [ { de: "Einweihungsfeier", th: "งานปาร์ตี้ขึ้นบ้านใหม่" } ] },
+  "2026-03-11": { all: [ { de: "Abflug Bangkok-Suvarnabhumi 12.40 Uhr", th: "เที่ยวบินกลับ กรุงเทพฯ-สุวรรณภูมิ เวลา 12:40 น." }, { de: "Ankunft Frankfurt/Main Flughafen 19.05 Uhr", th: "เดินทางถึงสนามบินแฟรังก์เฟิร์ต/ไมน์ เวลา 19.05 น." } ] }
 };
+
+/* special overnight 16.02 */
+const SPECIAL_OVERNIGHT_DATE = "2026-02-16";
+const SPECIAL_OVERNIGHT = { de: "Flugzeug", th: "เครื่องบิน" };
 
 /* storage key */
 const STORAGE_KEY = 'trip2026_v_complete_vfinal';
 
-/* data structure */
+/* data structure
+ data = {
+   entries: { 'YYYY-MM-DD': { PersonId: [ {de:'', th:''}, ... ] } },
+   overnight: { PersonId: { 'YYYY-MM-DD': {overnightId:null, de:'', th:'', booked:false} } },
+   todos: { PersonId: [ {id, de, th, done} ] },
+   locations: { PersonId: { 'YYYY-MM-DD': {de:'', th:''} } },
+   overnightTypes: [ {id, label_de, label_th} ],
+   activityPool: { 'YYYY-MM-DD': [ {de, th} ] } // optional pool created by users across persons
+ }
+*/
 let data = null;
 
 /* helpers */
@@ -253,7 +304,7 @@ function formatLabel(d){ return pad(d.getDate()) + '.' + pad(d.getMonth()+1) + '
 function daysInRange(s,e){ const s0 = new Date(s.getFullYear(),s.getMonth(),s.getDate()), e0 = new Date(e.getFullYear(),e.getMonth(),e.getDate()); return Math.round((e0 - s0)/86400000) + 1; }
 function dateByOffset(s,offset){ return new Date(s.getFullYear(), s.getMonth(), s.getDate() + offset); }
 function makeId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
-function esc(s){ return String(s||''); }
+function esc(s){ return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 /* time parsing for sorting */
 function parseFirstTime(text){
@@ -274,78 +325,58 @@ function sortItemsByTime(list){
 
 /* ========== create/load/save ========== */
 function createEmptyData(){
-  const d = { entries:{}, overnight:{}, todos:{} };
+  const d = { entries:{}, overnight:{}, todos:{}, locations:{}, overnightTypes:[], activityPool:{} };
   const days = daysInRange(START,END);
   for(let i=0;i<days;i++){
     const dt = dateByOffset(START,i); const k = formatKey(dt);
     d.entries[k] = {};
     PERSONS.forEach(p => d.entries[k][p.id] = []);
   }
-  PERSONS.forEach(p => { d.overnight[p.id] = {}; d.todos[p.id] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ]; });
+  PERSONS.forEach(p => {
+    d.overnight[p.id] = {};
+    d.locations[p.id] = {};
+    d.todos[p.id] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
+  });
+  // default overnight types: keep empty initially - entries are created when user adds
+  // but we'll include an initial type set for convenience (except SPECIAL date option)
+  d.overnightTypes = [
+    // these get used on other days; 16.02 forced to SPECIAL_OVERNIGHT only
+    { id: makeId(), label_de: "Hotel", label_th: "โรงแรม" },
+    { id: makeId(), label_de: "Guesthouse", label_th: "เกสต์เฮาส์" },
+    { id: makeId(), label_de: "Bungalow", label_th: "บ้านพักตากอากาศ" }
+  ];
   return d;
 }
 
-function mergePresetInto(d){
-  for(const dateKey in PRESET){
-    if(!d.entries[dateKey]) continue;
-    const obj = PRESET[dateKey];
-    if(obj.all){
-      obj.all.forEach(item=>{
-        PERSONS.forEach(p=>{
-          const list = d.entries[dateKey][p.id] || [];
-          const exists = list.some(e => (e.de||'')===item.de && (e.th||'')===item.th);
-          if(!exists) list.push({de:item.de, th:item.th});
-          d.entries[dateKey][p.id] = list;
-        });
-      });
-    }
-    PERSONS.forEach(p=>{
-      if(obj[p.id]){
-        obj[p.id].forEach(item=>{
-          const list = d.entries[dateKey][p.id] || [];
-          const exists = list.some(e => (e.de||'')===item.de && (e.th||'')===item.th);
-          if(!exists) list.push({de:item.de, th:item.th});
-          d.entries[dateKey][p.id] = list;
-        });
-      }
-    });
-  }
-  // Holger overnight special
-  const holgerKey = "2026-02-16";
-  if(d.overnight && d.overnight['Holger']){
-    d.overnight['Holger'][holgerKey] = { de: "Flugzeug", th: "เครื่องบิน", booked:false };
-  }
-}
-
+/* load from localStorage */
 function loadData(){
   const raw = localStorage.getItem(STORAGE_KEY);
   if(!raw){
     data = createEmptyData();
-    mergePresetInto(data);
+    // ensure Holger special overnight on 2026-02-16 exists if you want as an example — but per request: all personal entries should be empty
+    // So DO NOT populate per-person entries from PRESET. PRESET is only for dropdown suggestions.
+    // However keep Holger overnight only if present in old storage — but we keep empty to satisfy "all entries empty".
     saveData();
     return;
   }
   try{
     data = JSON.parse(raw);
-    if(!data.entries || !data.overnight || !data.todos){
-      data = createEmptyData();
-      mergePresetInto(data);
-      saveData();
-      return;
+    // validate / ensure shape
+    if(!data.entries || !data.overnight || !data.todos || !data.locations || !data.overnightTypes){
+      data = createEmptyData(); saveData(); return;
     }
-    // ensure date/person keys
+    // ensure keys for range exist
     const days = daysInRange(START,END);
     for(let i=0;i<days;i++){
       const dt = dateByOffset(START,i); const k = formatKey(dt);
       if(!data.entries[k]){ data.entries[k] = {}; PERSONS.forEach(p => data.entries[k][p.id] = []); }
       else { PERSONS.forEach(p => { if(!data.entries[k][p.id]) data.entries[k][p.id] = []; }); }
     }
-    PERSONS.forEach(p => { if(!data.overnight[p.id]) data.overnight[p.id] = {}; if(!Array.isArray(data.todos[p.id])) data.todos[p.id] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ]; });
-    mergePresetInto(data);
+    PERSONS.forEach(p => { if(!data.overnight[p.id]) data.overnight[p.id] = {}; if(!data.locations[p.id]) data.locations[p.id] = {}; if(!Array.isArray(data.todos[p.id])) data.todos[p.id] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ]; });
+    if(!Array.isArray(data.overnightTypes) || data.overnightTypes.length===0) data.overnightTypes = createEmptyData().overnightTypes;
   } catch(e){
     console.error('loadData error',e);
     data = createEmptyData();
-    mergePresetInto(data);
     saveData();
   }
 }
@@ -356,15 +387,41 @@ function saveData(){
   if(currentPerson) renderPersonEditor();
 }
 
-/* ========== helpers: global lists ========== */
-/* unique overnight templates across all persons */
+/* ========== Helper: global pools for dropdowns (activities/overnights/places) ==========
+   - PRESET entries are suggestions (activity suggestions) that appear in dropdowns for adopt.
+   - activityPool: user-added activities (saved via adopt/create) are added to pool so other can adopt.
+   - overnightTypes: data.overnightTypes drives dropdowns (except 16.02 special)
+   - places: we generate default place list from LANG.*.placeDefaults and also include any user-added places via activityPoolPlaces
+*/
+function getGlobalActivitySuggestionsForDay(dateKey){
+  const suggestions = [];
+  const seen = new Set();
+  // PRESET entries for this date
+  if(PRESET[dateKey] && Array.isArray(PRESET[dateKey].all)){
+    PRESET[dateKey].all.forEach(it => {
+      const k = ((it.de||'') + '||' + (it.th||''));
+      if(!seen.has(k)){ seen.add(k); suggestions.push({de: it.de || '', th: it.th || ''}); }
+    });
+  }
+  // PRESET person-specific? (we treat PRESET.*.all as the placement)
+  // activityPool user entries
+  if(data.activityPool && data.activityPool[dateKey]){
+    data.activityPool[dateKey].forEach(it=>{
+      const k = ((it.de||'') + '||' + (it.th||''));
+      if(!seen.has(k)){ seen.add(k); suggestions.push({de: it.de||'', th: it.th||''}); }
+    });
+  }
+  return suggestions;
+}
+
+/* global overnights derived from data.overnight across persons (excluding blank) */
 function getGlobalOvernights(){
   const found = []; const seen = new Set();
   PERSONS.forEach(p=>{
     const ovObj = data.overnight[p.id] || {};
     for(const k in ovObj){
       const ov = ovObj[k];
-      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()))){
+      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.overnightId)){
         const id = ((ov.de||'').trim() + '||' + (ov.th||'').trim());
         if(!seen.has(id)){ seen.add(id); found.push({de:ov.de||'', th:ov.th||'', sourcePerson:p.id, date:k}); }
       }
@@ -373,15 +430,22 @@ function getGlobalOvernights(){
   return found;
 }
 
-/* unique entries for a specific date across all persons */
-function getGlobalEntriesForDay(dateKey){
+/* get available places: defaults + any places present in locations or in activityPool (if used) */
+function getGlobalPlaces(){
+  const base = (lang==='de' ? LANG.de.placeDefaults : LANG.th.placeDefaults);
   const found = []; const seen = new Set();
+  base.forEach(p => {
+    const key = (lang==='de' ? p.de : p.th);
+    if(!seen.has(key)){ seen.add(key); found.push({de:p.de, th:p.th}); }
+  });
+  // gather from data.locations
   PERSONS.forEach(p=>{
-    const list = (data.entries[dateKey] && data.entries[dateKey][p.id]) ? data.entries[dateKey][p.id] : [];
-    list.forEach(it=>{
-      const id = ((it.de||'').trim() + '||' + (it.th||'').trim());
-      if(!seen.has(id)){ seen.add(id); found.push({de:it.de||'', th:it.th||'', sourcePerson:p.id}); }
-    });
+    const locs = data.locations[p.id] || {};
+    for(const k in locs){
+      const l = locs[k];
+      const id = ((l.de||'') + '||' + (l.th||''));
+      if(!seen.has(id)){ seen.add(id); found.push({de:l.de||'', th:l.th||''}); }
+    }
   });
   return found;
 }
@@ -393,9 +457,6 @@ const pageTitleEl = document.getElementById('pageTitle');
 const rangeInfoEl = document.getElementById('rangeInfo');
 const overviewHintEl = document.getElementById('overviewHint');
 const langLabelEl = document.getElementById('langLabel');
-const todoOverviewEl = document.getElementById('todoOverview');
-const overviewTodoListEl = document.getElementById('overviewTodoList');
-const todoOverviewTitleEl = document.getElementById('todoOverviewTitle');
 
 function renderOverview(){
   pageTitleEl.textContent = LANG[lang].pageTitle;
@@ -423,53 +484,52 @@ function renderOverview(){
     const dateClass = isWeekend ? 'sticky-date weekendDate' : 'sticky-date';
     bodyHtml += `<tr><td class="${dateClass}">${esc(dateLabel)}</td>`;
     PERSONS.forEach(p=>{
+      // Personal location (top of cell)
+      const loc = (data.locations[p.id] && data.locations[p.id][key]) ? data.locations[p.id][key] : null;
       const entries = (data.entries[key] && data.entries[key][p.id]) ? data.entries[key][p.id] : [];
       const ov = (data.overnight[p.id] && data.overnight[p.id][key]) ? data.overnight[p.id][key] : null;
-      const combined = entries.map(e => ({...e, _type:'entry'}));
-      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.booked)) combined.push({...ov, _type:'overnight'});
-      const sorted = sortItemsByTime(combined);
+
+      // combine: location (top), then entries sorted, overnight as entry type 'overnight' placed according to time sort if time included
+      // For overview we show: location box (if any) as distinct first element, then activities and overnight entries
+      // activities to display: we only display personal entries (not PRESET) — user wanted all personal entries empty initially; adopt available from PRESET but not automatically shown.
       let cellHtml = '';
-      sorted.forEach((e, idx)=>{
+      if(loc && ((lang==='de' && loc.de) || (lang==='th' && loc.th))){
+        const shownLoc = (lang==='de') ? (loc.de||'') : (loc.th||loc.de||'');
+        cellHtml += `<div class="placeBox" style="margin-bottom:8px">${esc(shownLoc)}</div>`;
+      } else {
+        // empty placeholder not shown
+      }
+
+      // activities
+      entries.forEach((e, idx)=>{
         const text = (lang==='de') ? (e.de||'') : (e.th||e.de||'');
-        const baseCls = (e._type==='overnight') ? 'entry overnight' : 'entry';
-        const parity = (idx % 2 === 0) ? 'odd' : 'even';
-        cellHtml += `<div class="${baseCls} ${parity}"><div class="text">${esc(text)}</div>` +
-                    (e._type==='overnight' && e.booked ? `<div class="meta"><i class="fa-solid fa-check"></i> ${LANG[lang].bookedLabel}</div>` : '') +
-                    `</div>`;
+        if(text && text.trim()){
+          cellHtml += `<div class="entry ${(idx%2===0)?'odd':'even'}"><div class="text">${esc(text)}</div></div>`;
+        }
       });
+
+      // overnight
+      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()) || ov.booked)){
+        const shown = (lang==='de') ? (ov.de||'') : (ov.th||ov.de||'');
+        const baseCls = 'entry overnight';
+        cellHtml += `<div class="${baseCls}"><div class="text">${esc(shown)}</div>` +
+                    (ov.booked ? `<div class="meta"><i class="fa-solid fa-check"></i> ${LANG[lang].bookedLabel}</div>` : '') +
+                    `</div>`;
+      }
+
       bodyHtml += `<td class="${p.class}">${cellHtml}</td>`;
     });
     bodyHtml += '</tr>';
   }
   calendarBody.innerHTML = bodyHtml;
 
-  // overview to-dos: show aggregated todos? user wanted To-Do under calendar — show person-agnostic placeholder; keep hidden unless requested
-  // We'll show a combined view of all todos below if any exist
-  const allTodos = collectAllTodos();
-  if(allTodos.length){
-    todoOverviewEl.style.display = 'block';
-    todoOverviewTitleEl.textContent = LANG[lang].todoTitle;
-    overviewTodoListEl.innerHTML = allTodos.map(t => `<div style="padding:6px;border-bottom:1px solid #eee">${esc(t)}</div>`).join('');
-  } else {
-    todoOverviewEl.style.display = 'none';
-  }
-}
-
-/* collect all todos in current language (for overview) */
-function collectAllTodos(){
-  const out = [];
-  PERSONS.forEach(p=>{
-    const list = data.todos[p.id] || [];
-    list.forEach(t=>{
-      const txt = (lang==='de') ? (t.de||'') : (t.th||'');
-      if(txt && txt.trim()) out.push(`${p.id}: ${txt}`);
-    });
-  });
-  return out;
+  // hide overview todo per requirement
+  // overview should not show todo list — keep it hidden
 }
 
 /* ========== Editor rendering & actions ========== */
 let currentPerson = null;
+let currentPersonView = 'calendar'; // 'calendar' or 'todos'
 
 function openEditor(personId){
   currentPerson = personId;
@@ -477,6 +537,14 @@ function openEditor(personId){
   document.getElementById('editorCard').style.display = 'block';
   document.getElementById('editorName').textContent = LANG[lang].persons[personId] || personId;
   document.getElementById('backBtn').innerHTML = `<i class="fa-solid fa-arrow-left"></i> ${LANG[lang].closeLabel}`;
+  // show person controls
+  document.getElementById('personControlsWrapper').style.display = 'block';
+  // set person button labels according to language
+  document.getElementById('btnCalendar').textContent = (lang==='de' ? 'Kalender' : 'ปฏิทิน');
+  document.getElementById('btnTodos').textContent = (lang==='de' ? 'To-Do-Liste' : 'รายการสิ่งที่ต้องทำ');
+  document.getElementById('btnOverview').textContent = (lang==='de' ? 'Übersicht' : 'ภาพรวม');
+  // default view: calendar
+  currentPersonView = 'calendar';
   renderPersonEditor();
 }
 
@@ -484,168 +552,274 @@ function closeEditor(){
   currentPerson = null;
   document.getElementById('editorCard').style.display = 'none';
   document.getElementById('overview').style.display = 'block';
+  document.getElementById('personControlsWrapper').style.display = 'none';
   saveData();
+}
+
+/* switch view within person page */
+function switchPersonView(view){
+  if(!currentPerson) return;
+  currentPersonView = view === 'todos' ? 'todos' : 'calendar';
+  renderPersonEditor();
 }
 
 /* render person page */
 function renderPersonEditor(){
   if(!currentPerson) return;
-  const days = daysInRange(START,END);
-  let html = '';
-  for(let i=0;i<days;i++){
-    const dt = dateByOffset(START,i); const key = formatKey(dt);
-    const weekday = LANG[lang].dayNames[dt.getDay()];
-    const label = `${weekday} ${formatLabel(dt)}`;
-    html += `<div class="entryBox">`;
-    html += `<div class="entryBoxHeader"><strong>${esc(label)}</strong></div>`;
+  // set badge color
+  const badge = document.getElementById('badgeColor');
+  const map = {
+    Rouven: 'linear-gradient(180deg,#fff0f0,#ffd9d9)',
+    Daniel: 'linear-gradient(180deg,#f0fff0,#d9ffd9)',
+    Henrik: 'linear-gradient(180deg,#eef4ff,#d9e7ff)',
+    Benja:  'linear-gradient(180deg,#fffaf0,#fff1d9)',
+    Holger: 'linear-gradient(180deg,#f7efff,#f0d9ff)'
+  };
+  badge.style.background = map[currentPerson] || '#fff';
 
-    // entries for this person/date
-    if(!data.entries[key]) data.entries[key] = {};
-    if(!data.entries[key][currentPerson]) data.entries[key][currentPerson] = [];
-    const entries = data.entries[key][currentPerson];
-
-    // show existing entries
-    if(entries.length){
-      entries.forEach((e, idx) => {
-        const shown = (lang==='de') ? (e.de||'') : (e.th||e.de||'');
-        html += `<div class="entryRow" style="align-items:center">
-                  <div class="text">${esc(shown)}</div>
-                  <div style="display:flex;gap:6px;align-items:center">
-                    <button class="icon-btn" title="hoch" onclick="moveEntry('${key}',${idx},-1)"><i class="fa-solid fa-arrow-up"></i></button>
-                    <button class="icon-btn" title="runter" onclick="moveEntry('${key}',${idx},1)"><i class="fa-solid fa-arrow-down"></i></button>
-                    <button class="icon-btn delete" title="${LANG[lang].btnDelete}" onclick="deleteEntryConfirm('${key}',${idx})"><i class="fa-solid fa-trash"></i></button>
-                  </div>
-                 </div>`;
-      });
-    }
-
-    // dropdown for "Neuer Eintrag" + adopt from others on same day
-    const globalEntries = getGlobalEntriesForDay(key);
-    html += `<div class="adopt-wrap"><select id="adoptEntry-${key}"><option value="-1">-- ${LANG[lang].newEntryText} --</option>`;
-    globalEntries.forEach((g,ii) => {
-      const txt = (lang==='de') ? (g.de||g.th) : (g.th||g.de);
-      html += `<option value="${ii}">${esc(txt)}</option>`;
-    });
-    html += `</select><button class="icon-btn adopt" title="${LANG[lang].adoptLabel}" onclick="adoptEntryFromDay('${key}')"><i class="fa-solid fa-plus"></i></button></div>`;
-
-    // day separator & overnight section
-    html += `<div class="day-sep"></div>`;
-    html += `<div class="overnight-section"><div class="overnight-label">${LANG[lang].overnightTitle}</div>`;
-    const ov = (data.overnight[currentPerson] && data.overnight[currentPerson][key]) ? data.overnight[currentPerson][key] : null;
-    if(ov){
-      const shown = (lang==='de') ? (ov.de||'') : (ov.th||ov.de||'');
-      const bookedCls = ov.booked ? 'booked' : '';
-      html += `<div class="overnight-wrap">
-                <div class="overnight-field ${bookedCls}" id="ovfield-${key}">
-                  <div class="overnight-text">${esc(shown)}</div>
-                  <div class="overnight-actions">
-                    <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="ovBooked-${key}" ${ov.booked ? 'checked' : ''} onchange="toggleOvernightBooked('${key}', this.checked)"> ${LANG[lang].bookedLabel}</label>
-                    <button class="icon-btn delete" title="${LANG[lang].removeOvernight}" onclick="removeOvernightConfirm('${key}')"><i class="fa-solid fa-trash"></i></button>
-                  </div>
-                </div>
-              </div>`;
-    } else {
-      // placeholder + adopt button
-      html += `<div class="overnight-wrap">
-                <div style="flex:1">
-                  <div class="overnight-field" style="background:linear-gradient(180deg,#f8fbff,#f0f8ff);border:1px solid rgba(0,0,0,0.04);">
-                    <div style="padding:6px;color:#666">${esc(LANG[lang].overnightTitle)}</div>
-                  </div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
-                  <button class="icon-btn add" title="${LANG[lang].addOvernight}" onclick="openOvernightPicker('${key}')"><i class="fa-solid fa-bed fa-lg"></i></button>
-                </div>
-              </div>
-              <div id="ov-adopter-${key}" style="margin-top:6px"></div>`;
-    }
-    html += `</div>`; // overnight-section
-    html += `</div>`; // entryBox
-  }
-
-  document.getElementById('personCalendarList').innerHTML = html;
-
-  // show person-specific todos in the right column / beneath depending on layout
+  // update titles/localized labels
   document.getElementById('todoTitle').textContent = LANG[lang].todoTitle;
   document.getElementById('newTaskLabel').textContent = LANG[lang].newTaskLabel;
-  document.getElementById('personTodos').style.display = 'block';
+
+  // toggle view sections
+  if(currentPersonView === 'todos'){
+    document.getElementById('personTodos').style.display = 'block';
+    document.getElementById('personCalendarList').style.display = 'none';
+  } else {
+    document.getElementById('personTodos').style.display = 'none';
+    document.getElementById('personCalendarList').style.display = 'block';
+  }
+
+  // render calendar (person-specific)
+  if(currentPersonView === 'calendar'){
+    const days = daysInRange(START,END);
+    let html = '';
+    for(let i=0;i<days;i++){
+      const dt = dateByOffset(START,i); const key = formatKey(dt);
+      const weekday = LANG[lang].dayNames[dt.getDay()];
+      const label = `${weekday} ${formatLabel(dt)}`;
+      html += `<div class="entryBox">`;
+      html += `<div class="entryBoxHeader"><strong>${esc(label)}</strong></div>`;
+
+      // LOCATION (single field per person/day)
+      const loc = (data.locations[currentPerson] && data.locations[currentPerson][key]) ? data.locations[currentPerson][key] : null;
+      const shownLoc = (loc ? (lang==='de' ? loc.de : (loc.th || loc.de)) : '');
+      html += `<div style="text-align:center;margin-bottom:8px">`;
+      html += `<div style="max-width:320px;margin:0 auto">`;
+      html += `<div class="placeBox">${esc(shownLoc || (lang==='de'?LANG.de.entryNewPlace:LANG.th.entryNewPlace))}</div>`;
+      html += `</div></div>`;
+
+      // place edit controls: allow edit and adopt via dropdown
+      html += `<div style="display:flex;gap:8px;align-items:center;margin-top:8px">`;
+      html += `<input type="text" placeholder="${esc(lang==='de'?LANG.de.entryNewPlace:LANG.th.entryNewPlace)} (DE)" value="${esc(loc?loc.de:'')}" id="place-de-${key}" oninput="updateLocationField('${key}','de', this.value)">`;
+      html += `<input type="text" placeholder="${esc(lang==='de'?LANG.de.entryNewPlace:LANG.th.entryNewPlace)} (TH)" value="${esc(loc?loc.th:'')}" id="place-th-${key}" oninput="updateLocationField('${key}','th', this.value)">`;
+      // adopt dropdown for places
+      const places = getGlobalPlaces();
+      html += `<div style="min-width:180px">`;
+      html += `<select id="adoptPlace-${key}"><option value="-1">-- ${esc(lang==='de'?LANG.de.entryNewPlace:LANG.th.entryNewPlace)} --</option>`;
+      places.forEach((p,ii)=>{ const txt = lang==='de'?p.de:p.th; html += `<option value="${ii}">${esc(txt)}</option>`; });
+      html += `</select><button class="icon-btn adopt" onclick="adoptPlace('${key}')"><i class="fa-solid fa-plus"></i></button>`;
+      html += `</div></div>`;
+
+      html += `<div class="day-sep"></div>`;
+
+      // ACTIVITIES for this person and date (personal entries only; dropdown offers PRESET & pool)
+      if(!data.entries[key]) data.entries[key] = {};
+      if(!data.entries[key][currentPerson]) data.entries[key][currentPerson] = [];
+      const entries = data.entries[key][currentPerson];
+
+      // show existing entries (DE/TH) - editable inline
+      if(entries.length){
+        entries.forEach((e, idx) => {
+          const shown = (lang==='de') ? (e.de||'') : (e.th||e.de||'');
+          html += `<div class="entryRow" style="align-items:center">
+                    <input type="text" placeholder="DE" value="${esc(e.de||'')}" oninput="updatePersonalEntry('${key}',${idx},'de',this.value)">
+                    <input type="text" placeholder="TH" value="${esc(e.th||'')}" oninput="updatePersonalEntry('${key}',${idx},'th',this.value)">
+                    <div style="display:flex;gap:6px;align-items:center">
+                      <button class="icon-btn delete" title="${LANG[lang].btnDelete}" onclick="deletePersonalEntry('${key}',${idx})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                   </div>`;
+        });
+      }
+
+      // adopt dropdown for activities (includes PRESET suggestions)
+      const globalActs = getGlobalActivitySuggestionsForDay(key);
+      html += `<div class="adopt-wrap"><select id="adoptEntry-${key}"><option value="-1">-- ${esc(lang==='de'?LANG.de.activityNewOption:LANG.th.activityNewOption)} --</option>`;
+      globalActs.forEach((g,ii) => {
+        const txt = (lang==='de') ? (g.de||g.th) : (g.th||g.de);
+        html += `<option value="${ii}">${esc(txt)}</option>`;
+      });
+      html += `</select><button class="icon-btn adopt" title="${LANG[lang].adoptLabel}" onclick="adoptActivityFromDay('${key}')"><i class="fa-solid fa-plus"></i></button></div>`;
+
+      // allow creating a new activity (will require both DE and TH)
+      html += `<div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+                <input type="text" placeholder="DE (z. B. 'Spaziergang')" id="newAct-de-${key}" style="flex:1">
+                <input type="text" placeholder="TH" id="newAct-th-${key}" style="flex:1">
+                <button class="icon-btn save" onclick="saveNewActivity('${key}')"><i class="fa-solid fa-save"></i></button>
+               </div>`;
+
+      html += `<div class="day-sep"></div>`;
+
+      // OVERNIGHT section
+      const ov = (data.overnight[currentPerson] && data.overnight[currentPerson][key]) ? data.overnight[currentPerson][key] : null;
+      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()))){
+        const shown = (lang==='de') ? (ov.de||'') : (ov.th||ov.de||'');
+        const bookedCls = ov.booked ? 'booked' : '';
+        html += `<div class="overnight-wrap">
+                  <div class="overnight-field ${bookedCls}" id="ovfield-${key}">
+                    <div class="overnight-text">${esc(shown)}</div>
+                    <div class="overnight-actions">
+                      <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="ovBooked-${key}" ${ov.booked ? 'checked' : ''} onchange="toggleOvernightBooked('${key}', this.checked)"> ${LANG[lang].bookedLabel}</label>
+                      <button class="icon-btn delete" title="${LANG[lang].removeOvernight}" onclick="removeOvernightConfirm('${key}')"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                  </div>
+                </div>`;
+      } else {
+        // create new overnight or adopt from global
+        // special rule: if date is SPECIAL_OVERNIGHT_DATE => only SPECIAL_OVERNIGHT available
+        if(key === SPECIAL_OVERNIGHT_DATE){
+          // show dropdown with only special option
+          const onlyLabel = (lang==='de') ? SPECIAL_OVERNIGHT.de : SPECIAL_OVERNIGHT.th;
+          html += `<div class="overnight-wrap">
+                    <div style="flex:1">
+                      <div class="overnight-field" style="background:linear-gradient(180deg,#f8fbff,#f0f8ff);border:1px solid rgba(0,0,0,0.04);">
+                        <div style="padding:6px;color:#666">${esc(LANG[lang].overnightTitle)}</div>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+                      <select id="ovSelect-${key}"><option value="">--</option><option value="__special__">${esc(onlyLabel)}</option></select>
+                      <button class="icon-btn add" onclick="ovSpecialSelect('${key}')"><i class="fa-solid fa-bed fa-lg"></i></button>
+                    </div>
+                  </div>`;
+        } else {
+          const globals = getGlobalOvernights();
+          html += `<div class="overnight-wrap">
+                    <div style="flex:1">
+                      <div class="overnight-field" style="background:linear-gradient(180deg,#f8fbff,#f0f8ff);border:1px solid rgba(0,0,0,0.04);">
+                        <div style="padding:6px;color:#666">${esc(LANG[lang].overnightTitle)}</div>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+                      <select id="ovSelect-${key}"><option value="-1">${esc(lang==='de'?LANG.de.overnightNewOption:LANG.th.overnightNewOption)}</option>`;
+          globals.forEach((g,ii)=>{ const txt = (lang==='de') ? (g.de||g.th) : (g.th||g.de); html += `<option value="${ii}">${esc(txt)}</option>`; });
+          html += `</select>
+                    <button class="icon-btn add" onclick="ovAdoptOrCreate('${key}')"><i class="fa-solid fa-bed fa-lg"></i></button>
+                    </div>
+                  </div>
+                  <div id="ov-adopter-${key}" style="margin-top:6px"></div>`;
+        }
+      }
+
+      html += `</div>`; // entryBox end
+    }
+    document.getElementById('personCalendarList').innerHTML = html;
+  } // end if calendar view
+
+  // render todos
   renderTodos();
 }
 
-/* ========== Entry operations ========== */
-function deleteEntryConfirm(dateKey, idx){
+/* ========== Location handlers ========== */
+function updateLocationField(dateKey, langField, value){
+  if(!data.locations[currentPerson]) data.locations[currentPerson] = {};
+  if(!data.locations[currentPerson][dateKey]) data.locations[currentPerson][dateKey] = {de:'', th:''};
+  data.locations[currentPerson][dateKey][langField] = value;
+  saveData();
+}
+function adoptPlace(dateKey){
+  const sel = document.getElementById('adoptPlace-'+dateKey);
+  if(!sel) return;
+  const idx = parseInt(sel.value,10);
+  if(isNaN(idx) || idx<0) return;
+  const places = getGlobalPlaces();
+  const chosen = places[idx];
+  if(!chosen) return;
+  if(!data.locations[currentPerson]) data.locations[currentPerson] = {};
+  data.locations[currentPerson][dateKey] = { de: chosen.de || '', th: chosen.th || '' };
+  saveData(); renderPersonEditor();
+}
+
+/* ========== Activity handlers (personal entries) ========== */
+function updatePersonalEntry(dateKey, idx, field, value){
+  if(!data.entries[dateKey] || !data.entries[dateKey][currentPerson]) return;
+  data.entries[dateKey][currentPerson][idx][field] = value;
+  dedupePersonalEntries(dateKey, currentPerson);
+  saveData();
+}
+function deletePersonalEntry(dateKey, idx){
   if(!confirm(LANG[lang].confirmDelete)) return;
   if(!data.entries[dateKey] || !data.entries[dateKey][currentPerson]) return;
   data.entries[dateKey][currentPerson].splice(idx,1);
   saveData();
   renderPersonEditor();
 }
-
-function moveEntry(dateKey, idx, dir){
-  const arr = (data.entries[dateKey] && data.entries[dateKey][currentPerson]) ? data.entries[dateKey][currentPerson] : null;
-  if(!arr) return;
-  const newIdx = idx + dir;
-  if(newIdx < 0 || newIdx >= arr.length) return;
-  const tmp = arr[newIdx]; arr[newIdx] = arr[idx]; arr[idx] = tmp;
-  saveData();
-  renderPersonEditor();
-}
-
-/* adopt entry from day dropdown (Neuer Eintrag or choose existing) */
-function adoptEntryFromDay(dateKey){
+function adoptActivityFromDay(dateKey){
   const sel = document.getElementById('adoptEntry-'+dateKey);
   if(!sel) return;
   const idx = parseInt(sel.value,10);
-  if(isNaN(idx)) return;
-  if(idx === -1){
-    // show inline new-entry inputs under this select
-    const parent = sel.parentElement;
-    // remove existing temp rows
-    const existing = parent.querySelector('.temp-entry-row'); if(existing) existing.remove();
-    const row = document.createElement('div'); row.className = 'temp-entry-row'; row.style.display='flex'; row.style.gap='8px'; row.style.marginTop='6px';
-    const inpDE = document.createElement('input'); inpDE.type='text'; inpDE.placeholder='DE'; inpDE.style.flex='1';
-    const inpTH = document.createElement('input'); inpTH.type='text'; inpTH.placeholder='TH'; inpTH.style.flex='1';
-    const saveBtn = document.createElement('button'); saveBtn.className='icon-btn save'; saveBtn.innerHTML = '<i class="fa-solid fa-save"></i>';
-    saveBtn.onclick = function(){
-      const de = (inpDE.value||'').trim(), th = (inpTH.value||'').trim();
-      if(!de && !th) return;
-      if(!data.entries[dateKey]) data.entries[dateKey] = {};
-      if(!data.entries[dateKey][currentPerson]) data.entries[dateKey][currentPerson] = [];
-      // dedupe exact match
-      const exists = data.entries[dateKey][currentPerson].some(x => ((x.de||'')===de && (x.th||'')===th));
-      if(!exists) data.entries[dateKey][currentPerson].push({de:de, th:th});
-      saveData();
-      renderPersonEditor();
-    };
-    const cancelBtn = document.createElement('button'); cancelBtn.className='icon-btn'; cancelBtn.innerHTML='<i class="fa-solid fa-xmark"></i>';
-    cancelBtn.onclick = function(){ row.remove(); };
-    row.appendChild(inpDE); row.appendChild(inpTH); row.appendChild(saveBtn); row.appendChild(cancelBtn);
-    parent.appendChild(row);
-    return;
-  }
-  const avail = getGlobalEntriesForDay(dateKey);
+  if(isNaN(idx) || idx<0) return;
+  const avail = getGlobalActivitySuggestionsForDay(dateKey);
   const chosen = avail[idx];
   if(!chosen) return;
   if(!data.entries[dateKey]) data.entries[dateKey] = {};
   if(!data.entries[dateKey][currentPerson]) data.entries[dateKey][currentPerson] = [];
+  // dedupe
   const exists = data.entries[dateKey][currentPerson].some(x => ((x.de||'')===chosen.de && (x.th||'')===chosen.th));
-  if(!exists) data.entries[dateKey][currentPerson].push({de:chosen.de, th:chosen.th});
-  saveData();
+  if(!exists){
+    data.entries[dateKey][currentPerson].push({de: chosen.de||'', th: chosen.th||''});
+    // add to activityPool so others can adopt
+    if(!data.activityPool[dateKey]) data.activityPool[dateKey] = [];
+    const poolexist = data.activityPool[dateKey].some(x => ((x.de||'')===chosen.de && (x.th||'')===chosen.th));
+    if(!poolexist) data.activityPool[dateKey].push({de:chosen.de, th:chosen.th});
+    saveData();
+  }
   renderPersonEditor();
 }
+function saveNewActivity(dateKey){
+  const de = (document.getElementById('newAct-de-'+dateKey)||{}).value || '';
+  const th = (document.getElementById('newAct-th-'+dateKey)||{}).value || '';
+  if(!de && !th) return;
+  if(!data.entries[dateKey]) data.entries[dateKey] = {};
+  if(!data.entries[dateKey][currentPerson]) data.entries[dateKey][currentPerson] = [];
+  // dedupe
+  const exists = data.entries[dateKey][currentPerson].some(x => ((x.de||'')===de && (x.th||'')===th));
+  if(!exists){
+    data.entries[dateKey][currentPerson].push({de:de, th:th});
+    // add to activityPool for that date
+    if(!data.activityPool[dateKey]) data.activityPool[dateKey] = [];
+    const poolexist = data.activityPool[dateKey].some(x => ((x.de||'')===de && (x.th||'')===th));
+    if(!poolexist) data.activityPool[dateKey].push({de:de, th:th});
+    saveData();
+  }
+  renderPersonEditor();
+}
+function dedupePersonalEntries(dateKey, person){
+  if(!data.entries[dateKey] || !data.entries[dateKey][person]) return;
+  const seen = new Set(); const res = [];
+  data.entries[dateKey][person].forEach(e=>{
+    const k = ((e.de||"").trim() + "||" + (e.th||"").trim());
+    if(!seen.has(k)){ seen.add(k); res.push(e); }
+  });
+  data.entries[dateKey][person] = res;
+}
 
-/* ========== Overnight operations ========== */
-function openOvernightPicker(dateKey){
-  const container = document.getElementById('ov-adopter-'+dateKey);
-  if(!container) return;
-  const globals = getGlobalOvernights();
-  let html = `<div class="adopt-wrap"><select id="ovSelect-${dateKey}"><option value="-1">${esc(LANG[lang].newOvernightText)}</option>`;
-  globals.forEach((g,ii)=>{ const txt = (lang==='de') ? (g.de||g.th) : (g.th||g.de); html += `<option value="${ii}">${esc(txt)}</option>`; });
-  html += `</select><button class="icon-btn adopt" onclick="ovAdoptOrCreate('${dateKey}')"><i class="fa-solid fa-check"></i></button></div>`;
-  container.innerHTML = html;
+/* ========== Overnight operations for person page ==========
+   - 16.02 only allows SPECIAL_OVERNIGHT
+   - other days: show global overnights (shared across persons) and allow creation (both languages)
+*/
+function ovSpecialSelect(dateKey){
+  const sel = document.getElementById('ovSelect-'+dateKey);
+  if(!sel) return;
+  const val = sel.value;
+  if(val !== "__special__" && val !== "__special__") return;
+  if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
+  data.overnight[currentPerson][dateKey] = { de: SPECIAL_OVERNIGHT.de, th: SPECIAL_OVERNIGHT.th, booked:false };
+  saveData(); renderPersonEditor();
 }
 
 function ovAdoptOrCreate(dateKey){
-  const sel = document.getElementById('ovSelect-'+dateKey); if(!sel) return;
+  const sel = document.getElementById('ovSelect-'+dateKey);
+  if(!sel) return;
   const idx = parseInt(sel.value,10);
   if(idx === -1){
     const container = document.getElementById('ov-adopter-'+dateKey);
@@ -668,6 +842,7 @@ function saveNewOvernight(dateKey){
   if(!de && !th) return;
   if(!data.overnight[currentPerson]) data.overnight[currentPerson] = {};
   data.overnight[currentPerson][dateKey] = { de: de, th: th, booked:false };
+  // also add to global overnight pool by adding to others' adopt options (we track via data.overnight entries)
   saveData(); renderPersonEditor();
 }
 
@@ -686,8 +861,9 @@ function removeOvernightConfirm(dateKey){
   }
 }
 
-/* ========== Todos (per person) - single-language display/save ========== */
+/* ========== Todos (per person only) - single-language display/save ========== */
 function renderTodos(){
+  if(!currentPerson) return;
   if(!data.todos[currentPerson]) data.todos[currentPerson] = [ { id: makeId(), de: LANG.de.defaultTodo, th: LANG.th.defaultTodo, done:false } ];
   const list = data.todos[currentPerson];
   let html = '';
@@ -701,12 +877,12 @@ function renderTodos(){
   document.getElementById('todoList').innerHTML = html;
 }
 
-/* add todo for current person (saved in both languages but visible in current) */
+/* add todo for current person */
 function addTodoItem(){
   if(!data.todos[currentPerson]) data.todos[currentPerson] = [];
   data.todos[currentPerson].push({ id: makeId(), de:'', th:'', done:false });
   saveData();
-  renderPersonEditor();
+  renderTodos();
 }
 
 /* update todo: fieldLang is 'de' or 'th' */
@@ -729,32 +905,34 @@ function deleteTodo(i){
   if(!confirm(LANG[lang].confirmDelete)) return;
   data.todos[currentPerson].splice(i,1);
   saveData();
-  renderPersonEditor();
+  renderTodos();
 }
 
-/* ========== Utility lists (duplicate-safe) ========== */
-function getGlobalOvernights(){
-  const found = []; const seen = new Set();
-  PERSONS.forEach(p=>{
-    const ovObj = data.overnight[p.id] || {};
-    for(const k in ovObj){
-      const ov = ovObj[k];
-      if(ov && ((ov.de && ov.de.trim()) || (ov.th && ov.th.trim()))){
-        const id = ((ov.de||'').trim() + '||' + (ov.th||'').trim());
-        if(!seen.has(id)){ seen.add(id); found.push({de:ov.de||'', th:ov.th||'', sourcePerson:p.id, date:k}); }
-      }
-    }
-  });
-  return found;
-}
-
+/* ========== Utility: global lists that include PRESET suggestions ==========
+  - getGlobalEntriesForDay used in overview adopt/dropdowns, but personal entries remain empty until user adds
+*/
 function getGlobalEntriesForDay(dateKey){
   const found = []; const seen = new Set();
+  // PRESET (all)
+  if(PRESET[dateKey] && PRESET[dateKey].all){
+    PRESET[dateKey].all.forEach(item=>{
+      const id = ((item.de||'').trim() + '||' + (item.th||'').trim());
+      if(!seen.has(id)){ seen.add(id); found.push({de:item.de||'', th:item.th||'', sourcePerson: 'preset'}); }
+    });
+  }
+  // activityPool (user-added)
+  if(data.activityPool && data.activityPool[dateKey]){
+    data.activityPool[dateKey].forEach(item=>{
+      const id = ((item.de||'').trim() + '||' + (item.th||'').trim());
+      if(!seen.has(id)){ seen.add(id); found.push({de:item.de||'', th:item.th||'', sourcePerson: 'pool'}); }
+    });
+  }
+  // also include personal entries across persons (so people can adopt each other's real entries)
   PERSONS.forEach(p=>{
     const list = (data.entries[dateKey] && data.entries[dateKey][p.id]) ? data.entries[dateKey][p.id] : [];
     list.forEach(it=>{
       const id = ((it.de||'').trim() + '||' + (it.th||'').trim());
-      if(!seen.has(id)){ seen.add(id); found.push({de:it.de||'', th:it.th||'', sourcePerson:p.id}); }
+      if(!seen.has(id)){ seen.add(id); found.push({de:it.de||'', th:it.th||'', sourcePerson: p.id}); }
     });
   });
   return found;
@@ -764,7 +942,6 @@ function getGlobalEntriesForDay(dateKey){
 function setLang(l){
   if(l !== 'de' && l !== 'th') return;
   lang = l;
-  // title + labels
   document.getElementById('pageTitle').textContent = LANG[lang].pageTitle;
   document.getElementById('overviewHint').textContent = LANG[lang].overviewHint;
   document.getElementById('langLabel').textContent = (lang==='de' ? 'Deutsch' : 'ไทย');
@@ -773,13 +950,15 @@ function setLang(l){
   if(currentPerson){
     document.getElementById('editorName').textContent = LANG[lang].persons[currentPerson] || currentPerson;
     document.getElementById('backBtn').innerHTML = `<i class="fa-solid fa-arrow-left"></i> ${LANG[lang].closeLabel}`;
+    // update button labels
+    document.getElementById('btnCalendar').textContent = (lang==='de' ? 'Kalender' : 'ปฏิทิน');
+    document.getElementById('btnTodos').textContent = (lang==='de' ? 'To-Do-Liste' : 'รายการสิ่งที่ต้องทำ');
+    document.getElementById('btnOverview').textContent = (lang==='de' ? 'Übersicht' : 'ภาพรวม');
     renderPersonEditor();
   }
 }
 
-/* ========== Start ==========
-   load data and render everything
-   ========================= */
+/* ========== Start ========== */
 loadData();
 renderOverview();
 
@@ -787,10 +966,9 @@ renderOverview();
 window.setLang = setLang;
 window.openEditor = openEditor;
 window.closeEditor = closeEditor;
-window.adoptEntryFromDay = adoptEntryFromDay;
-window.moveEntry = moveEntry;
-window.deleteEntryConfirm = deleteEntryConfirm;
-window.openOvernightPicker = openOvernightPicker;
+window.adoptActivityFromDay = adoptActivityFromDay;
+window.updatePersonalEntry = updatePersonalEntry;
+window.deletePersonalEntry = deletePersonalEntry;
 window.ovAdoptOrCreate = ovAdoptOrCreate;
 window.saveNewOvernight = saveNewOvernight;
 window.toggleOvernightBooked = toggleOvernightBooked;
@@ -799,7 +977,10 @@ window.addTodoItem = addTodoItem;
 window.updateTodo = updateTodo;
 window.toggleTodo = toggleTodo;
 window.deleteTodo = deleteTodo;
-
+window.switchPersonView = switchPersonView;
+window.saveNewActivity = saveNewActivity;
+window.adoptPlace = adoptPlace;
+window.updateLocationField = updateLocationField;
 </script>
 </body>
 </html>
